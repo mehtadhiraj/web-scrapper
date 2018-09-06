@@ -14,3 +14,4 @@ class GroferItem(scrapy.Item):
     name = scrapy.Field()
     offer = scrapy.Field()
     price = scrapy.Field()
+    stock = scrapy.Field()

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 05, 2018 at 06:48 PM
+-- Generation Time: Sep 06, 2018 at 05:10 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -36,6 +36,28 @@ CREATE TABLE `productdetails` (
   `stock` varchar(50) NOT NULL DEFAULT 'NOT NULL'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `skus`
+--
+
+CREATE TABLE `skus` (
+  `id` varchar(20) NOT NULL,
+  `website` varchar(25) NOT NULL DEFAULT 'NOT NULL',
+  `producturlname` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `skus`
+--
+
+INSERT INTO `skus` (`id`, `website`, `producturlname`) VALUES
+('368445', 'grofers', 'kissan-fresh-tomato-ketchup-pouch'),
+('95769', 'grofers', 'kelloggs-original-the-best-corn-flakes-pouch'),
+('B01CHUSZJ8', 'amazon', ''),
+('B071Y4M7Z3', 'amazon', 'Aashirvaad-Atta-Multigrains-5kg');
+
 --
 -- Indexes for dumped tables
 --
@@ -45,6 +67,13 @@ CREATE TABLE `productdetails` (
 --
 ALTER TABLE `productdetails`
   ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `skus`
+--
+ALTER TABLE `skus`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `producturlname` (`producturlname`);
 
 --
 -- Constraints for dumped tables
