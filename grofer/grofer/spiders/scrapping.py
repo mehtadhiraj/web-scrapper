@@ -1,5 +1,6 @@
 import scrapy
 import pymysql
+import csv
 import pymysql.cursors
 from twisted.conch.insults.window import cursor
 from scrapy.crawler import CrawlerProcess
@@ -8,35 +9,31 @@ from twisted.conch.test.test_helper import FakeDelayedCall
 
 # Connect to the database.
 connection = pymysql.connect(
-    host='10.0.0.5',
+    host='10.0.8.94',
     user='root',
-    password='',                             
+    password='123',                             
     db='web-scrapper',
-    charset='utf8mb4',
 )
 
 
 print ("Database Connection Established") 
 cursor  = connection.cursor()
-print ("Database Connection Established")
-cursor  = connection.cursor()
+# define the fields for your item here like
 class Item(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
     name = scrapy.Field()
     offer = scrapy.Field()
     price = scrapy.Field()
     stock = scrapy.Field()
-
+    
 # A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
     #SQL
     sql = "SELECT producturlname, id FROM `skus` WHERE website = 'grofers'";
     #Execute query
     cursor.execute(sql)
-    name = "Spider"
+    name = "GroferSpider"
     start_urls = []
-    allowed_domains = ['www.grofers.com', 'www.amazon.in']
+    allowed_domains = ['www.grofers.com']
     base_url = 'https://www.grofers.com/prn/'
     for url in cursor:
         start_urls.append(base_url+url[0]+'/prid/'+url[1])
@@ -48,13 +45,19 @@ class GroferSpider(scrapy.Spider):
         item['offer']=response.css('.offer-text::text').extract()
         item['price']=response.css('.pdp-product__price--new::text').extract()
         item['stock']=response.css('.product-variant__list::text').extract()
-        name = item['name'][0]
-        offer = item['offer'][0]
+        item['name'][0] = item['name'][0].strip()
+        name = item['name']
+        offer = item['offer']
         price = item['price']
-        print("=============="+name)
-        print(item['offer'][0])
-        print(item['price'])
-        print(item['stock'])
+        stock = item['stock']
+        print(name)
+        print(offer)
+        print(price)
+        print(stock)
+        csvFile = open('products.csv', 'a+', newline='')
+        writer = csv.writer(csvFile)
+        writer.writerow((name[0], offer[0], price[1]))
+        csvFile.close()
         return item
                 
 class AmazonSpider(scrapy.Spider):
@@ -74,44 +77,35 @@ class AmazonSpider(scrapy.Spider):
      
     def parse(self, response):
         item = Item()
-        item['name']=response.css('#productTitle::text').extract()
-        item['offer']=response.css('.a-span12.a-color-price.a-size-base::text').extract()
-        item['price']=response.css('#priceblock_ourprice::text').extract()
-        item['stock']=response.css('.a-size-medium.a-color-success::text').extract()
-        name = item['name'][0]
+        item['name'] = response.css('#productTitle::text').extract()
+        item['offer'] = response.css('.a-span12.a-color-price.a-size-base::text').extract()
+        item['price'] = response.css('#priceblock_ourprice::text').extract()
+        item['stock'] =response.css('.a-size-medium.a-color-success::text').extract()
+#         item['name'] = item['name'][0]
+#         item['offer'] = item['offer']
+#         item['price'] = item['price']
+        
+        item['name'][0] = item['name'][0].strip()
+        name = item['name']
         offer = item['offer']
         price = item['price']
-        print("=============="+item['name'][0].strip())
-        print(item['offer'])
-        print(item['price'])
-        print(item['stock'])
-        item['name'] = item['name'][0].strip()
-        return item
+        stock = item['stock']
+        print(name)
+        print(offer)
+        print(price)
+        print(stock)
         
+        csvFile = open('products.csv', 'a+', newline='')
+        writer = csv.writer(csvFile)
+        writer.writerow((name[0], offer[0], price[0]))
+        csvFile.close()
+        return item
 #     Setting browser version
 process = CrawlerProcess({
     'USER_AGENT': (
             'Chrome/69.0.3497.81')
 })
   
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
 process.crawl(GroferSpider)
 process.crawl(AmazonSpider)
 
