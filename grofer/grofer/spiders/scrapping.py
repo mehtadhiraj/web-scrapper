@@ -5,7 +5,8 @@ import pymysql.cursors
 from twisted.conch.insults.window import cursor
 from scrapy.crawler import CrawlerProcess
 from twisted.conch.test.test_helper import FakeDelayedCall
-#from grofer.items import GroferItem
+from _overlapped import NULL
+from asn1crypto._ffi import null
 
 # Connect to the database.
 connection = pymysql.connect(
@@ -15,11 +16,12 @@ connection = pymysql.connect(
     db='web-scrapper',
 )
 
-
 print ("Database Connection Established") 
 cursor  = connection.cursor()
+
 # define the fields for your item here like
 class Item(scrapy.Item):
+    id = scrapy.Field()
     name = scrapy.Field()
     offer = scrapy.Field()
     price = scrapy.Field()
@@ -27,38 +29,23 @@ class Item(scrapy.Item):
     
 # A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
-    #SQL
+    # SQL
     sql = "SELECT producturlname, id FROM `skus` WHERE website = 'grofers'";
-    #Execute query
+    # Execute query
     cursor.execute(sql)
     name = "GroferSpider"
     start_urls = []
-    allowed_domains = ['www.grofers.com']
-    base_url = 'https://www.grofers.com/prn/'
+    allowed_domains = ['www.grofers.com']  # Allowed domain for grofers
+    base_url = 'https://www.grofers.com/prn/' # Base url gor grofers
     for url in cursor:
+        # Appending product name found in URL and a product id
         start_urls.append(base_url+url[0]+'/prid/'+url[1])
     print("=================================================\n")
-    print(start_urls)     
+    print(start_urls)   
+    # Parsing to scrap data  
     def parse(self, response):
-        item = Item()
-        item['name']=response.css('.LinesEllipsis::text').extract()
-        item['offer']=response.css('.offer-text::text').extract()
-        item['price']=response.css('.pdp-product__price--new::text').extract()
-        item['stock']=response.css('.product-variant__list::text').extract()
-        item['name'][0] = item['name'][0].strip()
-        name = item['name']
-        offer = item['offer']
-        price = item['price']
-        stock = item['stock']
-        print(name)
-        print(offer)
-        print(price)
-        print(stock)
-        csvFile = open('products.csv', 'a+', newline='')
-        writer = csv.writer(csvFile)
-        writer.writerow((name[0], offer[0], price[1]))
-        csvFile.close()
-        return item
+        item = Item() 
+        return storeItem(item, response)  
                 
 class AmazonSpider(scrapy.Spider):
     #SQL
@@ -77,38 +64,43 @@ class AmazonSpider(scrapy.Spider):
      
     def parse(self, response):
         item = Item()
-        item['name'] = response.css('#productTitle::text').extract()
-        item['offer'] = response.css('.a-span12.a-color-price.a-size-base::text').extract()
-        item['price'] = response.css('#priceblock_ourprice::text').extract()
-        item['stock'] =response.css('.a-size-medium.a-color-success::text').extract()
-#         item['name'] = item['name'][0]
-#         item['offer'] = item['offer']
-#         item['price'] = item['price']
-        
-        item['name'][0] = item['name'][0].strip()
-        name = item['name']
-        offer = item['offer']
-        price = item['price']
-        stock = item['stock']
-        print(name)
-        print(offer)
-        print(price)
-        print(stock)
-        
-        csvFile = open('products.csv', 'a+', newline='')
-        writer = csv.writer(csvFile)
-        writer.writerow((name[0], offer[0], price[0]))
-        csvFile.close()
-        return item
-#     Setting browser version
+        return storeItem(item, response)
+ 
+# Storing the data in csv format   
+def storeItem(item, response):
+    item['name']=response.css('.LinesEllipsis::text').extract()
+    item['offer']=response.css('.offer-text::text').extract()
+    item['price']=response.css('.pdp-product__price--new::text').extract()
+    item['stock']=response.css('.product-variant__list::text').extract()
+    item['name'][0] = item['name'][0].strip() # Striping data to remove blank spaces
+    name = item['name']
+    offer = item['offer']
+    price = item['price']
+    stock = item['stock']
+    
+    print(name)
+    print(offer)
+    print(price)
+    print(stock)
+    sql = "INSERT INTO productdetails(name, offer, price, stock, rating) values('"+name[0]+"','"+offer[0]+"','"+price+"', '"+stock+"', '')"
+    cursor.execute(sql)
+    connection.commit()
+    # Saving data inn csv file.
+    csvFile = open('products.csv', 'a+', newline='')
+    writer = csv.writer(csvFile)
+    writer.writerow((name[0], offer[0], price[1], stock))
+    csvFile.close()
+    return item
+
+# Setting browser version
 process = CrawlerProcess({
     'USER_AGENT': (
             'Chrome/69.0.3497.81')
 })
-  
+
+# Invoking Spiders to crawl data  
 process.crawl(GroferSpider)
 process.crawl(AmazonSpider)
-
 process.start()
 print('Process Stopped')
 process.stop()
