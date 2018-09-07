@@ -8,22 +8,21 @@ from twisted.conch.test.test_helper import FakeDelayedCall
 
 # Connect to the database.
 connection = pymysql.connect(
-    host='10.0.8.104',
-    user='id7039796_root@2a02:4780:bad:c0de::13',
-    password='123456789',                             
-    db='id7039796_webscrapper    ',
+    host='10.0.0.5',
+    user='root',
+    password='',                             
+    db='web-scrapper',
     charset='utf8mb4',
 )
 
+
 print ("Database Connection Established") 
 cursor  = connection.cursor()
-#SQL
-sql = "SELECT producturlname, id FROM `skus` WHERE website = 'grofers'";
-#Execute query
-cursor.execute(sql)
-
+print ("Database Connection Established")
+cursor  = connection.cursor()
 class Item(scrapy.Item):
     # define the fields for your item here like:
+    # name = scrapy.Field()
     name = scrapy.Field()
     offer = scrapy.Field()
     price = scrapy.Field()
@@ -31,16 +30,16 @@ class Item(scrapy.Item):
 
 # A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
+    #SQL
+    sql = "SELECT producturlname, id FROM `skus` WHERE website = 'grofers'";
+    #Execute query
+    cursor.execute(sql)
     name = "Spider"
     start_urls = []
     allowed_domains = ['www.grofers.com', 'www.amazon.in']
     base_url = 'https://www.grofers.com/prn/'
     for url in cursor:
         start_urls.append(base_url+url[0]+'/prid/'+url[1])
-# 
-#     base_url = 'https://www.amazon.in/dp/'
-#     for url in cursor:
-#         start_urls.append(base_url+url[1])
     print("=================================================\n")
     print(start_urls)     
     def parse(self, response):
@@ -57,10 +56,13 @@ class GroferSpider(scrapy.Spider):
         print(item['price'])
         print(item['stock'])
         return item
-    
-        
-    
+                
 class AmazonSpider(scrapy.Spider):
+    #SQL
+    sql = "SELECT producturlname, id FROM `skus` WHERE website = 'amazon'";
+    #Execute query
+    cursor.execute(sql)
+    
     name = "AmazonSpider"
     allowed_domains = ['www.amazon.in']
     base_url = 'https://www.amazon.in/dp/'
@@ -77,14 +79,14 @@ class AmazonSpider(scrapy.Spider):
         item['price']=response.css('#priceblock_ourprice::text').extract()
         item['stock']=response.css('.a-size-medium.a-color-success::text').extract()
         name = item['name'][0]
-        offer = item['offer'][0]
-        price = item['price'][0]
+        offer = item['offer']
+        price = item['price']
         print("=============="+item['name'][0].strip())
-        print(item['offer'][0])
-        print(item['price'][0])
-        print(item['stock'][0])
+        print(item['offer'])
+        print(item['price'])
+        print(item['stock'])
         item['name'] = item['name'][0].strip()
-        return item 
+        return item
         
 #     Setting browser version
 process = CrawlerProcess({
@@ -92,7 +94,29 @@ process = CrawlerProcess({
             'Chrome/69.0.3497.81')
 })
   
-process.crawl(Spider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+process.crawl(GroferSpider)
+process.crawl(AmazonSpider)
+
 process.start()
 print('Process Stopped')
+process.stop()
+
 
