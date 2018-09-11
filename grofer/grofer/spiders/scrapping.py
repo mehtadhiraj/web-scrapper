@@ -10,7 +10,7 @@ from asn1crypto._ffi import null
 
 # Connect to the database.
 connection = pymysql.connect(
-    host='10.0.8.94',
+    host='localhost',
     user='root',
     password='123',                             
     db='web-scrapper',
@@ -21,11 +21,11 @@ cursor  = connection.cursor()
 
 # define the fields for your item here like
 class Item(scrapy.Item):
-    id = scrapy.Field()
     name = scrapy.Field()
     offer = scrapy.Field()
     price = scrapy.Field()
     stock = scrapy.Field()
+    rating = scrapy.Field()
     
 # A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
@@ -44,7 +44,14 @@ class GroferSpider(scrapy.Spider):
     print(start_urls)   
     # Parsing to scrap data  
     def parse(self, response):
-        item = Item() 
+        item = Item()
+        item['name']=response.css('.LinesEllipsis::text').extract()
+        item['offer']=response.css('.offer-text::text').extract()
+        item['price']=response.css('.pdp-product__price--new::text').extract()
+        item['price']=[item['price'][1]]
+#         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
+        item['rating']= ['Not available']
+        item['stock']=['Data Unavailable']
         return storeItem(item, response)  
                 
 class AmazonSpider(scrapy.Spider):
@@ -64,32 +71,34 @@ class AmazonSpider(scrapy.Spider):
      
     def parse(self, response):
         item = Item()
+        item['name']=response.css('#productTitle::text').extract()
+        item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
+        item['price']=response.css('#priceblock_ourprice::text').extract()
+        item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
+        item['stock']=response.css('#availability > span::text').extract()
+        item['name'][0] = item['name'][0].replace('\n',"").strip() # Striping data to remove blank spaces
         return storeItem(item, response)
  
-# Storing the data in csv format   
+# Storing Item in database
 def storeItem(item, response):
-    item['name']=response.css('.LinesEllipsis::text').extract()
-    item['offer']=response.css('.offer-text::text').extract()
-    item['price']=response.css('.pdp-product__price--new::text').extract()
-    item['stock']=response.css('.product-variant__list::text').extract()
-    item['name'][0] = item['name'][0].strip() # Striping data to remove blank spaces
     name = item['name']
     offer = item['offer']
     price = item['price']
     stock = item['stock']
-    
+    rating = item['rating']
     print(name)
     print(offer)
     print(price)
     print(stock)
-    sql = "INSERT INTO productdetails(name, offer, price, stock, rating) values('"+name[0]+"','"+offer[0]+"','"+price+"', '"+stock+"', '')"
+    print(rating)
+    sql = 'INSERT INTO productdetails(name, offer, price, stock, rating) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
     cursor.execute(sql)
     connection.commit()
-    # Saving data inn csv file.
+    # Saving data in csv file.
     csvFile = open('products.csv', 'a+', newline='')
     writer = csv.writer(csvFile)
-    writer.writerow((name[0], offer[0], price[1], stock))
-    csvFile.close()
+    writer.writerow((name[0], offer[0], price[0], stock))
+    csvFile.close() 
     return item
 
 # Setting browser version
