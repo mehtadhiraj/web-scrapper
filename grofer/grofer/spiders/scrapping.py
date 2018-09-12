@@ -1,3 +1,5 @@
+
+import subprocess
 import scrapy
 import pymysql
 import csv
@@ -158,5 +160,12 @@ process.crawl(AmazonSpider)
 process.start()
 print('Process Stopped')
 process.stop()
+
+
+
+
+
+
+
 
 
