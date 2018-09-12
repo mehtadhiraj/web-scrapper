@@ -71,7 +71,8 @@ class GroferSpider(scrapy.Spider):
         start_urls.append(base_url+url[0]+'/prid/'+url[1])
     print("=================================================\n")
     print(start_urls)  
-     
+    
+# Cookie based data scraping
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
         with open('cookies/amazon_pincodes/400701.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
@@ -105,7 +106,7 @@ class AmazonSpider(scrapy.Spider):
         start_urls.append(base_url+url[1])
     print("=================================================\n")
     print(start_urls)
-    
+# Cookie based data scraping    
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
         with open('cookies/amazon_pincodes/110001.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
