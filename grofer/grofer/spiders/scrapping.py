@@ -1,3 +1,5 @@
+
+import subprocess
 import scrapy
 import pymysql
 import pymysql.cursors
@@ -98,25 +100,19 @@ process.crawl(GroferSpider)
 process.crawl(AmazonSpider)
 process.crawl(GroferSpider)
 process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
+
+
+
 
 process.start()
 print('Process Stopped')
 process.stop()
+
+
+
+
+
+
+
 
 
