@@ -34,14 +34,14 @@ def getChromeCookies() -> None:
         print(c)
     print(cJar1)
 #    Replace PINCODE below
-    with open('cookies/grofers_pincodes/400701.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
+    with open('cookies/grofers_pincodes/123456.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
 getChromeCookies()
 
 # # Connect to the database.
 connection = pymysql.connect(
     host='localhost',
     user='root',
-    password='123',                             
+    password='',                             
     db='web-scrapper',
 )
  
@@ -74,8 +74,8 @@ class GroferSpider(scrapy.Spider):
     
 # Cookie based data scraping
     def start_requests(self):
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/amazon_pincodes/400701.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
+        with open('cookies/grofers_pincodes /123456.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
         print(cookieJar)
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
