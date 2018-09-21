@@ -55,20 +55,21 @@ class Item(scrapy.Item):
     price = scrapy.Field()
     stock = scrapy.Field()
     rating = scrapy.Field()
+    website = scrapy.Field()
 
 #A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
     # SQL
-    sql = "SELECT producturlname, id FROM `skus` WHERE website = 'grofers'";
+    sql = "SELECT id FROM `skus` WHERE website = 'grofers'";
     # Execute query
     cursor.execute(sql)
     name = "GroferSpider"
     start_urls = []
     allowed_domains = ['www.grofers.com']  # Allowed domain for grofers
-    base_url = 'https://www.grofers.com/prn/' # Base url gor grofers
+    base_url = 'https://www.grofers.com/prn//prid/' # Base url gor grofers
     for url in cursor:
         # Appending product name found in URL and a product id
-        start_urls.append(base_url+'/prid/'+url[1])
+        start_urls.append(base_url+url[0])
     print("=================================================\n")
     print(start_urls)  
     
@@ -89,8 +90,10 @@ class GroferSpider(scrapy.Spider):
         item['price']=[item['price'][1]]
 #         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
         item['rating']= ['Data Missing']
-        item['stock']= response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__out-of-stock::text').extract()
-        item['stock']=['Data missing']
+        item['stock']= response.css('.pdp-product__out-of-stock::text').extract()
+        #item['stock']=['Data missing']
+        item['website']='Grofers'
+        print(item['stock'])
         return storeItem(item, response)  
                  
 class AmazonSpider(scrapy.Spider):
@@ -122,6 +125,7 @@ class AmazonSpider(scrapy.Spider):
         item['price']=response.css('#priceblock_ourprice::text').extract()
         item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
         item['stock']=response.css('#availability > span::text').extract()
+        item['website']='Amazon'
         item['name'][0] = item['name'][0].replace('\n',"").strip() # Striping data to remove blank spaces
     
         return storeItem(item, response)
@@ -133,13 +137,15 @@ def storeItem(item, response):
     price = item['price']
     stock = item['stock']
     rating = item['rating']
+    website = item['website']
 
     print(name)
     print(offer)
     print(price)
     print(stock)
     print(rating)
-    sql = 'INSERT INTO productdetails(name, offer, price, stock, rating) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
+    print(website)
+    sql = 'INSERT INTO productdetails(name, offer, price, stock, rating, website) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'", "'+website[0]+'")'
     cursor.execute(sql)
     connection.commit()
 #     Saving data in csv file.
