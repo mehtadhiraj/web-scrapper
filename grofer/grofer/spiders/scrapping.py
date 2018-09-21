@@ -41,7 +41,7 @@ getChromeCookies()
 connection = pymysql.connect(
     host='localhost',
     user='root',
-    password='123',                             
+    password='',                             
     db='web-scrapper',
 )
  
@@ -65,17 +65,17 @@ class GroferSpider(scrapy.Spider):
     name = "GroferSpider"
     start_urls = []
     allowed_domains = ['www.grofers.com']  # Allowed domain for grofers
-    base_url = 'https://www.grofers.com/prn/' # Base url gor grofers
+    base_url = 'https://www.grofers.com/prn//prid/' # Base url gor grofers
     for url in cursor:
         # Appending product name found in URL and a product id
-        start_urls.append(base_url+'/prid/'+url[1])
+        start_urls.append(base_url+url[1])
     print("=================================================\n")
     print(start_urls)  
     
 # Cookie based data scraping
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
-        with open('./cookies/grofers_pincodes/110001.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        with open('./cookies/grofers_pincodes/400701.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
         print(cookieJar)
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
@@ -89,8 +89,8 @@ class GroferSpider(scrapy.Spider):
         item['price']=[item['price'][1]]
 #         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
         item['rating']= ['Data Missing']
-        item['stock']= response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__out-of-stock::text').extract()
-        item['stock']=['Data missing']
+        item['stock']= response.css('.pdp-product__out-of-stock::text').extract()
+        #item['stock']=['Data missing']
         return storeItem(item, response)  
                  
 class AmazonSpider(scrapy.Spider):
