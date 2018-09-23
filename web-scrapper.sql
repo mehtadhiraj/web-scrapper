@@ -29,11 +29,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `productdetails` (
-  `id` varchar(25) NOT NULL,
   `name` varchar(100) NOT NULL DEFAULT 'NOT NULL',
   `price` varchar(25) NOT NULL DEFAULT 'NOT NULL',
   `offer` varchar(25) NOT NULL DEFAULT 'NOT NUL',
-  `stock` varchar(50) NOT NULL DEFAULT 'NOT NULL'
+  `stock` varchar(50) NOT NULL DEFAULT 'NOT NULL',
+  `rating` varchar(50) NOT NULL DEFAULT 'NOT NULL',
+  `area` varchar(25) NOT NULL DEFAULT 'NOT NULL',
+  `pincode` varchar(25) NOT NULL DEFAULT 'NOT NULL',
+  `website` varchar(50) NOT NULL DEFAULT 'NOT NULL'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

@@ -12,7 +12,10 @@ from asn1crypto._ffi import null
 from scrapy.http import Request, FormRequest
 import pickle
 import requests
+import time
+import threading
 
+# Generating Cookies from chrome
 def getChromeCookies() -> None:
     '''
     Utility Function to save a new location.
@@ -28,92 +31,122 @@ def getChromeCookies() -> None:
     import browser_cookie3 as cookies
     cJar = cookies.chrome(domain_name='grofers.com')
     cJar1 = {c.name: c.value for c in cJar}
-#     del cJar1['session-id-time']
-#     del cJar1['visitCount']
     for c in cJar:
         print(c)
     print(cJar1)
 #    Replace PINCODE below
-    with open('cookies/grofers_pincodes/123456.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
+    with open('cookies/grofers_pincodes/123456.pkl', 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
+
+ # Creating Cookies form Chrome
 getChromeCookies()
 
-# # Connect to the database.
+#  Connect to the database.
 connection = pymysql.connect(
     host='localhost',
     user='root',
-    password='123',                             
+    password='',                             
     db='web-scrapper',
 )
  
 print ("Database Connection Established") 
+
 cursor  = connection.cursor()
+
+'''
+ Data that needs to be stored
+ Defining a class consisting of required field
  
-# define the fields for your item here like
+'''
 class Item(scrapy.Item):
     name = scrapy.Field()
     offer = scrapy.Field()
     price = scrapy.Field()
     stock = scrapy.Field()
     rating = scrapy.Field()
+    area = scrapy.Field()
+    pincode = scrapy.Field()
     website = scrapy.Field()
+
 
 #A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
     # SQL
+    print('Scrapy.Spider')
+    print(scrapy.Spider)
     sql = "SELECT id FROM `skus` WHERE website = 'grofers'";
     # Execute query
     cursor.execute(sql)
     name = "GroferSpider"
     start_urls = []
-    allowed_domains = ['www.grofers.com']  # Allowed domain for grofers
-    base_url = 'https://www.grofers.com/prn//prid/' # Base url gor grofers
+    allowed_domains = ['www.grofers.com']  # Domain allowed by this spider
+    base_url = 'https://www.grofers.com/prn//prid/' # Base url for grofers
     for url in cursor:
-        # Appending product name found in URL and a product id
+        # Appending a product id
         start_urls.append(base_url+url[0])
-    print("=================================================\n")
     print(start_urls)  
     
-# Cookie based data scraping
+# Requesting a Cookies for location baed data scraping
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
-        with open('./cookies/grofers_pincodes/110001.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        '''
+        Open pkl file stored with stored by the name same as pincode 
+        Append a pincode in the path below.
+        "pin" is defined global 
+        storing the following pkl file as a dictionary in a "cookieJar"
+        
+        '''
+        with open('./cookies/grofers_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
         print(cookieJar)
+        # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
       
     # Parsing to scrap data  
     def parse(self, response):
-        item = Item()
+        item = Item() # Creating an object of class Item
         item['name']=response.css('.LinesEllipsis::text').extract()
         item['offer']=response.css('.offer-text::text').extract()
         item['price']=response.css('.pdp-product__price--new::text').extract()
         item['price']=[item['price'][1]]
-#         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
-        item['rating']= ['Data Missing']
-        item['stock']= response.css('.pdp-product__out-of-stock::text').extract()
-        #item['stock']=['Data missing']
-        item['website']='Grofers'
-        print(item['stock'])
+        item['rating']= ['Data Missing'] # For grofers no rating feature available. Hence stated as "Data Missing"
+        '''
+        Grofers give the stock availability in the form of buttons
+        Stock unavailable is also in the form of button 
+        Hence data fetched is of both available and unavailable.
+        '''
+        item['stock']= response.css('.product-variant__btn::text').extract()
+        # It consists of data from a button that is unavailable. 
+        outOfStock = response.css('.product-variant__btn--disabled::text').extract()
+        #Hence using set operation data of unavailable product is removed from the complete list. 
+        item['stock'] = list(set(item['stock'])-set(outOfStock))
+        #Now applying a join operation to store the data on a 0th index.
+        item['stock'] = [', '.join(item['stock'])]
+        # After all the operation if stock is still empty we store the status as Unavailable
+        if item['stock'][0] == '':
+            item['stock'] = ['Curently Unavailable']
+        item['website']=['Grofers']
+        item['area'] = [location]
+        item['pincode'] = [pin]
         return storeItem(item, response)  
                  
+#Spider to Scrap data from Amazon
 class AmazonSpider(scrapy.Spider):
     #SQL
-    sql = "SELECT producturlname, id FROM `skus` WHERE website = 'amazon'";
+    sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
     #Execute query
     cursor.execute(sql)
      
     name = "AmazonSpider"
-    allowed_domains = ['www.amazon.in']
+    allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
     base_url = 'https://www.amazon.in/dp/'
     start_urls = []
     for url in cursor:
-        start_urls.append(base_url+url[1])
-    print("=================================================\n")
+        start_urls.append(base_url+url[0])
     print(start_urls)
 # Cookie based data scraping    
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/amazon_pincodes/110001.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        with open('cookies/amazon_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
         print(cookieJar)
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
@@ -125,9 +158,13 @@ class AmazonSpider(scrapy.Spider):
         item['price']=response.css('#priceblock_ourprice::text').extract()
         item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
         item['stock']=response.css('#availability > span::text').extract()
-        item['website']='Amazon'
-        item['name'][0] = item['name'][0].replace('\n',"").strip() # Striping data to remove blank spaces
-    
+        item['website']=['Amazon']
+        item['area'] = [location]
+        item['pincode'] = [pin]
+        # Striping data to remove blank spaces
+        item['name'][0] = item['name'][0].replace('\n',"").strip() 
+        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
+        
         return storeItem(item, response)
   
 # Storing Item in database
@@ -138,6 +175,8 @@ def storeItem(item, response):
     stock = item['stock']
     rating = item['rating']
     website = item['website']
+    loc = item['area']
+    pincd = item['pincode']
 
     print(name)
     print(offer)
@@ -145,30 +184,56 @@ def storeItem(item, response):
     print(stock)
     print(rating)
     print(website)
-    sql = 'INSERT INTO productdetails(name, offer, price, stock, rating, website) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'", "'+website[0]+'")'
-    cursor.execute(sql)
-    connection.commit()
+    print(pincd)
+    print(loc)
+    
+#     sql = 'INSERT INTO productdetails(name, offer, price, stock, rating, website) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'", "'+website[0]+'")'
+#     cursor.execute(sql)
+#     connection.commit()
 #     Saving data in csv file.
-    csvFile = open('products.csv', 'a+', newline='')
-    writer = csv.writer(csvFile)
-    writer.writerow((name[0], offer[0], price[0], stock))
-    csvFile.close() 
+#     csvFile = open('products.csv', 'a+', newline='')
+#     writer = csv.writer(csvFile)
+#     writer.writerow((name[0], offer[0], price[0], stock))
+#     csvFile.close() 
     return item
- 
+     
+#     # Setting browser version
+#     process = CrawlerProcess({
+#         'USER_AGENT': (
+#                 'Chrome/69.0.3497.81')
+#     })
+#      
+#     # Invoking Spiders to crawl data  
+#     process.crawl(GroferSpider)
+#     process.crawl(AmazonSpider)
+#     process.start()
+#     print('Process Stopped')
+    
+
+# SQL query
+sql = 'SELECT area, pincode FROM location'
+# Execute query
+cursor.execute(sql)
 # Setting browser version
 process = CrawlerProcess({
     'USER_AGENT': (
             'Chrome/69.0.3497.81')
 })
- 
-# Invoking Spiders to crawl data  
-process.crawl(GroferSpider)
-process.crawl(AmazonSpider)
-process.start()
+
+# Looping through all the pincodes present in database 
+for location, pincode in cursor:
+    global pin, area # Defined global in order to access it in both the spiders
+    pin = pincode
+    print(pin)
+    area = location
+    print(area) 
+    # Invoking spiders of grofer and amazon to crawl data.
+    process.crawl(GroferSpider)
+    time.sleep(5)
+    process.crawl(AmazonSpider)
+    time.sleep(5)
+process.start() # Start the process to crawl
 print('Process Stopped')
-process.stop()
-
-
 
 
 
