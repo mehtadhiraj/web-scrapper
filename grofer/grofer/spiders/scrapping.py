@@ -69,11 +69,7 @@ class GroferSpider(scrapy.Spider):
     base_url = 'https://www.grofers.com/prn//prid/' # Base url gor grofers
     for url in cursor:
         # Appending product name found in URL and a product id
-<<<<<<< HEAD
-        start_urls.append(base_url+url[1])
-=======
         start_urls.append(base_url+url[0])
->>>>>>> d3ee7e8a62cf9494389334e715639f02d47e0411
     print("=================================================\n")
     print(start_urls)  
     
