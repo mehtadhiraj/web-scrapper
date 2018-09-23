@@ -187,14 +187,15 @@ def storeItem(item, response):
     print(pincd)
     print(loc)
     
-#     sql = 'INSERT INTO productdetails(name, offer, price, stock, rating, website) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'", "'+website[0]+'")'
-#     cursor.execute(sql)
-#     connection.commit()
+    sql = 'INSERT INTO productdetails(name, offer, price, stock, rating, area, pincode, website) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'", "'+loc[0]+'","'+pincd[0]+'","'+website[0]+'")'
+    print(sql)
+    cursor.execute(sql)
+    connection.commit()
 #     Saving data in csv file.
-#     csvFile = open('products.csv', 'a+', newline='')
-#     writer = csv.writer(csvFile)
-#     writer.writerow((name[0], offer[0], price[0], stock))
-#     csvFile.close() 
+    csvFile = open('products.csv', 'a+', newline='')
+    writer = csv.writer(csvFile)
+    writer.writerow((name[0], offer[0], price[0], stock))
+    csvFile.close() 
     return item
      
 #     # Setting browser version
@@ -229,9 +230,7 @@ for location, pincode in cursor:
     print(area) 
     # Invoking spiders of grofer and amazon to crawl data.
     process.crawl(GroferSpider)
-    time.sleep(5)
     process.crawl(AmazonSpider)
-    time.sleep(5)
 process.start() # Start the process to crawl
 print('Process Stopped')
 
