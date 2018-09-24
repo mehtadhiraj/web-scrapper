@@ -40,11 +40,30 @@ def getChromeCookies() -> None:
  # Creating Cookies form Chrome
 getChromeCookies()
 
+def getPinArea():    
+    # SQL query
+    sql = 'SELECT area, pincode FROM location'
+    # Execute query
+    cursor.execute(sql)
+    # Setting browser version
+    process = CrawlerProcess({
+        'USER_AGENT': (
+                'Chrome/69.0.3497.81')
+    })
+    loc= []
+    a = []
+    # Looping through all the pincodes present in database 
+    for location in cursor:
+        loc.append(location[1])
+        a.append(location[0])
+    return loc,a
+
+
 #  Connect to the database.
 connection = pymysql.connect(
     host='localhost',
     user='root',
-    password='',                             
+    password='123',                             
     db='web-scrapper',
 )
  
@@ -83,8 +102,10 @@ class GroferSpider(scrapy.Spider):
     for url in cursor:
         # Appending a product id
         start_urls.append(base_url+url[0])
-    print(start_urls)  
-    
+    print(start_urls)
+    global pin  
+    pin = getPinArea()
+    print(pin)
 # Requesting a Cookies for location baed data scraping
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
@@ -95,7 +116,7 @@ class GroferSpider(scrapy.Spider):
         storing the following pkl file as a dictionary in a "cookieJar"
         
         '''
-        with open('./cookies/grofers_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        with open('./cookies/grofers_pincodes/'+pin[0][0]+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
         print(cookieJar)
         # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(self.start_urls):
@@ -125,46 +146,49 @@ class GroferSpider(scrapy.Spider):
         if item['stock'][0] == '':
             item['stock'] = ['Curently Unavailable']
         item['website']=['Grofers']
-        item['area'] = [location]
-        item['pincode'] = [pin]
-        return storeItem(item, response)  
+        item['area'] = [pin[1][0]]
+        item['pincode'] = [pin[0][0]]
+        del pin[0][0]
+        del pin[1][0]
+        return storeItem(item, response)
+
                  
 #Spider to Scrap data from Amazon
-class AmazonSpider(scrapy.Spider):
-    #SQL
-    sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
-    #Execute query
-    cursor.execute(sql)
-     
-    name = "AmazonSpider"
-    allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
-    base_url = 'https://www.amazon.in/dp/'
-    start_urls = []
-    for url in cursor:
-        start_urls.append(base_url+url[0])
-    print(start_urls)
-# Cookie based data scraping    
-    def start_requests(self):
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/amazon_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-        print(cookieJar)
-        for i,url in enumerate(self.start_urls):
-            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
-      
-    def parse(self, response):
-        item = Item()
-        item['name']=response.css('#productTitle::text').extract()
-        item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
-        item['price']=response.css('#priceblock_ourprice::text').extract()
-        item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
-        item['stock']=response.css('#availability > span::text').extract()
-        item['website']=['Amazon']
-        item['area'] = [location]
-        item['pincode'] = [pin]
-        # Striping data to remove blank spaces
-        item['name'][0] = item['name'][0].replace('\n',"").strip() 
-        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
-        
+# class AmazonSpider(scrapy.Spider):
+#     #SQL
+#     sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
+#     #Execute query
+#     cursor.execute(sql)
+#      
+#     name = "AmazonSpider"
+#     allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
+#     base_url = 'https://www.amazon.in/dp/'
+#     start_urls = []
+#     for url in cursor:
+#         start_urls.append(base_url+url[0])
+#     print(start_urls)
+# # Cookie based data scraping    
+#     def start_requests(self):
+#         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
+#         with open('cookies/amazon_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+#         print(cookieJar)
+#         for i,url in enumerate(self.start_urls):
+#             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+#       
+#     def parse(self, response):
+#         item = Item()
+#         item['name']=response.css('#productTitle::text').extract()
+#         item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
+#         item['price']=response.css('#priceblock_ourprice::text').extract()
+#         item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
+#         item['stock']=response.css('#availability > span::text').extract()
+#         item['website']=['Amazon']
+#         item['area'] = [location]
+#         item['pincode'] = [pin]
+#         # Striping data to remove blank spaces
+#         item['name'][0] = item['name'][0].replace('\n',"").strip() 
+#         item['stock'][0] = item['stock'][0].replace('\n',"").strip()
+#         
         return storeItem(item, response)
   
 # Storing Item in database
@@ -199,10 +223,10 @@ def storeItem(item, response):
     return item
      
 #     # Setting browser version
-#     process = CrawlerProcess({
-#         'USER_AGENT': (
-#                 'Chrome/69.0.3497.81')
-#     })
+process = CrawlerProcess({
+    'USER_AGENT': (
+            'Chrome/69.0.3497.81')
+})
 #      
 #     # Invoking Spiders to crawl data  
 #     process.crawl(GroferSpider)
@@ -210,27 +234,10 @@ def storeItem(item, response):
 #     process.start()
 #     print('Process Stopped')
     
+# Invoking spiders of grofer and amazon to crawl data.
+process.crawl(GroferSpider)
+# process.crawl(AmazonSpider)
 
-# SQL query
-sql = 'SELECT area, pincode FROM location'
-# Execute query
-cursor.execute(sql)
-# Setting browser version
-process = CrawlerProcess({
-    'USER_AGENT': (
-            'Chrome/69.0.3497.81')
-})
-
-# Looping through all the pincodes present in database 
-for location, pincode in cursor:
-    global pin, area # Defined global in order to access it in both the spiders
-    pin = pincode
-    print(pin)
-    area = location
-    print(area) 
-    # Invoking spiders of grofer and amazon to crawl data.
-    process.crawl(GroferSpider)
-    process.crawl(AmazonSpider)
 process.start() # Start the process to crawl
 print('Process Stopped')
 
