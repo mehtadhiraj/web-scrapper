@@ -1,3 +1,8 @@
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.by import By
 import subprocess
 import scrapy
 import pymysql
@@ -15,6 +20,7 @@ import time
 import threading
 import sys
 
+global response
 
 
 # Generating Cookies from chrome
@@ -31,13 +37,13 @@ def getChromeCookies() -> None:
     Alternative is to use Selenium webdrivers for browser automation.
     '''
     import browser_cookie3 as cookies
-    cJar = cookies.chrome(domain_name='grofers.com')
+    cJar = cookies.chrome(domain_name='bigbasket.com')
     cJar1 = {c.name: c.value for c in cJar}
     for c in cJar:
         print(c)
     print(cJar1)
 #    Replace PINCODE below
-    with open('cookies/grofers_pincodes/123456.pkl', 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
+    with open('cookies/bigbasket_pincodes/560029.pkl', 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
 
  # Creating Cookies form Chrome
 getChromeCookies()
@@ -71,6 +77,87 @@ class Item(scrapy.Item):
     area = scrapy.Field()
     pincode = scrapy.Field()
     website = scrapy.Field()
+
+class BigbasketSpider():
+    
+    print ("Scraping single item with no variants...")
+
+    cursor = connection.cursor()
+    sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
+    # Execute query
+    cursor.execute(sql)
+    name = "GroferSpider"
+    start_urls= []
+    allowed_domains = ['www.bigbasket.com']  # Domain allowed by this spider
+    base_url = 'https://www.bigbasket.com/pd/' # Base url for grofers
+    for url in cursor:
+        # Appending a product id
+        start_urls.append(base_url+url[0]+'//')
+        print(start_urls) 
+        
+    def start_requests(self):
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
+        '''
+        Open pkl file stored with stored by the name same as pincode 
+        Append a pincode in the path below.
+        "pin" is defined global 
+        storing the following pkl file as a dictionary in a "cookieJar"
+        
+        '''
+        with open('./cookies/bigbasket_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        print(cookieJar)
+        # Passing URL cookieJar and the headers to scrap location based values.
+        for i,url in enumerate(self.start_urls):
+            yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
+            #print(response)          
+
+
+    def scrape_single_item(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        driver = webdriver.Chrome('C:/Users/Vivek Iyer/Desktop/web-crawler/web-scrapper/grofer/grofer/spiders/chromedriver.exe')
+        driver.get(start_urls[0])
+        try:
+            element = WebDriverWait(driver, 60).until(
+                    expected_conditions.presence_of_element_located((By.CLASS_NAME, "sc-bRBYWo"))
+                    )
+            item_desc = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
+            print (item_desc.text + " " + element.text)
+        except TimeoutException:
+            print ("Connection Timeout")
+        finally:
+            driver.quit()
+        
+    def scrape_item_with_varaints(self):
+        
+        
+        print("Scraping item with variants...")
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        driver = webdriver.Chrome('C:/Users/Vivek Iyer/Desktop/web-crawler/web-scrapper/grofer/grofer/spiders/chromedriver.exe')
+        driver.get(start_urls[0])
+        try:
+            element = WebDriverWait(driver, 60).until(
+                    expected_conditions.presence_of_element_located((By.NAME, "size"))
+                    )
+            buttons = driver.find_elements_by_xpath('//*[@name="size"]')
+            for ele in buttons:
+                name = ele.get_attribute("id")
+                lbl = driver.find_element_by_xpath("//*[@for=\""+ name +"\"]")
+                lbl.click()
+                item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
+                price = driver.find_element_by_class_name("sc-bRBYWo")
+                print(item.text + " " + price.text)
+        except TimeoutException:
+            print ("Connection Timeout")
+        finally:
+            driver.quit()
+            
+a= BigbasketSpider()
+a.scrape_item_with_varaints()
+            
+
+
 
 
 #A spider to crap grofers.com
