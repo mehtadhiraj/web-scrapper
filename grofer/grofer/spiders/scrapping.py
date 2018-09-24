@@ -1,4 +1,3 @@
-
 import subprocess
 import scrapy
 import pymysql
@@ -14,6 +13,9 @@ import pickle
 import requests
 import time
 import threading
+import sys
+
+
 
 # Generating Cookies from chrome
 def getChromeCookies() -> None:
@@ -40,25 +42,7 @@ def getChromeCookies() -> None:
  # Creating Cookies form Chrome
 getChromeCookies()
 
-def getPinArea():    
-    # SQL query
-    sql = 'SELECT area, pincode FROM location'
-    # Execute query
-    cursor.execute(sql)
-    # Setting browser version
-    process = CrawlerProcess({
-        'USER_AGENT': (
-                'Chrome/69.0.3497.81')
-    })
-    loc= []
-    a = []
-    # Looping through all the pincodes present in database 
-    for location in cursor:
-        loc.append(location[1])
-        a.append(location[0])
-    return loc,a
-
-
+    
 #  Connect to the database.
 connection = pymysql.connect(
     host='localhost',
@@ -70,6 +54,8 @@ connection = pymysql.connect(
 print ("Database Connection Established") 
 
 cursor  = connection.cursor()
+
+
 
 '''
  Data that needs to be stored
@@ -89,7 +75,12 @@ class Item(scrapy.Item):
 
 #A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
-    # SQL
+    def __init__(self):
+        self.pincode = ''
+        self.location = ''
+
+    print('===========================================')
+#     print(self.pincode)
     print('Scrapy.Spider')
     print(scrapy.Spider)
     sql = "SELECT id FROM `skus` WHERE website = 'grofers'";
@@ -102,11 +93,9 @@ class GroferSpider(scrapy.Spider):
     for url in cursor:
         # Appending a product id
         start_urls.append(base_url+url[0])
-    print(start_urls)
-    global pin  
-    pin = getPinArea()
-    print(pin)
-# Requesting a Cookies for location baed data scraping
+    print(start_urls)   
+ 
+# Requesting a Cookies for location based data scraping
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
         '''
@@ -116,12 +105,12 @@ class GroferSpider(scrapy.Spider):
         storing the following pkl file as a dictionary in a "cookieJar"
         
         '''
-        with open('./cookies/grofers_pincodes/'+pin[0][0]+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        with open('./cookies/grofers_pincodes/'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
         print(cookieJar)
         # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
-      
+            
     # Parsing to scrap data  
     def parse(self, response):
         item = Item() # Creating an object of class Item
@@ -146,12 +135,9 @@ class GroferSpider(scrapy.Spider):
         if item['stock'][0] == '':
             item['stock'] = ['Curently Unavailable']
         item['website']=['Grofers']
-        item['area'] = [pin[1][0]]
-        item['pincode'] = [pin[0][0]]
-        del pin[0][0]
-        del pin[1][0]
+        item['area'] = [location]
+        item['pincode'] = [pincode]
         return storeItem(item, response)
-
                  
 #Spider to Scrap data from Amazon
 # class AmazonSpider(scrapy.Spider):
@@ -189,7 +175,7 @@ class GroferSpider(scrapy.Spider):
 #         item['name'][0] = item['name'][0].replace('\n',"").strip() 
 #         item['stock'][0] = item['stock'][0].replace('\n',"").strip()
 #         
-        return storeItem(item, response)
+#         return storeItem(item, response)
   
 # Storing Item in database
 def storeItem(item, response):
@@ -201,7 +187,7 @@ def storeItem(item, response):
     website = item['website']
     loc = item['area']
     pincd = item['pincode']
-
+    
     print(name)
     print(offer)
     print(price)
@@ -221,6 +207,7 @@ def storeItem(item, response):
     writer.writerow((name[0], offer[0], price[0], stock))
     csvFile.close() 
     return item
+
      
 #     # Setting browser version
 process = CrawlerProcess({
@@ -229,15 +216,33 @@ process = CrawlerProcess({
 })
 #      
 #     # Invoking Spiders to crawl data  
-#     process.crawl(GroferSpider)
+# process.crawl(GroferSpider)
 #     process.crawl(AmazonSpider)
 #     process.start()
 #     print('Process Stopped')
-    
-# Invoking spiders of grofer and amazon to crawl data.
-process.crawl(GroferSpider)
-# process.crawl(AmazonSpider)
 
+# # SQL query
+sql = 'SELECT area, pincode FROM location'
+# Execute query
+cursor.execute(sql)
+# # Setting browser version
+# process = CrawlerProcess({
+# 'USER_AGENT': (
+# 'Chrome/69.0.3497.81')
+# })
+# 
+# # Looping through all the pincodes present in database 
+for area, pin in cursor:
+    # Invoking spiders of grofer and amazon to crawl data.
+    print(pin)
+    groferObject = GroferSpider()
+    groferObject.location = area
+    groferObject.pincode = pin
+    print(groferObject.pincode)
+    process.crawl(groferObject)
+    
+# process.crawl(AmazonSpider)
+    
 process.start() # Start the process to crawl
 print('Process Stopped')
 
