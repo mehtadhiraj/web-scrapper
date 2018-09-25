@@ -112,15 +112,6 @@ class BigbasketSpider():
         # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
-<<<<<<< HEAD
-            #print(response)          
- 
- 
-=======
-            #print(response)         
-
-
->>>>>>> 45a79cd92837ae735b6f1b7b27cc3a3150cad3e0
     def scrape_single_item(self):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -164,11 +155,7 @@ class BigbasketSpider():
             print ("Connection Timeout")
         finally:
             driver.quit()
-<<<<<<< HEAD
-             
-=======
             
-
 
     def storeItem(item):
         name= item[0]
@@ -190,7 +177,6 @@ class BigbasketSpider():
         csvFile.close() 
         return item
     
->>>>>>> 45a79cd92837ae735b6f1b7b27cc3a3150cad3e0
 a= BigbasketSpider()
 a.scrape_item_with_varaints()
 
