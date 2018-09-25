@@ -1,8 +1,8 @@
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.by import By
+# from selenium import webdriver
+# from selenium.common.exceptions import TimeoutException
+# from selenium.webdriver.support.wait import WebDriverWait
+# from selenium.webdriver.support import expected_conditions
+# from selenium.webdriver.common.by import By
 import subprocess
 import scrapy
 import pymysql
@@ -79,9 +79,9 @@ class Item(scrapy.Item):
     website = scrapy.Field()
 
 class BigbasketSpider():
-    
+     
     print ("Scraping single item with no variants...")
-
+ 
     cursor = connection.cursor()
     sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
     # Execute query
@@ -94,7 +94,7 @@ class BigbasketSpider():
         # Appending a product id
         start_urls.append(base_url+url[0]+'//')
         print(start_urls) 
-        
+         
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
         '''
@@ -102,7 +102,7 @@ class BigbasketSpider():
         Append a pincode in the path below.
         "pin" is defined global 
         storing the following pkl file as a dictionary in a "cookieJar"
-        
+         
         '''
         with open('./cookies/bigbasket_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
         print(cookieJar)
@@ -110,8 +110,8 @@ class BigbasketSpider():
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
             #print(response)          
-
-
+ 
+ 
     def scrape_single_item(self):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -127,10 +127,10 @@ class BigbasketSpider():
             print ("Connection Timeout")
         finally:
             driver.quit()
-        
+         
     def scrape_item_with_varaints(self):
-        
-        
+         
+         
         print("Scraping item with variants...")
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -152,7 +152,7 @@ class BigbasketSpider():
             print ("Connection Timeout")
         finally:
             driver.quit()
-            
+             
 a= BigbasketSpider()
 a.scrape_item_with_varaints()
             
@@ -162,28 +162,30 @@ a.scrape_item_with_varaints()
 
 #A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):
-    def __init__(self):
+    def __init__(self, pincode, location):
         self.pincode = ''
         self.location = ''
 
-    print('===========================================')
-#     print(self.pincode)
-    print('Scrapy.Spider')
-    print(scrapy.Spider)
-    sql = "SELECT id FROM `skus` WHERE website = 'grofers'";
-    # Execute query
-    cursor.execute(sql)
-    name = "GroferSpider"
-    start_urls = []
-    allowed_domains = ['www.grofers.com']  # Domain allowed by this spider
-    base_url = 'https://www.grofers.com/prn//prid/' # Base url for grofers
-    for url in cursor:
-        # Appending a product id
-        start_urls.append(base_url+url[0])
-    print(start_urls)   
+    
  
 # Requesting a Cookies for location based data scraping
     def start_requests(self):
+        
+        print('===========================================')
+    #     print(self.pincode)
+        print('Scrapy.Spider')
+        print(scrapy.Spider)
+        sql = "SELECT id FROM `skus` WHERE website = 'grofers'";
+        # Execute query
+        cursor.execute(sql)
+        name = "GroferSpider"
+        start_urls = []
+        allowed_domains = ['www.grofers.com']  # Domain allowed by this spider
+        base_url = 'https://www.grofers.com/prn//prid/' # Base url for grofers
+        for url in cursor:
+            # Appending a product id
+            start_urls.append(base_url+url[0])
+        print(start_urls)   
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
         '''
         Open pkl file stored with stored by the name same as pincode 
@@ -301,30 +303,17 @@ process = CrawlerProcess({
     'USER_AGENT': (
             'Chrome/69.0.3497.81')
 })
-#      
-#     # Invoking Spiders to crawl data  
-# process.crawl(GroferSpider)
-#     process.crawl(AmazonSpider)
-#     process.start()
-#     print('Process Stopped')
 
 # # SQL query
 sql = 'SELECT area, pincode FROM location'
 # Execute query
 cursor.execute(sql)
-# # Setting browser version
-# process = CrawlerProcess({
-# 'USER_AGENT': (
-# 'Chrome/69.0.3497.81')
-# })
-# 
+ 
 # # Looping through all the pincodes present in database 
 for area, pin in cursor:
     # Invoking spiders of grofer and amazon to crawl data.
     print(pin)
-    groferObject = GroferSpider()
-    groferObject.location = area
-    groferObject.pincode = pin
+    groferObject = GroferSpider(pin, area)
     print(groferObject.pincode)
     process.crawl(groferObject)
     
