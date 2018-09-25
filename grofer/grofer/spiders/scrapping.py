@@ -43,13 +43,12 @@ def getChromeCookies() -> None:
         print(c)
     print(cJar1)
 #    Replace PINCODE below
-<<<<<<< HEAD
+
     with open('cookies/grofers_pincodes/400701.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
-=======
+
     with open('cookies/bigbasket_pincodes/560029.pkl', 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
 
  # Creating Cookies form Chrome
->>>>>>> 3878a1588865e47ea48b432413025670151b7721
 getChromeCookies()
 
     
@@ -210,7 +209,6 @@ class GroferSpider(scrapy.Spider):
         item['offer']='No Offer'
         item['price']=response.css('.pdp-product__price--new::text').extract()
         item['price']=[item['price'][1]]
-<<<<<<< HEAD
 #         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
         item['rating']= ['Data Missing']
         item['stock']= response.css('.pdp-product__out-of-stock::text').extract()
@@ -219,60 +217,6 @@ class GroferSpider(scrapy.Spider):
         print(item['stock'])
         return storeItem(item, response)  
                  
-class AmazonSpider(scrapy.Spider):
-    #SQL
-    sql = "SELECT producturlname, id FROM `skus` WHERE website = 'amazon'";
-    #Execute query
-    cursor.execute(sql)
-     
-    name = "AmazonSpider"
-    allowed_domains = ['www.amazon.in']
-    base_url = 'https://www.amazon.in/dp/'
-    start_urls = []
-    for url in cursor:
-        start_urls.append(base_url+url[1])
-    print("=================================================\n")
-    print(start_urls)
-# Cookie based data scraping    
-    def start_requests(self):
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/amazon_pincodes/400701.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-        print(cookieJar)
-        for i,url in enumerate(self.start_urls):
-            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
-      
-    def parse(self, response):
-        item = Item()
-        item['name']=response.css('#productTitle::text').extract()
-        item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
-        item['price']=response.css('#priceblock_ourprice::text').extract()
-        item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
-        item['stock']=response.css('#availability > span::text').extract()
-        item['website']='Amazon'
-        item['name'][0] = item['name'][0].replace('\n',"").strip() # Striping data to remove blank spaces
-    
-=======
-        item['rating']= ['Data Missing'] # For grofers no rating feature available. Hence stated as "Data Missing"
-        '''
-        Grofers give the stock availability in the form of buttons
-        Stock unavailable is also in the form of button 
-        Hence data fetched is of both available and unavailable.
-        '''
-        item['stock']= response.css('.product-variant__btn::text').extract()
-        # It consists of data from a button that is unavailable. 
-        outOfStock = response.css('.product-variant__btn--disabled::text').extract()
-        #Hence using set operation data of unavailable product is removed from the complete list. 
-        item['stock'] = list(set(item['stock'])-set(outOfStock))
-        #Now applying a join operation to store the data on a 0th index.
-        item['stock'] = [', '.join(item['stock'])]
-        # After all the operation if stock is still empty we store the status as Unavailable
-        if item['stock'][0] == '':
-            item['stock'] = ['Curently Unavailable']
-        item['website']=['Grofers']
-        item['area'] = [location]
-        item['pincode'] = [pincode]
->>>>>>> 3878a1588865e47ea48b432413025670151b7721
-        return storeItem(item, response)
                  
 #Spider to Scrap data from Amazon
 # class AmazonSpider(scrapy.Spider):
