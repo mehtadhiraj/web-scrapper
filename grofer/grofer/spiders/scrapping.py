@@ -216,7 +216,7 @@ class GroferSpider(scrapy.Spider):
         with open('./cookies/grofers_pincodes/'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
         print(cookieJar)
         # Passing URL cookieJar and the headers to scrap location based values.
-        for i,url in enumerate(self.start_urls):
+        for i,url in enumerate(start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
              
     # Parsing to scrap data  
@@ -224,15 +224,29 @@ class GroferSpider(scrapy.Spider):
         item = Item() # Creating an object of class Item
         item['name']=response.css('.LinesEllipsis::text').extract()
         item['offer']=response.css('.offer-text::text').extract()
-        item['offer']='No Offer'
+        item['offer']=['No Offer']
         item['price']=response.css('.pdp-product__price--new::text').extract()
         item['price']=[item['price'][1]]
 #         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
         item['rating']= ['Data Missing']
-        item['stock']= response.css('.pdp-product__out-of-stock::text').extract()
-        #item['stock']=['Data missing']
-        item['website']='Grofers'
-        print(item['stock'])
+        '''
+        Grofers give the stock availability in the form of buttons
+        Stock unavailable is also in the form of button 
+        Hence data fetched is of both available and unavailable.
+        '''
+        item['stock']= response.css('.product-variant__btn::text').extract()
+        # It consists of data from a button that is unavailable. 
+        outOfStock = response.css('.product-variant__btn--disabled::text').extract()
+        #Hence using set operation data of unavailable product is removed from the complete list. 
+        item['stock'] = list(set(item['stock'])-set(outOfStock))
+        #Now applying a join operation to store the data on a 0th index.
+        item['stock'] = [', '.join(item['stock'])]
+        # After all the operation if stock is still empty we store the status as Unavailable
+        if item['stock'][0] == '':
+            item['stock'] = ['Curently Unavailable']
+        item['website']=['Grofers']
+        item['area'] = [self.location]
+        item['pincode'] = [self.pincode]
         return storeItem(item, response)
              
 
@@ -327,7 +341,7 @@ for area, pin in cursor:
     # Invoking spiders of grofer and amazon to crawl data.
     print('ok')
 #     obj = GroferSpider(pin, area)
-    process.crawl(GroferSpider().__init__(pin, area))
+    process.crawl(GroferSpider, pincode = pin, location = area)
      
 # process.crawl(AmazonSpider)
      
