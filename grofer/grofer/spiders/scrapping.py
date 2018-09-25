@@ -43,6 +43,9 @@ def getChromeCookies() -> None:
         print(c)
     print(cJar1)
 #    Replace PINCODE below
+
+    with open('cookies/grofers_pincodes/400701.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
+
     with open('cookies/bigbasket_pincodes/560029.pkl', 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
 
  # Creating Cookies form Chrome
@@ -83,11 +86,11 @@ class BigbasketSpider():
     print ("Scraping single item with no variants...")
  
     cursor = connection.cursor()
-    sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
+    sql = "SELECT id FROM `skus` WHERE producturlname = 'fresho-pav-chemical-free-300-gm'";
     # Execute query
     cursor.execute(sql)
     name = "GroferSpider"
-    start_urls= []
+    start_urls=[]
     allowed_domains = ['www.bigbasket.com']  # Domain allowed by this spider
     base_url = 'https://www.bigbasket.com/pd/' # Base url for grofers
     for url in cursor:
@@ -109,9 +112,15 @@ class BigbasketSpider():
         # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
+<<<<<<< HEAD
             #print(response)          
  
  
+=======
+            #print(response)         
+
+
+>>>>>>> 45a79cd92837ae735b6f1b7b27cc3a3150cad3e0
     def scrape_single_item(self):
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -147,14 +156,44 @@ class BigbasketSpider():
                 lbl.click()
                 item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
                 price = driver.find_element_by_class_name("sc-bRBYWo")
+                item1=[item,price]
+                
                 print(item.text + " " + price.text)
+                storeItem(item1)
         except TimeoutException:
             print ("Connection Timeout")
         finally:
             driver.quit()
+<<<<<<< HEAD
              
+=======
+            
+
+
+    def storeItem(item):
+        name= item[0]
+        price= item[1]
+        if name:
+            stock='AVAILABLE'
+        else:
+            stock='UNAVAILABLE'
+        
+    
+        sql = 'INSERT INTO productdetails(name,price, stock) values("'+name[0]+'","'+price[0]+'", "'+stock+'")'
+        print(sql)
+        cursor.execute(sql)
+        connection.commit()
+#     Saving data in csv file.
+        csvFile = open('products.csv', 'a+', newline='')
+        writer = csv.writer(csvFile)
+        writer.writerow((name[0],price[0], stock))
+        csvFile.close() 
+        return item
+    
+>>>>>>> 45a79cd92837ae735b6f1b7b27cc3a3150cad3e0
 a= BigbasketSpider()
 a.scrape_item_with_varaints()
+
             
 
 
@@ -205,28 +244,17 @@ class GroferSpider(scrapy.Spider):
         item = Item() # Creating an object of class Item
         item['name']=response.css('.LinesEllipsis::text').extract()
         item['offer']=response.css('.offer-text::text').extract()
+        item['offer']='No Offer'
         item['price']=response.css('.pdp-product__price--new::text').extract()
         item['price']=[item['price'][1]]
-        item['rating']= ['Data Missing'] # For grofers no rating feature available. Hence stated as "Data Missing"
-        '''
-        Grofers give the stock availability in the form of buttons
-        Stock unavailable is also in the form of button 
-        Hence data fetched is of both available and unavailable.
-        '''
-        item['stock']= response.css('.product-variant__btn::text').extract()
-        # It consists of data from a button that is unavailable. 
-        outOfStock = response.css('.product-variant__btn--disabled::text').extract()
-        #Hence using set operation data of unavailable product is removed from the complete list. 
-        item['stock'] = list(set(item['stock'])-set(outOfStock))
-        #Now applying a join operation to store the data on a 0th index.
-        item['stock'] = [', '.join(item['stock'])]
-        # After all the operation if stock is still empty we store the status as Unavailable
-        if item['stock'][0] == '':
-            item['stock'] = ['Curently Unavailable']
-        item['website']=['Grofers']
-        item['area'] = [location]
-        item['pincode'] = [pincode]
-        return storeItem(item, response)
+#         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
+        item['rating']= ['Data Missing']
+        item['stock']= response.css('.pdp-product__out-of-stock::text').extract()
+        #item['stock']=['Data missing']
+        item['website']='Grofers'
+        print(item['stock'])
+        return storeItem(item, response)  
+                 
                  
 #Spider to Scrap data from Amazon
 # class AmazonSpider(scrapy.Spider):
@@ -293,7 +321,7 @@ def storeItem(item, response):
 #     Saving data in csv file.
     csvFile = open('products.csv', 'a+', newline='')
     writer = csv.writer(csvFile)
-    writer.writerow((name[0], offer[0], price[0], stock))
+    writer.writerow((name[0], offer[0], price[0], stock[0], rating[0], website[0]))
     csvFile.close() 
     return item
 
