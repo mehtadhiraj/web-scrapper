@@ -78,11 +78,11 @@ class BigbasketSpider():
     print ("Scraping single item with no variants...")
 
     cursor = connection.cursor()
-    sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
+    sql = "SELECT id FROM `skus` WHERE producturlname = 'fresho-pav-chemical-free-300-gm'";
     # Execute query
     cursor.execute(sql)
     name = "GroferSpider"
-    start_urls= []
+    start_urls=[]
     allowed_domains = ['www.bigbasket.com']  # Domain allowed by this spider
     base_url = 'https://www.bigbasket.com/pd/' # Base url for grofers
     for url in cursor:
@@ -104,7 +104,7 @@ class BigbasketSpider():
         # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
-            #print(response)          
+            #print(response)         
 
 
     def scrape_single_item(self):
@@ -142,14 +142,40 @@ class BigbasketSpider():
                 lbl.click()
                 item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
                 price = driver.find_element_by_class_name("sc-bRBYWo")
+                item1=[item,price]
+                
                 print(item.text + " " + price.text)
+                storeItem(item1)
         except TimeoutException:
             print ("Connection Timeout")
         finally:
             driver.quit()
             
+
+
+    def storeItem(item):
+        name= item[0]
+        price= item[1]
+        if name:
+            stock='AVAILABLE'
+        else:
+            stock='UNAVAILABLE'
+        
+    
+        sql = 'INSERT INTO productdetails(name,price, stock) values("'+name[0]+'","'+price[0]+'", "'+stock+'")'
+        print(sql)
+        cursor.execute(sql)
+        connection.commit()
+#     Saving data in csv file.
+        csvFile = open('products.csv', 'a+', newline='')
+        writer = csv.writer(csvFile)
+        writer.writerow((name[0],price[0], stock))
+        csvFile.close() 
+        return item
+    
 a= BigbasketSpider()
 a.scrape_item_with_varaints()
+
             
 
 
