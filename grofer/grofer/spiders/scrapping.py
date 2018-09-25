@@ -34,7 +34,7 @@ def getChromeCookies() -> None:
         print(c)
     print(cJar1)
 #    Replace PINCODE below
-    with open('cookies/grofers_pincodes/123456.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
+    with open('cookies/grofers_pincodes/400701.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
 getChromeCookies()
 
 # # Connect to the database.
@@ -86,6 +86,7 @@ class GroferSpider(scrapy.Spider):
         item = Item()
         item['name']=response.css('.LinesEllipsis::text').extract()
         item['offer']=response.css('.offer-text::text').extract()
+        item['offer']='No Offer'
         item['price']=response.css('.pdp-product__price--new::text').extract()
         item['price']=[item['price'][1]]
 #         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
@@ -113,7 +114,7 @@ class AmazonSpider(scrapy.Spider):
 # Cookie based data scraping    
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/amazon_pincodes/110001.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        with open('cookies/amazon_pincodes/400701.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
         print(cookieJar)
         for i,url in enumerate(self.start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
@@ -151,7 +152,7 @@ def storeItem(item, response):
 #     Saving data in csv file.
     csvFile = open('products.csv', 'a+', newline='')
     writer = csv.writer(csvFile)
-    writer.writerow((name[0], offer[0], price[0], stock))
+    writer.writerow((name[0], offer[0], price[0], stock[0], rating[0], website[0]))
     csvFile.close() 
     return item
  
