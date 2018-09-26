@@ -14,6 +14,7 @@ import csv
 import pymysql.cursors
 from twisted.conch.insults.window import cursor
 from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
 from twisted.conch.test.test_helper import FakeDelayedCall
 from _overlapped import NULL
 from asn1crypto._ffi import null
@@ -24,7 +25,8 @@ import requests
 import time
 import threading
 import sys
-
+from scrapy.utils.log import configure_logging
+import os
 global response
 
 #  Connect to the database.
@@ -48,13 +50,13 @@ Defining a class consisting of required field
 '''
 class Item(scrapy.Item):
     name = scrapy.Field()
-    offer = scrapy.Field()
     price = scrapy.Field()
     stock = scrapy.Field()
     rating = scrapy.Field()
-    area = scrapy.Field()
-    pincode = scrapy.Field()
-    website = scrapy.Field()
+    location_id = scrapy.Field()
+    store_id = scrapy.Field()
+    sku_id = scrapy.Field()
+    product_id = scrapy.Field()
  
  
  
@@ -87,7 +89,7 @@ def ClearCookies():
     #driver.manage().deleteAllCookies();
      
 # Creating Cookies form Chrome
-def ChangeLocation(pincode, url, sku, store):
+def ChangeLocation(pincode, store, base_url, location_id, store_id, sku):
      
 #     sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
 #     #Execute query
@@ -97,7 +99,7 @@ def ChangeLocation(pincode, url, sku, store):
 #     base_url = 'https://www.amazon.in/dp/'
 #     start_urls = []
 #     for url in cursor:
-    start_urls = url+sku
+    start_urls = base_url+sku
      
     # Creating an instance webdriver 
     browser = webdriver.Chrome('chromedriver.exe') 
@@ -131,7 +133,7 @@ def ChangeLocation(pincode, url, sku, store):
     apply[0].click()
     time.sleep(2)
      
-    done = browser.find_elements_by_xpath('//*[@id="a-popover-2"]/div/div[2]/span/span/span/button')
+    done = browser.find_elements_by_name('glowDoneButton')#('//*[@id="a-popover-2"]/div/div[2]/span/span/span/button')
     
     print(done)
     done[0].click()
@@ -141,105 +143,116 @@ def ChangeLocation(pincode, url, sku, store):
     driver.get('chrome://settings/clearBrowserData')
     time.sleep(2)
      
-    GetChromeCookies(pincode, store, url)
+    GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
      
     driver.close()
  
  
-def GetChromeCookies(pincode, store, url) -> None:
+def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
     Utility Function to save a new location.
     
     Change to the required new location in Chrome browser by going to 
-    Amazon.in sitebefore calling this function.
+    Amazon.in site before calling this function.
 
     Only to be used to capture cookies for a new PINCODE.  We save and reuse 
     these cookies to pass with the http request for the right PINCODE.
 
     Alternative is to use Selenium webdrivers for browser automation.
+          
     '''
     import browser_cookie3 as cookies
 
-    cJar = cookies.chrome()
+    cJar = cookies.chrome(domain_name='amazon.in')
     cJar1 = {c.name: c.value for c in cJar}
 #     del cJar1['session-id-time']
 #     del cJar1['visitCount']
     print(cJar)
-    path = 'cookies/'+store+'_pincodes/'+pincode+'.pkl'
-    print(path)
 #    Replace PINCODE below
-    with open('cookies/'+store+'_pincodes/'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
-
+    with open('cookies/'+store+'_pincodes/'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
+    # # Setting browser version
+    
  
-# #Spider to scrap amazon's data
-# class AmazonSpider(scrapy.Spider):
-#     
-#     sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
-#     #Execute query
-#     cursor.execute(sql)
-#   
-#     name = "AmazonSpider"
-#     allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
-#     base_url = 'https://www.amazon.in/dp/'
-#     start_urls = []
-#     for url in cursor:
-#         start_urls.append(base_url+url[0])
-#     print(start_urls)
-#  # Cookie based data scraping    
-#     def start_requests(self):
-#         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-#         with open('cookies/amazon_pincodes/'+start_urls[0]+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-#         print(cookieJar)
-#         for i,url in enumerate(self.start_urls):
-#             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
-#       
-#     def parse(self, response):
-#         item = Item()
-#         item['name']=response.css('#productTitle::text').extract()
-#         item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
-#         item['price']=response.css('#priceblock_ourprice::text').extract()
+#Spider to scrap amazon's data
+class AmazonSpider(scrapy.Spider):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store):
+        self.base_url = base_url
+        self.pincode = pincode
+        self.area = area
+        self.sku = sku
+        self.location_id = location_id
+        self.store_id = store_id
+        self.store = store
+
+ # Cookie based data scraping    
+    def start_requests(self):
+        for file in os.listdir("cookies/amazon_pincodes"):
+            if not(os.path.isfile(self.pincode+'pkl')):
+                ClearCookies()
+                ChangeLocation(self.pincode, store, self.base_url, self.location_id, self.store_id, self.sku)
+        name = "AmazonSpider"
+        allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
+        start_urls = [self.base_url+self.sku]
+        print(start_urls)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
+        with open('cookies/amazon_pincodes/'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        print(cookieJar)
+        for i,url in enumerate(self.start_urls):
+            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+       
+    def parse(self, response):
+        item = Item()
+        item['name']=response.css('#productTitle::text').extract()
+        item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
+        item['price']=response.css('#priceblock_ourprice::text').extract()
 #         item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
-#         item['stock']=response.css('#availability > span::text').extract()
-#         
-#         # Striping data to remove blank spaces
-#         item['name'][0] = item['name'][0].replace('\n',"").strip() 
-#         item['stock'][0] = item['stock'][0].replace('\n',"").strip()
-#          
-#         return storeItem(item, response)
-# 
-# def storeItem(item, response):
-#     name = item['name']
-#     offer = item['offer']
-#     price = item['price']
-#     stock = item['stock']
-#     rating = item['rating']
-#     
-#     print(name)
-#     print(offer)
-#     print(price)
-#     print(stock)
-#     print(rating)
-#     print(website)
-#     print(pincd)
-#     print(loc)
-#     
-#     sql = 'INSERT INTO productdetails(name, offer, price, stock, rating) values("'+name[0]+'","'+offer[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
-#     print(sql)
-#     cursor.execute(sql)
-#     connection.commit()
-# #     Saving data in csv file.
-#     csvFile = open('products.csv', 'a+', newline='')
-#     writer = csv.writer(csvFile)
-#     writer.writerow((name[0], offer[0], price[0], stock[0], rating[0]))
-#     csvFile.close() 
-#     return item
+        item['stock']=response.css('#availability > span::text').extract()
+         
+        # Striping data to remove blank spaces
+        item['name'][0] = item['name'][0].replace('\n',"").strip() 
+        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
+        item['location_id'] = [location_id]
+        item['store_id'] = [store_id]
+        item['sku_id'] = [sku]
+        item['product_id'] = [location_id+store_id]
+          
+        return storeItem(item, response)
+ 
+def storeItem(item, response):
+    name = item['name']
+    price = item['price']
+    stock = item['stock']
+    rating = item['rating']
+    product_id = item['product_id']
+    sku_id  = item['sku_id']
+    store_id = item['store_id']
+    location_id = item['location_id'] 
+    print(name)
+    print(price)
+    print(stock)
+    print(rating)
+    print(product_id)
+    print(sku_id)
+    print(store_id)
+    print(location_id)
+     
+    sql = 'INSERT INTO productdetails(product_id, skus_id, store_id, location_id, product_name, product_price, product_stock, product_rating) values("'+product_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
+    print(sql)
+    cursor.execute(sql)
+    connection.commit()
+#     Saving data in csv file.
+    csvFile = open('products.csv', 'a+', newline='')
+    writer = csv.writer(csvFile)
+    writer.writerow((name[0], offer[0], price[0], stock[0], rating[0]))
+    csvFile.close() 
+    return item
 # 
 #      
 # # Setting browser version
-# process = CrawlerProcess({
-#     'USER_AGENT': (
-#             'Chrome/69.0.3497.81')
-# })
+process = CrawlerProcess({
+    'USER_AGENT': (
+            'Chrome/69.0.3497.81')
+})
 # #      
 # #     # Invoking Spiders to crawl data  
 # # process.crawl(GroferSpider)
@@ -247,28 +260,30 @@ def GetChromeCookies(pincode, store, url) -> None:
 # # process.start()
 # print('Process Stopped')
    
+# process.start()
 
-sql = 'SELECT store_name FROM store'
+sql = 'SELECT store_name, store_id FROM store'
 cursor1.execute(sql)
 
-for store in cursor1:
-    sql = 'SELECT * FROM location'
-    cursor2.execute(sql)
-    print(store[0])
-    for location_id, area, pincode in cursor2:
-        sql = "SELECT skus.sku_id, store.base_url FROM skus, store WHERE store.store_name = '"+store[0]+"' AND skus.store_id = store.store_id"
+for store, store_id in cursor1:
+    print(store)
+    print(store_id)
+    sql = "SELECT skus.sku_id, store.base_url FROM skus, store WHERE store.store_name = '"+store+"' AND skus.store_id = store.store_id"
+    print(cursor2.execute(sql))
+    for sku, base_url in cursor2:
+        print(sku)
+        print(base_url)
+        sql = 'SELECT * FROM location'
         cursor3.execute(sql)
-        print(location_id)
-        print(pincode)
-        print(area)
-        for sku, url in cursor3:
-            print(sku)
-            print(url)
-            ClearCookies()
-            ChangeLocation(pincode, url, sku, store[0])
-#             GetChromeCookies(pincode, store[0], url)
-            
+        for location_id, area, pincode in cursor3:
+            print(location_id)
+            print(pincode)
+            print(area)
+            process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
+#             process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id)
 
+            
+process.start()
 print(cursor)
         
-        
+
