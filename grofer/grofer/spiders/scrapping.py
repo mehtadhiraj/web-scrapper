@@ -81,104 +81,104 @@ class Item(scrapy.Item):
     pincode = scrapy.Field()
     website = scrapy.Field()
 
-# class BigbasketSpider():
-#      
-#      
-#          
-#     def start_requests(self):
-#         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
-#         '''
-#         Open pkl file stored with stored by the name same as pincode 
-#         Append a pincode in the path below.
-#         "pin" is defined global 
-#         storing the following pkl file as a dictionary in a "cookieJar"
-#          
-#         '''
-#         with open('./cookies/bigbasket_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-#         print(cookieJar)
-#         # Passing URL cookieJar and the headers to scrap location based values.
-#         for i,url in enumerate(self.start_urls):
-#             yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
-# #     def scrape_single_item(self):
-# #         options = webdriver.ChromeOptions()
-# #         options.add_argument('headless')
-# #         driver = webdriver.Chrome('C:/Users/Vivek Iyer/Desktop/web-crawler/web-scrapper/grofer/grofer/spiders/chromedriver.exe')
-# #         driver.get(start_urls[0])
-# #         try:
-# #             element = WebDriverWait(driver, 60).until(
-# #                     expected_conditions.presence_of_element_located((By.CLASS_NAME, "sc-bRBYWo"))
-# #                     )
-# #             item_desc = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
-# #             print (item_desc.text + " " + element.text)
-# #         except TimeoutException:
-# #             print ("Connection Timeout")
-# #         finally:
-# #             driver.quit()
-#          
-#     def scrape_item_with_varaints(self):
-#         print ("Scraping single item with no variants...")
-#  
-#         cursor = connection.cursor()
-#         sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
-#         # Execute query
-#         cursor.execute(sql)
-#         name = "GroferSpider"
-#         start_urls=[]
-#         allowed_domains = ['www.bigbasket.com']  # Domain allowed by this spider
-#         base_url = 'https://www.bigbasket.com/pd/' # Base url for grofers
-#         for url in cursor:
-#             # Appending a product id
-#             start_urls.append(base_url+url[0]+'//')
-#             print(start_urls)
-#          
-#         print("Scraping item with variants...")
-#         options = webdriver.ChromeOptions()
-#         options.add_argument('--no-sandbox')
-#         driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
-#         driver.get(start_urls[0])
-#         try:
-#             element = WebDriverWait(driver, 60).until(
-#                     expected_conditions.presence_of_element_located((By.NAME, "size"))
-#                     )
-#             buttons = driver.find_elements_by_xpath('//*[@name="size"]')
-#             for ele in buttons:
-#                 name = ele.get_attribute("id")
-#                 lbl = driver.find_element_by_xpath("//*[@for=\""+ name +"\"]")
-#                 lbl.click()
-#                 item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
-#                 price = driver.find_element_by_class_name("sc-bRBYWo")
-#                 item1=[item,price]
-#                 
-#                 print(item.text + " " + price.text)
-#                 storeItem(item1)
-#         except TimeoutException:
-#             print ("Connection Timeout")
-#         finally:
-#             driver.quit()
-#             
-# 
-#     def storeItem(item):
-#         name= item[0]
-#         price= item[1]
-#         if name:
-#             stock='AVAILABLE'
-#         else:
-#             stock='UNAVAILABLE'
-#         
-#     
-#         sql = 'INSERT INTO productdetails(name,price, stock) values("'+name[0]+'","'+price[0]+'", "'+stock+'")'
-#         print(sql)
-#         cursor.execute(sql)
-#         connection.commit()
-# #     Saving data in csv file.
-#         csvFile = open('products.csv', 'a+', newline='')
-#         writer = csv.writer(csvFile)
-#         writer.writerow((name[0],price[0], stock))
-#         csvFile.close() 
-#         return item
-#     
-# a= BigbasketSpider()
-# a.scrape_item_with_varaints()
+class BigbasketSpider():
+      
+      
+          
+    def start_requests(self):
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
+        '''
+        Open pkl file stored with stored by the name same as pincode 
+        Append a pincode in the path below.
+        "pin" is defined global 
+        storing the following pkl file as a dictionary in a "cookieJar"
+          
+        '''
+        with open('./cookies/bigbasket_pincodes/'+pin+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        print(cookieJar)
+        # Passing URL cookieJar and the headers to scrap location based values.
+        for i,url in enumerate(self.start_urls):
+            yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_variants, headers=headers)
+    def scrape_single_item(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        driver = webdriver.Chrome('C:/Users/Vivek Iyer/Desktop/web-crawler/web-scrapper/grofer/grofer/spiders/chromedriver.exe')
+        driver.get(start_urls[0])
+        try:
+            element = WebDriverWait(driver, 60).until(
+                    expected_conditions.presence_of_element_located((By.CLASS_NAME, "sc-bRBYWo"))
+                    )
+            item_desc = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
+            print (item_desc.text + " " + element.text)
+        except TimeoutException:
+            print ("Connection Timeout")
+        finally:
+            driver.quit()
+          
+    def scrape_item_with_varaints(self):
+        print ("Scraping single item with no variants...")
+  
+        cursor = connection.cursor()
+        sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
+        # Execute query
+        cursor.execute(sql)
+        name = "GroferSpider"
+        start_urls=[]
+        allowed_domains = ['www.bigbasket.com']  # Domain allowed by this spider
+        base_url = 'https://www.bigbasket.com/pd/' # Base url for grofers
+        for url in cursor:
+            # Appending a product id
+            start_urls.append(base_url+url[0]+'//')
+            print(start_urls)
+          
+        print("Scraping item with variants...")
+        options = webdriver.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
+        driver.get(start_urls[0])
+        try:
+            element = WebDriverWait(driver, 60).until(
+                    expected_conditions.presence_of_element_located((By.NAME, "size"))
+                    )
+            buttons = driver.find_elements_by_xpath('//*[@name="size"]')
+            for ele in buttons:
+                name = ele.get_attribute("id")
+                lbl = driver.find_element_by_xpath("//*[@for=\""+ name +"\"]")
+                lbl.click()
+                item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
+                price = driver.find_element_by_class_name("sc-bRBYWo")
+                item1=[item,price]
+                 
+                print(item.text + " " + price.text)
+                storeItem(item1)
+        except TimeoutException:
+            print ("Connection Timeout")
+        finally:
+            driver.quit()
+             
+ 
+    def storeItem(item):
+        name= item[0]
+        price= item[1]
+        if name:
+            stock='AVAILABLE'
+        else:
+            stock='UNAVAILABLE'
+         
+     
+        sql = 'INSERT INTO productdetails(name,price, stock) values("'+name[0]+'","'+price[0]+'", "'+stock+'")'
+        print(sql)
+        cursor.execute(sql)
+        connection.commit()
+#     Saving data in csv file.
+        csvFile = open('products.csv', 'a+', newline='')
+        writer = csv.writer(csvFile)
+        writer.writerow((name[0],price[0], stock))
+        csvFile.close() 
+        return item
+     
+a= BigbasketSpider()
+a.scrape_item_with_varaints()
 
 #A spider to crap grofers.com
 class GroferSpider(scrapy.Spider):

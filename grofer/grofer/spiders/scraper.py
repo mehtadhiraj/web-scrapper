@@ -160,11 +160,13 @@ def GetChromeCookies(pincode, store, url) -> None:
     '''
     import browser_cookie3 as cookies
 
-    cJar = cookies.chrome(domain_name='amazon.in')
+    cJar = cookies.chrome()
     cJar1 = {c.name: c.value for c in cJar}
 #     del cJar1['session-id-time']
 #     del cJar1['visitCount']
     print(cJar)
+    path = 'cookies/'+store+'_pincodes/'+pincode+'.pkl'
+    print(path)
 #    Replace PINCODE below
     with open('cookies/'+store+'_pincodes/'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
 
@@ -264,6 +266,7 @@ for store in cursor1:
             print(url)
             ClearCookies()
             ChangeLocation(pincode, url, sku, store[0])
+#             GetChromeCookies(pincode, store[0], url)
             
 
 print(cursor)
