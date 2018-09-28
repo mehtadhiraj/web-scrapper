@@ -1,4 +1,4 @@
-from twisted.internet import reactor
+# from twisted.internet import reactor 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.select import Select
@@ -28,17 +28,18 @@ import sys
 from scrapy.utils.log import configure_logging
 import os
 global response
+from datetime import datetime
 
 #  Connect to the database.
 connection = pymysql.connect(
    host='localhost',
    user='root',
-   password='123',                             
-   db='scraperdb',
+   password='',                             
+   db='scraperdb1',
 )
 
 print ("Database Connection Established") 
-
+cursor = connection.cursor()
 cursor1  = connection.cursor()
 cursor2  = connection.cursor()
 cursor3  = connection.cursor()
@@ -56,8 +57,6 @@ class Item(scrapy.Item):
     location_id = scrapy.Field()
     store_id = scrapy.Field()
     sku_id = scrapy.Field()
-    product_id = scrapy.Field()
- 
  
  
 def ClearCookies():
@@ -140,13 +139,12 @@ def ChangeLocation(pincode, store, base_url, location_id, store_id, sku):
     time.sleep(2)  
     driver = webdriver.Chrome()
      
-    driver.get('chrome://settings/clearBrowserData')
+#     driver.get('chrome://settings/clearBrowserData')
     time.sleep(2)
-     
+    driver.close()
     GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
      
-    driver.close()
- 
+     
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
@@ -186,10 +184,12 @@ class AmazonSpider(scrapy.Spider):
 
  # Cookie based data scraping    
     def start_requests(self):
-        for file in os.listdir("cookies/amazon_pincodes"):
-            if not(os.path.isfile(self.pincode+'pkl')):
-                ClearCookies()
-                ChangeLocation(self.pincode, store, self.base_url, self.location_id, self.store_id, self.sku)
+#         for file in os.listdir("cookies/amazon_pincodes/"):
+#             print(file)
+#             if os.path.isfile(self.pincode+'pkl'):
+#                 ClearCookies()
+#                 ChangeLocation(self.pincode, self.store, self.base_url, self.location_id, self.store_id, self.sku)
+               
         name = "AmazonSpider"
         allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
         start_urls = [self.base_url+self.sku]
@@ -197,13 +197,15 @@ class AmazonSpider(scrapy.Spider):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
         with open('cookies/amazon_pincodes/'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
         print(cookieJar)
-        for i,url in enumerate(self.start_urls):
+        for i,url in enumerate(start_urls):
             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
        
     def parse(self, response):
         item = Item()
         item['name']=response.css('#productTitle::text').extract()
         item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
+        if len(item['rating']) <1:
+            item['rating'] = ['Not applicable']
         item['price']=response.css('#priceblock_ourprice::text').extract()
 #         item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
         item['stock']=response.css('#availability > span::text').extract()
@@ -211,39 +213,57 @@ class AmazonSpider(scrapy.Spider):
         # Striping data to remove blank spaces
         item['name'][0] = item['name'][0].replace('\n',"").strip() 
         item['stock'][0] = item['stock'][0].replace('\n',"").strip()
-        item['location_id'] = [location_id]
-        item['store_id'] = [store_id]
-        item['sku_id'] = [sku]
-        item['product_id'] = [location_id+store_id]
+        item['location_id'] = [self.location_id]
+        item['store_id'] = [self.store_id]
+        item['sku_id'] = [self.sku]
+    
           
         return storeItem(item, response)
  
 def storeItem(item, response):
+    
+    sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
+    cursor.execute(sql_fetch_session_id_all)
+    connection.commit()
+    current_session_id = []
+    for id in cursor:
+        session_id = str(id[0])
     name = item['name']
     price = item['price']
+    if len(price) < 1:
+        price = ['Data Missing']
     stock = item['stock']
     rating = item['rating']
-    product_id = item['product_id']
-    sku_id  = item['sku_id']
+    asin_id  = item['sku_id']
     store_id = item['store_id']
-    location_id = item['location_id'] 
+    location_id = item['location_id']
+    scrape_datetime= str(datetime.now())
+    store_id = str(store_id[0])
+    location_id = str(location_id[0]) 
+    store_id = [store_id]
+    location_id = [location_id]
+    session_id = [session_id]
     print(name)
     print(price)
     print(stock)
     print(rating)
-    print(product_id)
-    print(sku_id)
-    print(store_id)
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    print(asin_id)
+    print(type(store_id))
     print(location_id)
+    print(session_id)
+
+    
+    
      
-    sql = 'INSERT INTO productdetails(product_id, skus_id, store_id, location_id, product_name, product_price, product_stock, product_rating) values("'+product_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
-    print(sql)
-    cursor.execute(sql)
+    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+asin_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
+    print(sql2)
+    cursor.execute(sql2)
     connection.commit()
 #     Saving data in csv file.
-    csvFile = open('products.csv', 'a+', newline='')
+    csvFile = open('products.csv', 'w+', newline='')
     writer = csv.writer(csvFile)
-    writer.writerow((name[0], offer[0], price[0], stock[0], rating[0]))
+    writer.writerow((name[0], price[0], stock[0], rating[0]))
     csvFile.close() 
     return item
 # 
@@ -262,28 +282,75 @@ process = CrawlerProcess({
    
 # process.start()
 
-sql = 'SELECT store_name, store_id FROM store'
+
+
+cursor = connection.cursor()
+
+start_date_time= str(datetime.now())
+end_date_time= str(datetime.now())
+
+scrape_result= 'SCRAPING IN PROGRESS'
+sql_insert_session = 'INSERT INTO scrape_sessions(session_start_datetime,session_end_datetime, scrape_result ) values("'+start_date_time+'","'+end_date_time+'", "'+scrape_result+'")'
+print(sql_insert_session)
+ab= cursor.execute(sql_insert_session)
+connection.commit()
+
+sql = 'SELECT store_name, id FROM stores'
 cursor1.execute(sql)
+
+
+
+
+    
+    
 
 for store, store_id in cursor1:
     print(store)
     print(store_id)
-    sql = "SELECT skus.sku_id, store.base_url FROM skus, store WHERE store.store_name = '"+store+"' AND skus.store_id = store.store_id"
+    sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id"
     print(cursor2.execute(sql))
     for sku, base_url in cursor2:
+        print('+++++++++++++++++++++++++++')
         print(sku)
+        print('+++++++++++++++++++++++++++')
         print(base_url)
-        sql = 'SELECT * FROM location'
+        sql = 'SELECT store_locations.id, city_area, pin_code FROM store_locations,stores WHERE stores.id = store_locations.store_id'
         cursor3.execute(sql)
-        for location_id, area, pincode in cursor3:
+        for location_id,area,pincode in cursor3:
             print(location_id)
             print(pincode)
             print(area)
+            for root, dirs, files in os.walk('cookies/amazon_pincodes/'):
+                print(root)
+                print(dirs)
+                print(files)
+                if pincode+'.pkl' in files:
+                    print('=======ddddddddddddd========= '+pincode+' ')
+                    pass
+                else:
+                    ClearCookies()
+                    ChangeLocation(pincode, store, base_url, location_id, store_id, sku)
             process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
 #             process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id)
 
-            
-process.start()
-print(cursor)
-        
 
+                
+process.start()
+sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
+cursor.execute(sql_fetch_session_id_all)
+current_session_id = []
+for id in cursor:
+    session_id = str(id[0])
+
+end_time = str(datetime.now())
+if ab == 1:
+    scrape_result = 'SUCCESSFUL'
+else:
+    scrape_result = 'FAILED'
+
+sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+session_id+'" '
+cursor.execute(sql_update_end_time_and_status)
+connection.commit()
+
+
+print(cursor)
