@@ -88,7 +88,7 @@ def ClearCookies():
     #driver.manage().deleteAllCookies();
      
 # Creating Cookies form Chrome
-def ChangeLocation(pincode, store, base_url, location_id, store_id, sku):
+def ChangeLocationAmazon(pincode, store, base_url, location_id, store_id, sku):
      
 #     sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
 #     #Execute query
@@ -144,7 +144,32 @@ def ChangeLocation(pincode, store, base_url, location_id, store_id, sku):
     driver.close()
     GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
      
-     
+# ======================
+# Grofers Change Location
+
+def ChangeLocationGrofers(pincode, store, base_url, location_id, store_id, sku, area):
+
+    browser = webdriver.Chrome('chromedriver.exe')
+    url = base_url+sku
+    print(url)
+    browser.get(url)
+    time.sleep(2)
+
+    location = browser.find_elements_by_xpath('//*[@id="app"]/div/div[2]/div[2]/header/div[1]/a')
+    location[0].click()
+    time.sleep(2)
+
+    city = browser.find_elements_by_tag_name('input')
+    city[0].send_keys(area)
+    time.sleep(2)
+
+    city[0].send_keys(Keys.ENTER)
+    time.sleep(2)
+    
+    browser.close()
+    
+    GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
+
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
@@ -183,13 +208,7 @@ class AmazonSpider(scrapy.Spider):
         self.store = store
 
  # Cookie based data scraping    
-    def start_requests(self):
-#         for file in os.listdir("cookies/amazon_pincodes/"):
-#             print(file)
-#             if os.path.isfile(self.pincode+'pkl'):
-#                 ClearCookies()
-#                 ChangeLocation(self.pincode, self.store, self.base_url, self.location_id, self.store_id, self.sku)
-               
+    def start_requests(self):               
         name = "AmazonSpider"
         allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
         start_urls = [self.base_url+self.sku]
@@ -203,6 +222,9 @@ class AmazonSpider(scrapy.Spider):
     def parse(self, response):
         item = Item()
         item['name']=response.css('#productTitle::text').extract()
+        if len(item['name']) <1:
+            item['name'] = ['Data Unavailable']
+        
         print('=====================================================================')
         print(item['name'])
         item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
@@ -213,14 +235,83 @@ class AmazonSpider(scrapy.Spider):
         item['stock']=response.css('#availability > span::text').extract()
          
         # Striping data to remove blank spaces
-        item['name'] = item['name'][0].replace('\n',"").strip() 
-        item['stock'] = item['stock'][0].replace('\n',"").strip()
+        item['name'][0] = item['name'][0].replace('\n',"").strip() 
+        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
         item['location_id'] = [self.location_id]
         item['store_id'] = [self.store_id]
         item['sku_id'] = [self.sku]
     
           
         return storeItem(item, self.store, response)
+
+#==============================
+#Grofer Spider
+
+class GrofersSpider(scrapy.Spider):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store):
+        self.base_url = base_url
+        self.pincode = pincode
+        self.area = area
+        self.sku = sku
+        self.location_id = location_id
+        self.store_id = store_id
+        self.store = store
+         
+# Requesting a Cookies for location based data scraping
+    def start_requests(self):
+          
+        print('===========================================')
+    #     print(self.pincode)
+        print('Scrapy.Spider')
+        print(scrapy.Spider)
+        name = "GroferSpider"
+        start_urls = [self.base_url+self.sku]
+        allowed_domains = ['www.grofers.com']  # Domain allowed by this spider
+        print(start_urls)   
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
+        '''
+        Open pkl file stored with stored by the name same as pincode 
+        Append a pincode in the path below.
+        "pin" is defined global 
+        storing the following pkl file as a dictionary in a "cookieJar"
+          
+        '''
+        with open('./cookies/grofers_pincodes/'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        print(cookieJar)
+        # Passing URL cookieJar and the headers to scrap location based values.
+        for i,url in enumerate(start_urls):
+            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+              
+    # Parsing to scrap data  
+    def parse(self, response):
+        item = Item() # Creating an object of class Item
+        item['name']=response.css('.LinesEllipsis::text').extract()
+        item['price']=response.css('.pdp-product__price--new::text').extract()
+        item['price']=[item['price'][1]]
+#         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
+        item['rating']= ['Not Applicable']
+         
+        '''
+        Grofers give the stock availability in the form of buttons
+        Stock unavailable is also in the form of button 
+        Hence data fetched is of both available and unavailable.
+        '''
+        item['stock']= response.css('.product-variant__btn::text').extract()
+        # It consists of data from a button that is unavailable. 
+        outOfStock = response.css('.product-variant__btn--disabled::text').extract()
+        #Hence using set operation data of unavailable product is removed from the complete list. 
+        item['stock'] = list(set(item['stock'])-set(outOfStock))
+        #Now applying a join operation to store the data on a 0th index.
+        item['stock'] = [', '.join(item['stock'])]
+        # After all the operation if stock is still empty we store the status as Unavailable
+        if item['stock'][0] == '':
+            item['stock'] = ['Curently Unavailable']
+        item['location_id'] = [self.location_id]
+        item['store_id'] = [self.store_id]
+        item['sku_id'] = [self.sku]
+        
+        return storeItem(item, self.store, response)
+
  
 def storeItem(item, store, response):
     
@@ -307,6 +398,7 @@ cursor1.execute(sql)
     
 
 for store, store_id in cursor1:
+    store = store.lower()
     print(store)
     print(store_id)
     sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id"
@@ -322,7 +414,7 @@ for store, store_id in cursor1:
             print(location_id)
             print(pincode)
             print(area)
-            for root, dirs, files in os.walk('cookies/amazon_pincodes/'):
+            for root, dirs, files in os.walk('cookies/'+store+'_pincodes/'):
                 print(root)
                 print(dirs)
                 print(files)
@@ -331,8 +423,14 @@ for store, store_id in cursor1:
                     pass
                 else:
                     ClearCookies()
-                    ChangeLocation(pincode, store, base_url, location_id, store_id, sku)
-            process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
+                    if store == 'amazon':
+                        ChangeLocationAmazon(pincode, store, base_url, location_id, store_id, sku)
+                    elif store == 'grofers':
+                        ChangeLocationGrofers(pincode, store, base_url, location_id, store_id, sku, area)
+            if store == 'amazon':
+                process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
+            elif store == 'grofers':
+                process.crawl(GroferSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
 #             process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id)
 
 
