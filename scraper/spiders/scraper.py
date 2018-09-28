@@ -1,3 +1,4 @@
+# from twisted.internet import reactor 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.select import Select
@@ -85,10 +86,68 @@ def ClearCookies():
     clear.click()
     time.sleep(2)
     #driver.manage().deleteAllCookies();
+     
+# Creating Cookies form Chrome
+def ChangeLocationAmazon(pincode, store, base_url, location_id, store_id, sku):
+     
+#     sql = "SELECT id FROM `skus` WHERE website = 'amazon'";
+#     #Execute query
+#     cursor.execute(sql)
+#     name = "AmazonSpider"
+    allowed_domains = ['www.amazon.in', 'www.grofers.com', 'www.bigbasket.com'] # Domains allowed in Amazon's spider
+#     base_url = 'https://www.amazon.in/dp/'
+#     start_urls = []
+#     for url in cursor:
+    start_urls = base_url+sku
+     
+    # Creating an instance webdriver 
+    browser = webdriver.Chrome('chromedriver.exe') 
+    print(start_urls)
+    browser.get(start_urls) 
+       
+    # Let's the user see and also load the element  
+    time.sleep(2) 
+        
+    location = browser.find_elements_by_xpath('//*[@id="nav-global-location-slot"]/span/a') 
+    print(location)  
+    # using the click function which is similar to a click in mouse. 
+    location[0].click() 
+    time.sleep(2)
+     
+    #change = nextpage.find_elements_by_xpath('//*[@id="GLUXChangePostalCodeLink"]') 
+    change=browser.find_elements_by_xpath('//*[@id="GLUXChangePostalCodeLink"]')
+    print(change)
+    change[0].click()
+    #browser.css("#GLUXChangePostalCodeLink").click()
+    time.sleep(2)
+     
+    enterpincode=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdateInput"]')
+    enterpincode[0].clear()
+    #enterpincode[0].get_text()
+    enterpincode[0].send_keys(pincode)
+    time.sleep(2)
+     
+    apply=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdate"]/span/input')
+    print(apply)
+    apply[0].click()
+    time.sleep(2)
+     
+    done = browser.find_elements_by_name('glowDoneButton')#('//*[@id="a-popover-2"]/div/div[2]/span/span/span/button')
+    
+    print(done)
+    done[0].click()
+    time.sleep(2)  
+    driver = webdriver.Chrome()
+     
+#     driver.get('chrome://settings/clearBrowserData')
+    time.sleep(2)
+    driver.close()
+    GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
+     
+# ======================
+# Grofers Change Location
 
-
-
-def ChangeLocationgrofers(pincode, store, base_url, location_id, store_id, sku, area):
+def ChangeLocationGrofers(pincode, store, base_url, location_id, store_id, sku, area):
 
     browser = webdriver.Chrome('chromedriver.exe')
     url = base_url+sku
@@ -110,7 +169,8 @@ def ChangeLocationgrofers(pincode, store, base_url, location_id, store_id, sku, 
     browser.close()
     
     GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
-    
+
+ 
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
     Utility Function to save a new location.
@@ -126,7 +186,7 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
     '''
     import browser_cookie3 as cookies
 
-    cJar = cookies.chrome(domain_name='grofers.com')
+    cJar = cookies.chrome(domain_name='amazon.in')
     cJar1 = {c.name: c.value for c in cJar}
 #     del cJar1['session-id-time']
 #     del cJar1['visitCount']
@@ -135,7 +195,59 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
     with open('cookies/'+store+'_pincodes/'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
     # # Setting browser version
     
-class GroferSpider(scrapy.Spider):
+ 
+#Spider to scrap amazon's data
+class AmazonSpider(scrapy.Spider):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store):
+        self.base_url = base_url
+        self.pincode = pincode
+        self.area = area
+        self.sku = sku
+        self.location_id = location_id
+        self.store_id = store_id
+        self.store = store
+
+ # Cookie based data scraping    
+    def start_requests(self):               
+        name = "AmazonSpider"
+        allowed_domains = ['www.amazon.in'] # Domains allowed in Amazon's spider
+        start_urls = [self.base_url+self.sku]
+        print(start_urls)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
+        with open('cookies/amazon_pincodes/'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+        print(cookieJar)
+        for i,url in enumerate(start_urls):
+            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+       
+    def parse(self, response):
+        item = Item()
+        item['name']=response.css('#productTitle::text').extract()
+        if len(item['name']) <1:
+            item['name'] = ['Data Unavailable']
+        
+        print('=====================================================================')
+        print(item['name'])
+        item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
+        if len(item['rating']) <1:
+            item['rating'] = ['Not applicable']
+        item['price']=response.css('#priceblock_ourprice::text').extract()
+#         item['offer']=response.css('#regularprice_savings > td.a-span12.a-color-price.a-size-base::text').extract()
+        item['stock']=response.css('#availability > span::text').extract()
+         
+        # Striping data to remove blank spaces
+        item['name'][0] = item['name'][0].replace('\n',"").strip() 
+        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
+        item['location_id'] = [self.location_id]
+        item['store_id'] = [self.store_id]
+        item['sku_id'] = [self.sku]
+    
+          
+        return storeItem(item, self.store, response)
+
+#==============================
+#Grofer Spider
+
+class GrofersSpider(scrapy.Spider):
     def __init__(self, base_url, pincode, sku, location_id, store_id, store):
         self.base_url = base_url
         self.pincode = pincode
@@ -200,8 +312,7 @@ class GroferSpider(scrapy.Spider):
         
         return storeItem(item, self.store, response)
 
-
- # Creating Cookies form Chrome
+ 
 def storeItem(item, store, response):
     
     sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
@@ -213,7 +324,7 @@ def storeItem(item, store, response):
     name = item['name']
     price = item['price']
     if len(price) < 1:
-        price = ['Data Missing']
+        price = ['000.00']
     stock = item['stock']
     rating = item['rating']
     sku_id  = item['sku_id']
@@ -229,11 +340,11 @@ def storeItem(item, store, response):
     print(price)
     print(stock)
     print(rating)
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     print(sku_id)
-    print(type(store_id))
+    print(store_id)
     print(location_id)
     print(session_id)
+    print(store)
 
     
     
@@ -243,7 +354,7 @@ def storeItem(item, store, response):
     cursor.execute(sql2)
     connection.commit()
 #     Saving data in csv file.
-    csvFile = open('csv_files/'+store+'/'+store+'_'+session_id[0]+'.csv', 'w+', newline='')
+    csvFile = open('csv_files/'+store+'_'+session_id[0]+'.csv', 'a+', newline='')
     writer = csv.writer(csvFile)
     writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
     csvFile.close() 
@@ -287,6 +398,7 @@ cursor1.execute(sql)
     
 
 for store, store_id in cursor1:
+    store = store.lower()
     print(store)
     print(store_id)
     sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id"
@@ -304,8 +416,7 @@ for store, store_id in cursor1:
             area = area.split('_')
             area = area[0]
             print(area)
-            
-            for root, dirs, files in os.walk('cookies/grofers_pincodes/'):
+            for root, dirs, files in os.walk('cookies/'+store+'_pincodes/'):
                 print(root)
                 print(dirs)
                 print(files)
@@ -314,9 +425,14 @@ for store, store_id in cursor1:
                     pass
                 else:
                     ClearCookies()
-                    if store == 'grofers':
-                        ChangeLocationgrofers(pincode, store, base_url, location_id, store_id, sku, area)
-            process.crawl(GroferSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
+                    if store == 'amazon':
+                        ChangeLocationAmazon(pincode, store, base_url, location_id, store_id, sku)
+                    elif store == 'grofers':
+                        ChangeLocationGrofers(pincode, store, base_url, location_id, store_id, sku, area)
+            if store == 'amazon':
+                process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
+            elif store == 'grofers':
+                process.crawl(GrofersSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store)
 #             process.crawl(AmazonSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id)
 
 
