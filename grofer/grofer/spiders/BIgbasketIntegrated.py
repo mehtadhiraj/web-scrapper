@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys  
 from boto.cloudtrail.exceptions import InvalidTimeRangeException
+import os
+import psutil
 import subprocess
 import scrapy
 import pymysql
@@ -53,11 +55,15 @@ def ClearCookies():
     clear = driver.find_element_by_css_selector('* /deep/ #clearBrowsingDataConfirm')
     clear.click()
     time.sleep(2)
+    
+    driver.close()
+    
+    
     #driver.manage().deleteAllCookies();    
      
 # Creating Cookies form Chrome
 
-def ChangeLocation(pincode, url, sku, store):
+def ChangeLocationbigbasket(pincode, url, sku, store):
     browser = webdriver.Chrome('chromedriver.exe')
     start_urls= url+sku
     browser.get('https://www.bigbasket.com/pd/40033824/fresho-apple-washington-regular-4-pcs/?nc=feat-prod&t_pg=l1-cat-fruits-vegetables&t_p=cl-temp-1&t_s=feat-prod&t_pos_sec=3&t_pos_item=1&t_ch=desktop')
@@ -98,6 +104,10 @@ def ChangeLocation(pincode, url, sku, store):
 
 # Generating Cookies from chrome
 def getChromeCookies(pincode, store, url) -> None:
+    
+    print(pincode)
+    print(store)
+    print(url)
     '''
     Utility Function to save a new location.
     
@@ -109,6 +119,7 @@ def getChromeCookies(pincode, store, url) -> None:
 
     Alternative is to use Selenium webdrivers for browser automation.
     '''
+    print("===================================================================")
     import browser_cookie3 as cookies
     cJar = cookies.chrome(domain_name='bigbasket.com')
     cJar1 = {c.name: c.value for c in cJar}
@@ -117,26 +128,21 @@ def getChromeCookies(pincode, store, url) -> None:
     print(cJar1)
 #    Replace PINCODE below
 
-    with open('cookies/'+store+'_pincodes/'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)    
-
-    with open('cookies/'+store+'_pincodes/'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
+    #with open('cookies/_pincodes/.pkl', 'wb') as fp: pickle.dump(cJar1, fp) 
+       
+    folder_loc= 'cookies/'+store+'_pincodes/'+pincode+'.pkl'
+    print(folder_loc)
+    with open(folder_loc, 'wb') as fp: pickle.dump(cJar1, fp) # creating a pickel file of generated cookies
 
  # Creating Cookies form Chrome
 
 
     
 #  Connect to the database.
-connection = pymysql.connect(
-    host='localhost',
-    user='root',
-    password='123',                             
-    db='web-scrapper',
-)
- 
-print ("Database Connection Established") 
 
-cursor  = connection.cursor()
-
+process= psutil.Process(os.getpid())
+print(process)
+print(process.memory_full_info())     
 
 
 '''
@@ -187,28 +193,20 @@ class BigbasketSpider():
             print ("Connection Timeout")
         finally:
             driver.quit()
+    
+    
+
           
     def scrape_item_with_varaints(self):
         print ("Scraping single item with no variants...")
   
-        cursor = connection.cursor()
-        sql = "SELECT id FROM `skus` WHERE website = 'bigbasket'";
-        # Execute query
-        cursor.execute(sql)
-        name = "GroferSpider"
-        start_urls=[]
-        allowed_domains = ['www.bigbasket.com']  # Domain allowed by this spider
-        base_url = 'https://www.bigbasket.com/pd/' # Base url for grofers
-        for url in cursor:
-            # Appending a product id
-            start_urls.append(base_url+url[0]+'//')
-            print(start_urls)
+        
           
         print("Scraping item with variants...")
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
         driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
-        driver.get(start_urls[0])
+        driver.get('https://www.bigbasket.com/pd/10000170/fresho-cabbage-red-1-kg/')
         try:
             element = WebDriverWait(driver, 60).until(
                     expected_conditions.presence_of_element_located((By.NAME, "size"))
@@ -218,70 +216,97 @@ class BigbasketSpider():
                 name = ele.get_attribute("id")
                 lbl = driver.find_element_by_xpath("//*[@for=\""+ name +"\"]")
                 lbl.click()
-                item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div")
-                price = driver.find_element_by_class_name("sc-bRBYWo")
-                item1=[item,price]
+                item = driver.find_element_by_xpath("//*[@id=\"root\"]/div/div/div/div[2]/div[2]/div/div[2]/div/div[1]/div").text
+                price = driver.find_element_by_class_name("sc-bRBYWo").text
+                item1,price1=item,price
                  
-                print(item.text + " " + price.text)
-                storeItem(item1)
+                print(item + " " + price)
+                return item1,price1
         except TimeoutException:
             print ("Connection Timeout")
         finally:
             driver.quit()
              
  
-    def storeItem(item):
-        name= item[0]
-        price= item[1]
-        if name:
-            stock='AVAILABLE'
-        else:
-            stock='UNAVAILABLE'
-         
-     
-        sql = 'INSERT INTO productdetails(name,price, stock) values("'+name[0]+'","'+price[0]+'", "'+stock+'")'
-        print(sql)
-        cursor.execute(sql)
-        connection.commit()
-#     Saving data in csv file.
-        csvFile = open('products.csv', 'a+', newline='')
-        writer = csv.writer(csvFile)
-        writer.writerow((name[0],price[0], stock))
-        csvFile.close() 
-        return item
-    
+        
 connection = pymysql.connect(
    host='localhost',
    user='root',
-   password='123',                             
+   password='',                             
    db='scraperdb',
 )
 
 print ("Database Connection Established") 
-
+cursor = connection.cursor()
 cursor1  = connection.cursor()
 cursor2  = connection.cursor()
 cursor3  = connection.cursor()
     
-sql = 'SELECT store_name FROM store'
+sql = 'SELECT store_name, store_id FROM store'
 cursor1.execute(sql)
 
-for store in cursor1:
-    sql = 'SELECT * FROM location'
-    cursor2.execute(sql)
-    print(store[0])
-    for location_id, area, pincode in cursor2:
-        sql = "SELECT skus.sku_id, store.base_url FROM skus, store WHERE store.store_name = '"+store[0]+"' AND skus.store_id = store.store_id"
+def storeItem(item,price):
+    skus_id= '10000170'
+    store_id= 's1'
+    location_id= 'l2'
+    product_stock= 'In Stock'
+    product_rating= '3.0 out of 5'
+    name= item
+    price= price
+    if name:
+        stock='AVAILABLE'
+    else:
+        stock='UNAVAILABLE'
+     
+    
+    sql = 'INSERT INTO productdetails(skus_id, store_id, location_id, product_name, product_price, product_stock, product_rating) values("'+skus_id+'","'+store_id+'","'+location_id+'","'+name+'","'+price+'", "'+product_stock+'", "'+product_rating+'")'
+    print(sql)
+    cursor.execute(sql)
+    connection.commit()
+#     Saving data in csv file.
+    csvFile = open('products.csv', 'a+', newline='')
+    writer = csv.writer(csvFile)
+    writer.writerow((name[0],price[0], stock))
+    csvFile.close() 
+    return item        
+
+
+for store, store_id in cursor1:
+    print(store)
+    print(store_id)
+    sql = "SELECT skus.sku_id, store.base_url FROM skus, store WHERE store.store_name = '"+store+"' AND skus.store_id = store.store_id"
+    print(cursor2.execute(sql))
+    for sku, base_url in cursor2:
+        print(sku)
+        print(base_url)
+        sql = 'SELECT * FROM location'
         cursor3.execute(sql)
-        print(location_id)
-        print(pincode)
-        print(area)
-        for sku, url in cursor3:
-            print(sku)
-            print(url)
-            ClearCookies()
-            ChangeLocation(pincode, url, sku, store[0])
-            
+        for location_id, area, pincode in cursor3:
+            print(location_id)
+            print(pincode)
+            print(area)
+        for root, dirs, files in os.walk('cookies/bigbasket_pincodes/'):
+                print(root)
+                print(dirs)
+                print(files)
+                if pincode+'.pkl' in files:
+                    pass
+                else:
+                    ClearCookies()
+                    if store == 'bigbasket':
+                        
+                        ChangeLocationbigbasket(pincode, base_url, sku, store)
+                    else:
+                        print("SORRY")
+                a= BigbasketSpider()
+                item1,price1=a.scrape_item_with_varaints()
+                print(item1)
+                
+                storeItem(item1,price1)
+
+process= psutil.Process(os.getpid())
+print(process)
+print(process.memory_full_info())     
     
      
 # a= BigbasketSpider()
