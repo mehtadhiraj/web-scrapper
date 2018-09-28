@@ -34,7 +34,7 @@ from datetime import datetime
 connection = pymysql.connect(
    host='localhost',
    user='root',
-   password='',                             
+   password='123',                             
    db='scraperdb1',
 )
 
@@ -203,6 +203,8 @@ class AmazonSpider(scrapy.Spider):
     def parse(self, response):
         item = Item()
         item['name']=response.css('#productTitle::text').extract()
+        print('=====================================================================')
+        print(item['name'])
         item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
         if len(item['rating']) <1:
             item['rating'] = ['Not applicable']
@@ -211,16 +213,16 @@ class AmazonSpider(scrapy.Spider):
         item['stock']=response.css('#availability > span::text').extract()
          
         # Striping data to remove blank spaces
-        item['name'][0] = item['name'][0].replace('\n',"").strip() 
-        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
+        item['name'] = item['name'][0].replace('\n',"").strip() 
+        item['stock'] = item['stock'][0].replace('\n',"").strip()
         item['location_id'] = [self.location_id]
         item['store_id'] = [self.store_id]
         item['sku_id'] = [self.sku]
     
           
-        return storeItem(item, response)
+        return storeItem(item, self.store, response)
  
-def storeItem(item, response):
+def storeItem(item, store, response):
     
     sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
     cursor.execute(sql_fetch_session_id_all)
@@ -231,10 +233,10 @@ def storeItem(item, response):
     name = item['name']
     price = item['price']
     if len(price) < 1:
-        price = ['Data Missing']
+        price = ['000.00']
     stock = item['stock']
     rating = item['rating']
-    asin_id  = item['sku_id']
+    sku_id  = item['sku_id']
     store_id = item['store_id']
     location_id = item['location_id']
     scrape_datetime= str(datetime.now())
@@ -247,23 +249,23 @@ def storeItem(item, response):
     print(price)
     print(stock)
     print(rating)
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    print(asin_id)
-    print(type(store_id))
+    print(sku_id)
+    print(store_id)
     print(location_id)
     print(session_id)
+    print(store)
 
     
     
      
-    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+asin_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
+    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
     print(sql2)
     cursor.execute(sql2)
     connection.commit()
 #     Saving data in csv file.
-    csvFile = open('products.csv', 'w+', newline='')
+    csvFile = open('csv_files/'+store+'_'+session_id[0]+'.csv', 'w+', newline='')
     writer = csv.writer(csvFile)
-    writer.writerow((name[0], price[0], stock[0], rating[0]))
+    writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
     csvFile.close() 
     return item
 # 
