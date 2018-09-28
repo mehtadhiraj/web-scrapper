@@ -198,11 +198,11 @@ class GroferSpider(scrapy.Spider):
         item['store_id'] = [self.store_id]
         item['sku_id'] = [self.sku]
         
-        return storeItem(item, response)
+        return storeItem(item, self.store, response)
 
 
  # Creating Cookies form Chrome
-def storeItem(item, response):
+def storeItem(item, store, response):
     
     sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
     cursor.execute(sql_fetch_session_id_all)
@@ -216,7 +216,7 @@ def storeItem(item, response):
         price = ['Data Missing']
     stock = item['stock']
     rating = item['rating']
-    asin_id  = item['sku_id']
+    sku_id  = item['sku_id']
     store_id = item['store_id']
     location_id = item['location_id']
     scrape_datetime= str(datetime.now())
@@ -230,7 +230,7 @@ def storeItem(item, response):
     print(stock)
     print(rating)
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    print(asin_id)
+    print(sku_id)
     print(type(store_id))
     print(location_id)
     print(session_id)
@@ -238,14 +238,14 @@ def storeItem(item, response):
     
     
      
-    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+asin_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
+    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
     print(sql2)
     cursor.execute(sql2)
     connection.commit()
 #     Saving data in csv file.
-    csvFile = open('products.csv', 'w+', newline='')
+    csvFile = open('csv_files/'+store+'/'+store+'_'+session_id[0]+'.csv', 'w+', newline='')
     writer = csv.writer(csvFile)
-    writer.writerow((name[0], price[0], stock[0], rating[0]))
+    writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
     csvFile.close() 
     return item
 # 
