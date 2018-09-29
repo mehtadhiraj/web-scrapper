@@ -101,7 +101,7 @@ for store, store_id in cursor1:
                 print(dirs)
                 print(files)
                 if  str(store_id)+'_'+pincode+'.pkl' in files:
-                    print('=======ddddddddddddd========= '+pincode+' ')
+                 
                     pass
                 else:
                     ClearCookies()
@@ -125,8 +125,8 @@ for store, store_id in cursor1:
                  
                 continue
             
-#             elif store_id == 3:
-#                 scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+            elif store_id == 3:
+                scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
 
 process.start()
 sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for grofer project
+# Scrapy settings for grff project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,16 +9,17 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'grofer'
+BOT_NAME = 'grff'
 
-SPIDER_MODULES = ['grofer.spiders']
-NEWSPIDER_MODULE = 'grofer.spiders'
+
+SPIDER_MODULES = ['grff.spiders']
+NEWSPIDER_MODULE = 'grff.spiders'
 
 FEED_FORMAT = "csv"
 FEED_URI = "products.csv"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'grofer (+http://www.yourdomain.com)'
+#USER_AGENT = 'grff (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 #ROBOTSTXT_OBEY = True
@@ -49,13 +50,13 @@ FEED_URI = "products.csv"
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'grofer.middlewares.GroferSpiderMiddleware': 543,
+#    'grff.middlewares.GrffSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'grofer.middlewares.GroferDownloaderMiddleware': 543,
+#    'grff.middlewares.grffDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -67,7 +68,7 @@ FEED_URI = "products.csv"
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'grofer.pipelines.GroferPipeline': 300,
+#    'grff.pipelines.grffPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

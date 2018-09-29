@@ -429,7 +429,7 @@ class BbsSpider():
         start_urls= base_url+sku
         print("Scraping item with variants...")
         options = webdriver.ChromeOptions()
-        options.add_argument('--no-sandbox')
+        options.add_argument('--headless')
         driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
         driver.get(start_urls)
 
@@ -470,7 +470,7 @@ def storeItem(item, store, session_id, response):
     location_id = str(location_id[0]) 
     store_id = [store_id]
     location_id = [location_id]
-    session_id = [session_id]
+    session_id = [str(session_id)]
     print(name)
     print(price)
     print(stock)
@@ -496,7 +496,7 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
     
     stock= ["Available"]
     rating= ["Not Applicable"]
-    
+    session_id = [str(session_id)]
     sku_id = [sku_id]
     location_id = [str(location_id)]
     store_id = [str(store_id)]
