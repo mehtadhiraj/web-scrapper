@@ -77,6 +77,7 @@ def ClearCookies():
     clear = driver.find_element_by_css_selector('* /deep/ #clearBrowsingDataConfirm')
     clear.click()
     time.sleep(2)
+    driver.close()
    
      
 # Creating Cookies form Chrome
@@ -158,7 +159,7 @@ def ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, are
 def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area):
     
     try:
-        flag=0
+        
         start_urls= base_url+sku
         browser = webdriver.Chrome('chromedriver.exe')
         browser.get(start_urls)
@@ -191,7 +192,7 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         browser.close()
         flag=1
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
-        return flag
+        
 
             
     except ElementNotVisibleException:
@@ -303,14 +304,17 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
     csvFile = open(csv_path, 'a+', newline='')
     writer = csv.writer(csvFile)
     writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
+    
     csvFile.close() 
+    
+    return 1
 
     
     
  
 #Spider to scrap store1 data
 class AmzSpider(scrapy.Spider):
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store, area):
         self.base_url = base_url
         self.pincode = pincode
         self.area = area
@@ -345,10 +349,12 @@ class AmzSpider(scrapy.Spider):
         item['price']=response.css('#priceblock_ourprice::text').extract()
          
         item['stock']=response.css('#availability > span::text').extract()
-         
+        if len(item['stock']) < 1:
+            item['stock'] = ['Data Missing']
+        else:
+            item['stock'][0] = item['stock'][0].replace('\n',"").strip()
         # Striping data to remove blank spaces
         item['name'][0] = item['name'][0].replace('\n',"").strip() 
-        item['stock'][0] = item['stock'][0].replace('\n',"").strip()
         item['location_id'] = [self.location_id]
         item['store_id'] = [self.store_id]
         item['sku_id'] = [self.sku]
@@ -359,7 +365,7 @@ class AmzSpider(scrapy.Spider):
 
 
 class GrffSpider(scrapy.Spider):
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store, area):
         self.base_url = base_url
         self.pincode = pincode
         self.area = area
@@ -387,7 +393,7 @@ class GrffSpider(scrapy.Spider):
         storing the following pkl file as a dictionary in a "cookieJar"
           
         '''
-        with open('/cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        with open('cookies/'+str(self.store_id)+'_'+str(self.pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
         print(cookieJar)
         # Passing URL cookieJar and the headers to scrap location based values.
         for i,url in enumerate(start_urls):
@@ -425,36 +431,55 @@ class GrffSpider(scrapy.Spider):
 
 
 class BbsSpider():
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store):
-        self.base_url = base_url
-        self.pincode = pincode
-        self.area = area
-        self.sku = sku
-        self.location_id = location_id
-        self.store_id = store_id
-        self.store = store  
+    
+    
+#     def __init__(self, base_url, pincode, sku, location_id, store_id, store, area):
+#         
+#         self.base_url = base_url
+#         self.pincode = pincode
+#         self.area = area
+#         self.sku = sku
+#         self.location_id = location_id
+#         self.store_id = store_id
+#         self.store = store  
+#         print('+++++++++++++++++++++++--------------------------------000000000000000000000000000000000000000000000')
+      #  scrape_item_with_variants(self,base_url, pincode, sku, location_id, store_id, store, area)
+
+        
+
+   
         
         
-    def start_requests(self):
+#     def start_requests(self):
       
-        start_urls = [self.base_url+self.sku]
-        print(start_urls)
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-        print(cookieJar)
-        for i,url in enumerate(start_urls):
-            yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_varaints, headers=headers)
+#         start_urls = [self.base_url+self.sku]
+#         print(start_urls)
+#         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
+#         with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+#         print(cookieJar)
+#         for i,url in enumerate(start_urls):
+#             yield Request(url,cookies=cookieJar, callback=self.scrape_item_with_varaints, headers=headers)
        
 
 #
-    def scrape_item_with_varaints(self,base_url, pincode, sku, location_id, store_id, store):
-        print ("Scraping single item with no variants...")
+    def scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area):
         
-        start_urls = base_url+sku
-        print('++++++++++++++++++++++++++++++')
-        print(start_urls)
+        print('+++++++++++++++++++++++--------------------------------000000000000000000000000000000000000000000000')
         
-          
+#         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
+#         with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+#         print(cookieJar)
+#         for i,url in enumerate(start_urls):
+#             yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+#        
+#         
+#         print ("Scraping single item with no variants...")
+#         
+#         start_urls = base_url+sku
+#         print('+++++++++++++`1+++++++++++++++++')
+#         print(start_urls)
+#         
+        start_urls= base_url+sku
         print("Scraping item with variants...")
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
@@ -474,12 +499,12 @@ class BbsSpider():
                 item1=[item,price]
                  
                 print(item + " " + price)
-                storeItemBbs(item1,self.sku,self.location_id,self.store_id,self.store)
+                storeItemBbs(item1,sku,location_id,store_id,store)
         except TimeoutException:
             print ("Connection Timeout")
         finally:
-            driver.quit()
-
+            driver.close()
+   
  
 def storeItem(item, store, response):
     
@@ -517,6 +542,7 @@ def storeItem(item, store, response):
     sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
     print(sql2)
     cursor.execute(sql2)
+    
     connection.commit()
 
     csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
@@ -565,23 +591,23 @@ def storeItemBbs(item,sku_id,location_id,store_id,store):
 
 
 #      
-exec(compile(source=open('main_program.py').read(), filename='main_program.py', mode='exec'))
+# exec(compile(source=open('main_program.py').read(), filename='main_program.py', mode='exec'))
 
-sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
-cursor.execute(sql_fetch_session_id_all)
-current_session_id = []
-for id in cursor:
-    session_id = str(id[0])
-
-end_time = str(datetime.now())
-if ab == 1:
-    scrape_result = 'SUCCESSFUL'
-else:
-    scrape_result = 'FAILED'
-
-sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+session_id+'" '
-cursor.execute(sql_update_end_time_and_status)
-connection.commit()
+# sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
+# cursor.execute(sql_fetch_session_id_all)
+# current_session_id = []
+# for id in cursor:
+#     session_id = str(id[0])
+# 
+# end_time = str(datetime.now())
+# if ab == 1:
+#     scrape_result = 'SUCCESSFUL'
+# else:
+#     scrape_result = 'FAILED'
+# 
+# sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+session_id+'" '
+# cursor.execute(sql_update_end_time_and_status)
+# connection.commit()
 
 
 
