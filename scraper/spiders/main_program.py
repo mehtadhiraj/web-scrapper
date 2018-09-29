@@ -70,8 +70,8 @@ scrape_result= 'SCRAPING IN PROGRESS'
 sql_insert_session = 'INSERT INTO scrape_sessions(session_start_datetime,session_end_datetime, scrape_result ) values("'+start_date_time+'","'+end_date_time+'", "'+scrape_result+'")'
 print(sql_insert_session)
 ab= cursor.execute(sql_insert_session)
-
 connection.commit()
+session_id = cursor.lastrowid
  
 sql = 'SELECT store_name, id FROM stores'
 cursor1.execute(sql)
@@ -115,18 +115,18 @@ for store, store_id in cursor1:
 
             
             if store_id == 2:
-                p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area)
+                p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
                
                 
                 continue
                   
             elif store_id == 1:
-                p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area)
+                p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
                  
                 continue
             
-            elif store_id == 3:
-                scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area)
+#             elif store_id == 3:
+#                 scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
 
 process.start()
 sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
