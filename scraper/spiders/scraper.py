@@ -27,7 +27,7 @@ import threading
 import sys
 import browser_cookie3 as cookies
 from scrapy.utils.log import configure_logging
-import os
+import os, fnmatch
 global response
 from datetime import datetime
 import smtplib 
@@ -228,7 +228,7 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
 
 #SENDING MAIL
 
-def mailgeneration(store,session_id):   
+def mailgeneration(store_id,store,session_id):   
     sql='select recipient_email from report_recipients' 
     cursor4.execute(sql)
       
@@ -258,14 +258,17 @@ def mailgeneration(store,session_id):
     msg.attach(MIMEText(body, 'plain')) 
              
     # open the file to be sent  
-    files = "csv_files/"
-    filenames = [os.path.join(files, f) for f in os.listdir(files)]
+    path = "csv_files/"
+    pattern = "*_sid"+session_id+".csv"
+    filenames = []
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if fnmatch.fnmatch(name, pattern):
+                filenames.append(os.path.join(root, name))
+           
     print(filenames)
-            
-    csvfiles=filenames[-1].startswith(str(store_id)+'_sid'+str(session_id))
-    print(csvfiles)
     
-    for file in csvfiles:  
+    for file in filenames:  
     # instance of MIMEBase and named as p 
           part = MIMEBase('application', 'octet-stream')
           part.set_payload(open(file, 'rb').read())
@@ -351,7 +354,7 @@ class AmzSpider(scrapy.Spider):
         item['store_id'] = [self.store_id]
         item['sku_id'] = [self.sku]
     
-          
+
         return storeItem(item, self.store, self.session_id, response)
 
 
@@ -488,6 +491,7 @@ def storeItem(item, store, session_id, response):
     connection.commit()
 
     csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
+    return item
          
 def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
     name= [item[0]]

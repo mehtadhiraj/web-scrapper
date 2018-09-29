@@ -119,14 +119,16 @@ for store, store_id in cursor1:
                
                 
                 continue
-                  
+                   
             elif store_id == 1:
                 p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
-                 
+                  
                 continue
-            
+             
             elif store_id == 3:
                 scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+                 
+                continue
 
 process.start()
 sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
@@ -144,5 +146,7 @@ else:
 sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+session_id+'" '
 cursor.execute(sql_update_end_time_and_status)
 connection.commit()
+
+scraper.mailgeneration(store_id,store,session_id)
 
 
