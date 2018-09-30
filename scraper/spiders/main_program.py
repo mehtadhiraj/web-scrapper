@@ -35,6 +35,7 @@ import os, fnmatch
 global response
 from datetime import datetime
 import smtplib 
+import logs
 from email.mime.multipart import MIMEMultipart 
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
@@ -44,7 +45,11 @@ from multiprocessing import Process, Queue
 from twisted.internet import reactor
 from scraper import BbsSpider
 
+
 try:
+#     Evoking logs from scraper
+    logger = logs.logs()
+    
     # Executing Database config
     exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
     
@@ -64,10 +69,11 @@ try:
     ab= cursor.execute(sql_insert_session)
     connection.commit()
     session_id = cursor.lastrowid
-    
+    logger.info('Session Started')
 except TypeError:
     print('Error occured while starting a new seesion')
-
+    logger.exception('Error occured while starting a new seesion')
+    
 try:
     # Loop1 to get all the storenames 
     sql = 'SELECT store_name, id FROM stores'
@@ -76,6 +82,7 @@ try:
         store = store.lower()
         print(store)
         print(store_id)
+        logger.info('Scraping for '+store+' started.')
     #     Loop2 to get all the sku id for the given store
         sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id AND item_sku_codes.is_scrape_active = 1"
         cursor2.execute(sql)
@@ -106,7 +113,6 @@ try:
                             scraper.ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku)
                         elif store_id == 2:
                             scraper.ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area)
-     
                         elif store_id == 3:
                             flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area)
     #             Call to the spiders as per the given store
@@ -121,21 +127,25 @@ try:
                     continue
     
     process.start()
+    logger.info('Data Scraped Successfully')
+    
 except Exception as e:
     print(e)
-    
+    logger.exception(e)
 finally:
     end_time = str(datetime.now())
     if ab == 1:
         scrape_result = 'SUCCESSFUL'
         print(scrape_result)
+        logger.info(scrape_result)
     else:
         scrape_result = 'FAILED'
-    
+        logger.info(scrape_result)
+        
     sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+str(session_id)+'" '
     cursor.execute(sql_update_end_time_and_status)
     connection.commit()
     
     scraper.mailgeneration(store_id,store,str(session_id))
-
+    logger.info('Session Sucessfull')
 

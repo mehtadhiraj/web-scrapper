@@ -36,13 +36,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders 
+import logs
 
-
-
+logger = logs.logs()
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
-
-
  
     
 '''
@@ -76,9 +74,11 @@ def ClearCookies():
         clear = driver.find_element_by_css_selector('* /deep/ #clearBrowsingDataConfirm')
         clear.click()
         time.sleep(2)
+        logger.info('Cookies Cleared Successfully')
         driver.close()
     except Exception as e:
-        print(e)   
+        print(e)
+        logger.exception(e)   
      
 # Creating Cookies form Chrome
 def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku): 
@@ -127,9 +127,11 @@ def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku):
         
         time.sleep(2)
         driver.close()
+        logger.info('Location changed to '+str(location_id)+' in Amz')
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
     except Exception as e:
         print(e) 
+        logger.critical(e)
 
 # Store2 Change Location
 
@@ -152,10 +154,12 @@ def ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, are
         time.sleep(2)
         
         browser.close()
-        
+        logger.info('Location changed to '+str(location_id)+' in Grff')
+
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
     except Exception as e:
         print(e)
+        logger.critical(e)
     
 def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area):
     try:
@@ -190,6 +194,8 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         time.sleep(2)
         browser.close()
         flag=1
+        logger.info('Location changed to '+location_id+' in Amz')
+
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
                 
     except ElementNotVisibleException as elem_not_vis:
@@ -205,9 +211,10 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         print(sql2)
         cursor.execute(sql2)
         connection.commit()
-    
+        logger.exception('Bbs data not available for '+sku+'.')
     except Exception as e:
         print(e)
+        logger.error(e)
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
@@ -245,8 +252,10 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
         print(cJar1)
     #    Replace PINCODE below
         with open('cookies/'+str(store_id)+'_'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
+        logger.info('New Chromw cookies Collected')
     except Exception as e:
         print(e)
+        logger.exception(e)
 #SENDING MAIL
 
 def mailgeneration(store_id,store,session_id):   
@@ -316,9 +325,12 @@ def mailgeneration(store_id,store,session_id):
         # terminating the session 
         s.quit() 
         print("Mail Sent successfully")
+        logger.info('Mail Sent successfully')
     except Exception as e:
         print(e)
+        logger.error('Mail not sent')
         print('Session Unsucessfull')
+        logger.critical('Session Unsucessfull')
 
     
 #GENERATING CSV FILE    
@@ -330,13 +342,14 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
         writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
         
         csvFile.close() 
-        
+        logger.info('CSV file for store '+str(store_id)+' created')
         return 1
     except FileNotFoundError:
-        print('CSV for a '+store+' is not created')
-    
+        print('CSV for store '+str(store_id)+' is not created')
+        logger.error('CSV for store '+str(store_id)+' is not created')
     except Exception as e:
         print(e)
+        logger.error(e)
 #Spider to scrap store1 data
 class AmzSpider(scrapy.Spider):
     def __init__(self, base_url, pincode, sku, location_id, store_id, store, area, session_id):
@@ -361,11 +374,13 @@ class AmzSpider(scrapy.Spider):
             print(cookieJar)
             for i,url in enumerate(start_urls):
                 yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+                
         except FileNotFoundError:
-           print('Requested Cookies does not exist') 
-           
+           print('Requested Cookies for '+self.store+' does not exist') 
+           logger.critical('Requested Cookies does not exist')
         except Exception as e:
             print(e)
+            logger.error(e)
             
     def parse(self, response):
         try:
@@ -393,7 +408,7 @@ class AmzSpider(scrapy.Spider):
             item['sku_id'] = [self.sku]
         except Exception as e:
             print(e)
-        
+            logger.critical(self.sku+' data missing')
         finally:    
             return storeItem(item, self.store, self.session_id, response)
 
@@ -432,10 +447,11 @@ class GrffSpider(scrapy.Spider):
                 yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
         
         except FileNotFoundError:
-           print('Requested Cookies does not exist') 
-           
+           print('Requested Cookies for '+self.store+' does not exist') 
+           logger.critical('Requested Cookies does not exist')
         except Exception as e:
             print(e)
+            logger.error(e)
                   
     # Parsing to scrap data  
     def parse(self, response):
@@ -468,7 +484,8 @@ class GrffSpider(scrapy.Spider):
             
         except Exception as e:
             print(e)
-        
+            logger.critical(self.sku+' data missing')
+   
         finally:    
             return storeItem(item, self.store, self.session_id, response)
 
@@ -507,6 +524,7 @@ class BbsSpider():
                 storeItemBbs(item1,sku,location_id,store_id,store, session_id)
         except TimeoutException:
             print ("Connection Timeout")
+            logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
         finally:
             driver.close()
    
@@ -525,8 +543,8 @@ def storeItem(item, store, session_id, response):
     scrape_datetime= str(datetime.now())
     store_id = str(store_id[0])
     location_id = str(location_id[0]) 
-    store_id = [store_id]
-    location_id = [location_id]
+    store_id = [str(store_id)]
+    location_id = [str(location_id)]
     session_id = [str(session_id)]
     print(name)
     print(price)
@@ -544,11 +562,12 @@ def storeItem(item, store, session_id, response):
         cursor.execute(sql2)
         
         connection.commit()
-    
+        logger.info('Data of '+store+'stored  Successfully')
         csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
     
     except Exception as e:
         print(e)
+        logger.critical(e)
     
     finally:
         return item
@@ -581,8 +600,10 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
         print(sql2)
         cursor.execute(sql2)
         connection.commit()
+
         csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
     except Exception as e:
         print(e)
+        logger.critical(e)
 print(cursor)
 
