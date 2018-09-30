@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys  
 from boto.cloudtrail.exceptions import InvalidTimeRangeException
+from selenium.common.exceptions import ElementNotVisibleException
 import subprocess
 import scrapy
 import pymysql
@@ -35,6 +36,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders 
+
+
 
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
@@ -220,9 +223,25 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
     '''
     
     cJar = cookies.chrome(domain_name=store)
-    cJar1 = {c.name: c.value for c in cJar}
-
     print(cJar)
+    for cookie in cJar:
+        print(cookie.name)
+        print(cookie.value)
+    cJar1 = {c.name: c.value for c in cJar}#{i.name: i for i in list(j)}
+    
+    
+    for i,j in cJar1.items():
+    
+        print (i)
+        print( '-------->>>>>>')
+        print (j)
+
+#     print("---------------------------------------------------------------------------------------------------------------------")
+#     print(name) 
+#     print(value)
+#     print("---------------------------------------------------------------------------------------------------------------------")
+    #print(name)
+    print(cJar1)
 #    Replace PINCODE below
     with open('cookies/'+str(store_id)+'_'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
 
@@ -233,7 +252,7 @@ def mailgeneration(store_id,store,session_id):
     cursor4.execute(sql)
       
        
-    fromaddr = "karthikmudaliar13@gmail.com"
+    fromaddr = "vivekiyer98@gmail.com"
     toaddr = [] 
     for mail in cursor4:
         toaddr.append(mail[0])
@@ -282,7 +301,7 @@ def mailgeneration(store_id,store,session_id):
     s.starttls() 
       
     # Authentication 
-    s.login(fromaddr, "karthik@1308") 
+    s.login(fromaddr, "messi2009") 
       
     # Converts the Multipart msg into a string 
     text = msg.as_string() 
@@ -430,12 +449,18 @@ class BbsSpider():
     def scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id):
         
         start_urls= base_url+sku
+        with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+        #cookies = pickle.load(open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', "rb"))
+        #print(cookieJar)
         print("Scraping item with variants...")
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
         driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
-        driver.get(start_urls)
 
+        driver.get(start_urls)
+        for cookiename,cookievalue in cookieJar.items():
+            driver.add_cookie({'name':cookiename,'value':cookievalue,'path':'/','Secure':'True'})
+#           
         try:
             element = WebDriverWait(driver, 60).until(
                     expected_conditions.presence_of_element_located((By.NAME, "size"))

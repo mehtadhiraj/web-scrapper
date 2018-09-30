@@ -104,7 +104,7 @@ for store, store_id in cursor1:
                  
                     pass
                 else:
-                    ClearCookies()
+                    scraper.ClearCookies()
                     if store_id == 1:
                         scraper.ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku)
                     elif store_id == 2:
@@ -127,7 +127,7 @@ for store, store_id in cursor1:
              
             elif store_id == 3:
                 scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
-                 
+                  
                 continue
 
 process.start()
