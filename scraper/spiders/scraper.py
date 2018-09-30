@@ -229,11 +229,11 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
 #SENDING MAIL
 
 def mailgeneration(store_id,store,session_id):   
-    sql='select recipient_email from report_recipients' 
+    sql='select recipient_email from report_recipients where is_active = 1' 
     cursor4.execute(sql)
       
        
-    fromaddr = "karthikmudaliar13@gmail.com"
+    fromaddr = "pracs31@gmail.com"
     toaddr = [] 
     for mail in cursor4:
         toaddr.append(mail[0])
@@ -282,7 +282,7 @@ def mailgeneration(store_id,store,session_id):
     s.starttls() 
       
     # Authentication 
-    s.login(fromaddr, "karthik@1308") 
+    s.login(fromaddr, "31@pracspracs@31") 
       
     # Converts the Multipart msg into a string 
     text = msg.as_string() 

@@ -31,7 +31,7 @@ import time
 import threading
 import sys
 from scrapy.utils.log import configure_logging
-import os
+import os, fnmatch
 global response
 from datetime import datetime
 import smtplib 
@@ -44,109 +44,103 @@ from multiprocessing import Process, Queue
 from twisted.internet import reactor
 from scraper import BbsSpider
 
+try:
+    # Executing Database config
+    exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
+    
+    process = CrawlerProcess({
+        'USER_AGENT': (
+                'Chrome/69.0.3497.81')
+    })
+      
+#     Get date and time of current session
+    start_date_time= str(datetime.now())
+    end_date_time= str(datetime.now())
+     
+    scrape_result= 'SCRAPING IN PROGRESS'
+    # Query to add session in database
+    sql_insert_session = 'INSERT INTO scrape_sessions(session_start_datetime,session_end_datetime, scrape_result ) values("'+start_date_time+'","'+end_date_time+'", "'+scrape_result+'")'
+    print(sql_insert_session)
+    ab= cursor.execute(sql_insert_session)
+    connection.commit()
+    session_id = cursor.lastrowid
+    
+except TypeError:
+    print('Error occured while starting a new seesion')
 
+try:
+    # Loop1 to get all the storenames 
+    sql = 'SELECT store_name, id FROM stores'
+    num_rows = cursor1.execute(sql)
+    if num_rows < 1:
+        raise Exception
+    for store, store_id in cursor1:
+        store = store.lower()
+        print(store)
+        print(store_id)
+    #     Loop2 to get all the sku id for the given store
+        sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id AND item_sku_codes.is_scrape_active = 1"
+        num_rows = cursor2.execute(sql)
+        if num_rows < 1:
+            raise Exception
+        for sku, base_url in cursor2:
+            print(sku)
+            print(base_url)
+    #         Loop3 to get all the store locations for the given store and sku id
+            sql = 'SELECT store_locations.id, city_area, pin_code FROM store_locations,stores WHERE stores.id = store_locations.store_id AND stores.store_name = "'+store+'"'
+            num_rows = cursor3.execute(sql)
+            if num_rows < 1:
+                raise Exception
+            for location_id,area,pincode in cursor3:
+                print(location_id)
+                print(pincode)
+                area = area.split('_')
+                area = area[0]
+                print(area)
+                flag = 0
+    #             Loop4 to check for the existence of given pincode in a cookies directory
+                for root, dirs, files in os.walk('cookies/'):
+                    print(root)
+                    print(dirs)
+                    print(files)
+                    if  str(store_id)+'_'+pincode+'.pkl' in files:
+                        pass
+                    else:
+    #                     If given pincodes does not exist genarate a new pickle file
+                        scraper.ClearCookies()
+                        if store_id == 1:
+                            scraper.ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku)
+                        elif store_id == 2:
+                            scraper.ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area)
+     
+                        elif store_id == 3:
+                            flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area)
+    #             Call to the spiders as per the given store
+                if store_id == 2:
+                    p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)               
+                    continue       
+                elif store_id == 1:
+                    p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
+                    continue
+                elif store_id == 3:
+                    scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+                    continue
+    
+    process.start()
+    
+    end_time = str(datetime.now())
+    if ab == 1:
+        scrape_result = 'SUCCESSFUL'
+    else:
+        scrape_result = 'FAILED'
+    
+    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+str(session_id)+'" '
+    cursor.execute(sql_update_end_time_and_status)
+    connection.commit()
+    
+    scraper.mailgeneration(store_id,store,str(session_id))
 
-
-
- 
-exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
-
-
-process = CrawlerProcess({
-    'USER_AGENT': (
-            'Chrome/69.0.3497.81')
-})
- 
- 
- 
- 
-cursor = connection.cursor()
-
- 
-start_date_time= str(datetime.now())
-end_date_time= str(datetime.now())
- 
-scrape_result= 'SCRAPING IN PROGRESS'
-sql_insert_session = 'INSERT INTO scrape_sessions(session_start_datetime,session_end_datetime, scrape_result ) values("'+start_date_time+'","'+end_date_time+'", "'+scrape_result+'")'
-print(sql_insert_session)
-ab= cursor.execute(sql_insert_session)
-connection.commit()
-session_id = cursor.lastrowid
- 
-sql = 'SELECT store_name, id FROM stores'
-cursor1.execute(sql)
- 
-for store, store_id in cursor1:
-    store = store.lower()
-    print(store)
-    print(store_id)
-    sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id AND item_sku_codes.is_scrape_active = 1"
-    print(cursor2.execute(sql))
-    for sku, base_url in cursor2:
-        print('+++++++++++++++++++++++++++')
-        print(sku)
-        print('+++++++++++++++++++++++++++')
-        print(base_url)
-        sql = 'SELECT store_locations.store_id, city_area, pin_code FROM store_locations,stores WHERE stores.id = store_locations.store_id AND stores.store_name = "'+store+'"'
-        cursor3.execute(sql)
-        for location_id,area,pincode in cursor3:
-            print(location_id)
-            print(pincode)
-            area = area.split('_')
-            area = area[0]
-            print(area)
-            flag = 0
-            for root, dirs, files in os.walk('cookies/'):
-                print(root)
-                print(dirs)
-                print(files)
-                if  str(store_id)+'_'+pincode+'.pkl' in files:
-                 
-                    pass
-                else:
-                    ClearCookies()
-                    if store_id == 1:
-                        scraper.ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku)
-                    elif store_id == 2:
-                        scraper.ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area)
- 
-                    elif store_id == 3:
-                        flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area)
-
-            
-            if store_id == 2:
-                p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
-               
-                
-                continue
-                   
-            elif store_id == 1:
-                p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
-                  
-                continue
-             
-            elif store_id == 3:
-                scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
-                 
-                continue
-
-process.start()
-sql_fetch_session_id_all= 'SELECT max(id) FROM scrape_sessions'
-cursor.execute(sql_fetch_session_id_all)
-
-for id in cursor:
-    session_id = str(id[0])
-
-end_time = str(datetime.now())
-if ab == 1:
-    scrape_result = 'SUCCESSFUL'
-else:
-    scrape_result = 'FAILED'
-
-sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+session_id+'" '
-cursor.execute(sql_update_end_time_and_status)
-connection.commit()
-
-scraper.mailgeneration(store_id,store,session_id)
+except Exception as e:
+    print('Please enter a required data in database. eg. Stores, location and sku')
 
 
