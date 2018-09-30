@@ -71,26 +71,20 @@ except TypeError:
 try:
     # Loop1 to get all the storenames 
     sql = 'SELECT store_name, id FROM stores'
-    num_rows = cursor1.execute(sql)
-    if num_rows < 1:
-        raise Exception
+    cursor1.execute(sql)
     for store, store_id in cursor1:
         store = store.lower()
         print(store)
         print(store_id)
     #     Loop2 to get all the sku id for the given store
         sql = "SELECT item_sku_codes.sku_code, stores.base_url FROM item_sku_codes, stores WHERE stores.store_name = '"+store+"' AND item_sku_codes.store_id = stores.id AND item_sku_codes.is_scrape_active = 1"
-        num_rows = cursor2.execute(sql)
-        if num_rows < 1:
-            raise Exception
+        cursor2.execute(sql)
         for sku, base_url in cursor2:
             print(sku)
             print(base_url)
     #         Loop3 to get all the store locations for the given store and sku id
             sql = 'SELECT store_locations.id, city_area, pin_code FROM store_locations,stores WHERE stores.id = store_locations.store_id AND stores.store_name = "'+store+'"'
-            num_rows = cursor3.execute(sql)
-            if num_rows < 1:
-                raise Exception
+            cursor3.execute(sql)
             for location_id,area,pincode in cursor3:
                 print(location_id)
                 print(pincode)
@@ -123,14 +117,18 @@ try:
                     p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
                     continue
                 elif store_id == 3:
-                    scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+                    p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
                     continue
     
     process.start()
+except Exception as e:
+    print(e)
     
+finally:
     end_time = str(datetime.now())
     if ab == 1:
         scrape_result = 'SUCCESSFUL'
+        print(scrape_result)
     else:
         scrape_result = 'FAILED'
     
@@ -139,8 +137,5 @@ try:
     connection.commit()
     
     scraper.mailgeneration(store_id,store,str(session_id))
-
-except Exception as e:
-    print('Please enter a required data in database. eg. Stores, location and sku')
 
 

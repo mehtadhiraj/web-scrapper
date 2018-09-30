@@ -60,105 +60,105 @@ class Item(scrapy.Item):
     sku_id = scrapy.Field()
  
  
-def ClearCookies():
-     
-    driver = webdriver.Chrome('chromedriver.exe')
-    driver.get('chrome://settings/clearBrowserData')
-    time.sleep(2)
-    elem = Select(driver.find_element_by_css_selector('* /deep/ #dropdownMenu'))
-    elem.select_by_index(2)   
-    time.sleep(2)
-     
-    result = driver.find_element_by_css_selector('* /deep/ #checkbox')
-    result.click()
-    
-    time.sleep(2)
-    clear = driver.find_element_by_css_selector('* /deep/ #clearBrowsingDataConfirm')
-    clear.click()
-    time.sleep(2)
-    driver.close()
-   
+def ClearCookies(): 
+    try:    
+        driver = webdriver.Chrome('chromedriver.exe')
+        driver.get('chrome://settings/clearBrowserData')
+        time.sleep(2)
+        elem = Select(driver.find_element_by_css_selector('* /deep/ #dropdownMenu'))
+        elem.select_by_index(2)   
+        time.sleep(2)
+         
+        result = driver.find_element_by_css_selector('* /deep/ #checkbox')
+        result.click()
+        
+        time.sleep(2)
+        clear = driver.find_element_by_css_selector('* /deep/ #clearBrowsingDataConfirm')
+        clear.click()
+        time.sleep(2)
+        driver.close()
+    except Exception as e:
+        print(e)   
      
 # Creating Cookies form Chrome
-def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku):
-     
-
-    allowed_domains = [store]
-    start_urls = base_url+sku
-     
-    # Creating an instance webdriver 
-    browser = webdriver.Chrome('chromedriver.exe') 
-    print(start_urls)
-    browser.get(start_urls) 
-       
-    # Let's the user see and also load the element  
-    time.sleep(2) 
+def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku): 
+    try:
+        allowed_domains = [store]
+        start_urls = base_url+sku
+         
+        # Creating an instance webdriver 
+        browser = webdriver.Chrome('chromedriver.exe') 
+        print(start_urls)
+        browser.get(start_urls) 
+           
+        # Let's the user see and also load the element  
+        time.sleep(2) 
+            
+        location = browser.find_elements_by_xpath('//*[@id="nav-global-location-slot"]/span/a') 
+        print(location)  
+        # using the click function which is similar to a click in mouse. 
+        location[0].click() 
+        time.sleep(2)
+         
         
-    location = browser.find_elements_by_xpath('//*[@id="nav-global-location-slot"]/span/a') 
-    print(location)  
-    # using the click function which is similar to a click in mouse. 
-    location[0].click() 
-    time.sleep(2)
-     
-    
-    change=browser.find_elements_by_xpath('//*[@id="GLUXChangePostalCodeLink"]')
-    
-    change[0].click()
-    
-    time.sleep(2)
-     
-    enterpincode=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdateInput"]')
-    enterpincode[0].clear()
-    
-    enterpincode[0].send_keys(pincode)
-    time.sleep(2)
-     
-    apply=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdate"]/span/input')
-    print(apply)
-    apply[0].click()
-    time.sleep(2)
-     
-    done = browser.find_elements_by_name('glowDoneButton')
-    
-    
-    done[0].click()
-    time.sleep(2)  
-    driver = webdriver.Chrome()
-    
-    time.sleep(2)
-    driver.close()
-    GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
-     
+        change=browser.find_elements_by_xpath('//*[@id="GLUXChangePostalCodeLink"]')
+        
+        change[0].click()
+        
+        time.sleep(2)
+         
+        enterpincode=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdateInput"]')
+        enterpincode[0].clear()
+        
+        enterpincode[0].send_keys(pincode)
+        time.sleep(2)
+         
+        apply=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdate"]/span/input')
+        print(apply)
+        apply[0].click()
+        time.sleep(2)
+         
+        done = browser.find_elements_by_name('glowDoneButton')
+        
+        
+        done[0].click()
+        time.sleep(2)  
+        driver = webdriver.Chrome()
+        
+        time.sleep(2)
+        driver.close()
+        GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
+    except Exception as e:
+        print(e) 
 
 # Store2 Change Location
 
 def ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area):
-
-    browser = webdriver.Chrome('chromedriver.exe')
-    url = base_url+sku
-    browser.get(url)
-    time.sleep(2)
-
-    location = browser.find_elements_by_xpath('//*[@id="app"]/div/div[2]/div[2]/header/div[1]/a')
-    location[0].click()
-    time.sleep(2)
-
-    city = browser.find_elements_by_tag_name('input')
-    city[0].send_keys(area)
-    time.sleep(2)
-
-    city[0].send_keys(Keys.ENTER)
-    time.sleep(2)
+    try:
+        browser = webdriver.Chrome('chromedriver.exe')
+        url = base_url+sku
+        browser.get(url)
+        time.sleep(2)
     
-    browser.close()
+        location = browser.find_elements_by_xpath('//*[@id="app"]/div/div[2]/div[2]/header/div[1]/a')
+        location[0].click()
+        time.sleep(2)
     
-    GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
+        city = browser.find_elements_by_tag_name('input')
+        city[0].send_keys(area)
+        time.sleep(2)
     
+        city[0].send_keys(Keys.ENTER)
+        time.sleep(2)
+        
+        browser.close()
+        
+        GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
+    except Exception as e:
+        print(e)
     
 def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area):
-    
     try:
-        
         start_urls= base_url+sku
         browser = webdriver.Chrome('chromedriver.exe')
         browser.get(start_urls)
@@ -191,10 +191,9 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         browser.close()
         flag=1
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
-        
-
-            
-    except ElementNotVisibleException:
+                
+    except ElementNotVisibleException as elem_not_vis:
+        print(elem_not_vis)
         print('cant be scrapped')
         driver.close()
         name=["Not Available"]
@@ -206,7 +205,9 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         print(sql2)
         cursor.execute(sql2)
         connection.commit()
-
+    
+    except Exception as e:
+        print(e)
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
@@ -221,108 +222,121 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
     Alternative is to use Selenium webdrivers for browser automation.
           
     '''
+    try:
+        cJar = cookies.chrome(domain_name=store)
+        print(cJar)
+        for cookie in cJar:
+            print(cookie.name)
+            print(cookie.value)
+        cJar1 = {c.name: c.value for c in cJar}#{i.name: i for i in list(j)}
+        
+        
+        for i,j in cJar1.items():
+        
+            print (i)
+            print( '-------->>>>>>')
+            print (j)
     
-    cJar = cookies.chrome(domain_name=store)
-    print(cJar)
-    for cookie in cJar:
-        print(cookie.name)
-        print(cookie.value)
-    cJar1 = {c.name: c.value for c in cJar}#{i.name: i for i in list(j)}
-    
-    
-    for i,j in cJar1.items():
-    
-        print (i)
-        print( '-------->>>>>>')
-        print (j)
-
-#     print("---------------------------------------------------------------------------------------------------------------------")
-#     print(name) 
-#     print(value)
-#     print("---------------------------------------------------------------------------------------------------------------------")
-    #print(name)
-    print(cJar1)
-#    Replace PINCODE below
-    with open('cookies/'+str(store_id)+'_'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
-
+    #     print("---------------------------------------------------------------------------------------------------------------------")
+    #     print(name) 
+    #     print(value)
+    #     print("---------------------------------------------------------------------------------------------------------------------")
+        #print(name)
+        print(cJar1)
+    #    Replace PINCODE below
+        with open('cookies/'+str(store_id)+'_'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
+    except Exception as e:
+        print(e)
 #SENDING MAIL
 
 def mailgeneration(store_id,store,session_id):   
-    sql='select recipient_email from report_recipients where is_active = 1' 
-    cursor4.execute(sql)
-    fromaddr = "vivekiyer98@gmail.com"
-    toaddr = [] 
-    for mail in cursor4:
-        toaddr.append(mail[0])
-    print(toaddr)
-    recipients = ', '.join(toaddr)   
-    # instance of MIMEMultipart 
-    msg = MIMEMultipart() 
-      
-    # storing the senders email address   
-    msg['From'] = fromaddr 
-      
-    # storing the receivers email address  
-    msg['To'] = recipients
-      
-    # storing the subject  
-    msg['Subject'] = "abc"
-      
-    # string to store the body of the mail 
-    body = "def"
-      
-    # attach the body with the msg instance 
-    msg.attach(MIMEText(body, 'plain')) 
-             
-    # open the file to be sent  
-    path = "csv_files/"
-    pattern = "*_sid"+session_id+".csv"
-    filenames = []
-    for root, dirs, files in os.walk(path):
-        for name in files:
-            if fnmatch.fnmatch(name, pattern):
-                filenames.append(os.path.join(root, name))
-           
-    print(filenames)
-    
-    for file in filenames:  
-    # instance of MIMEBase and named as p 
-          part = MIMEBase('application', 'octet-stream')
-          part.set_payload(open(file, 'rb').read())
-          encoders.encode_base64(part)
-          part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
-          msg.attach(part)
-    # creates SMTP session 
-    s = smtplib.SMTP('smtp.gmail.com', 587) 
-      
-    # start TLS for security 
-    s.starttls() 
-      
-    # Authentication 
-    s.login(fromaddr, "messi2009") 
-      
-    # Converts the Multipart msg into a string 
-    text = msg.as_string() 
-      
-    # sending the mail 
-    s.sendmail(fromaddr, toaddr, text) 
-      
-    # terminating the session 
-    s.quit() 
-    print("Mail Sent successfully")
+    try:
+        sql='select recipient_email from report_recipients where is_active = 1' 
+        cursor4.execute(sql)
+        fromaddr = "vivekiyer98@gmail.com"
+        toaddr = [] 
+        for mail in cursor4:
+            toaddr.append(mail[0])
+        print(toaddr)
+        recipients = ', '.join(toaddr)   
+        # instance of MIMEMultipart 
+        msg = MIMEMultipart() 
+          
+        # storing the senders email address   
+        msg['From'] = fromaddr 
+          
+        # storing the receivers email address  
+        msg['To'] = recipients
+          
+        # storing the subject  
+        msg['Subject'] = "abc"
+          
+        # string to store the body of the mail 
+        body = "def"
+          
+        # attach the body with the msg instance 
+        msg.attach(MIMEText(body, 'plain')) 
+                 
+        # open the file to be sent  
+        path = "csv_files/"
+        pattern = "*_sid"+session_id+".csv"
+        filenames = []
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                if fnmatch.fnmatch(name, pattern):
+                    filenames.append(os.path.join(root, name))
+               
+        print(filenames)
+        
+        if len(filenames) < 1:
+            raise Exception
+        
+        for file in filenames:  
+        # instance of MIMEBase and named as p 
+              part = MIMEBase('application', 'octet-stream')
+              part.set_payload(open(file, 'rb').read())
+              encoders.encode_base64(part)
+              part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
+              msg.attach(part)
+        # creates SMTP session 
+        s = smtplib.SMTP('smtp.gmail.com', 587) 
+          
+        # start TLS for security 
+        s.starttls() 
+          
+        # Authentication 
+        s.login(fromaddr, "messi2009") 
+          
+        # Converts the Multipart msg into a string 
+        text = msg.as_string() 
+          
+        # sending the mail 
+        s.sendmail(fromaddr, toaddr, text) 
+          
+        # terminating the session 
+        s.quit() 
+        print("Mail Sent successfully")
+    except Exception as e:
+        print(e)
+        print('Session Unsucessfull')
 
     
 #GENERATING CSV FILE    
 def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store):
-    csv_path = 'csv_files/'+str(store_id[0])+'_sid'+session_id[0]+'.csv'
-    csvFile = open(csv_path, 'a+', newline='')
-    writer = csv.writer(csvFile)
-    writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
+    try:
+        csv_path = 'csv_files/'+str(store_id[0])+'_sid'+session_id[0]+'.csv'
+        csvFile = open(csv_path, 'a+', newline='')
+        writer = csv.writer(csvFile)
+        writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
+        
+        csvFile.close() 
+        
+        return 1
+    except FileNotFoundError:
+        print('CSV for a '+store+' is not created')
     
-    csvFile.close() 
-    
-    return 1
- 
+    except Exception as e:
+        print(e)
 #Spider to scrap store1 data
 class AmzSpider(scrapy.Spider):
     def __init__(self, base_url, pincode, sku, location_id, store_id, store, area, session_id):
@@ -337,42 +351,51 @@ class AmzSpider(scrapy.Spider):
 
  # Cookie based data scraping    
     def start_requests(self):               
-        name = "AmzSpider"
-        allowed_domains = [self.store] # Domains allowed in Store1's spider
-        start_urls = [self.base_url+self.sku]
-        print(start_urls)
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
-        with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-        print(cookieJar)
-        for i,url in enumerate(start_urls):
-            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
-       
+        try:
+            name = "AmzSpider"
+            allowed_domains = [self.store] # Domains allowed in Store1's spider
+            start_urls = [self.base_url+self.sku]
+            print(start_urls)
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
+            with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
+            print(cookieJar)
+            for i,url in enumerate(start_urls):
+                yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+        except FileNotFoundError:
+           print('Requested Cookies does not exist') 
+           
+        except Exception as e:
+            print(e)
+            
     def parse(self, response):
-        item = Item()
-        item['name']=response.css('#productTitle::text').extract()
-        if len(item['name']) <1:
-            item['name'] = ['Data Unavailable']
+        try:
+            item = Item()
+            item['name']=response.css('#productTitle::text').extract()
+            if len(item['name']) <1:
+                item['name'] = ['Data Unavailable']
+            
+            print('=====================================================================')
+            print(item['name'])
+            item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
+            if len(item['rating']) <1:
+                item['rating'] = ['Not applicable']
+            item['price']=response.css('#priceblock_ourprice::text').extract()
+             
+            item['stock']=response.css('#availability > span::text').extract()
+            if len(item['stock']) < 1:
+                item['stock'] = ['Data Missing']
+            else:
+                item['stock'][0] = item['stock'][0].replace('\n',"").strip()
+            # Striping data to remove blank spaces
+            item['name'][0] = item['name'][0].replace('\n',"").strip() 
+            item['location_id'] = [self.location_id]
+            item['store_id'] = [self.store_id]
+            item['sku_id'] = [self.sku]
+        except Exception as e:
+            print(e)
         
-        print('=====================================================================')
-        print(item['name'])
-        item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
-        if len(item['rating']) <1:
-            item['rating'] = ['Not applicable']
-        item['price']=response.css('#priceblock_ourprice::text').extract()
-         
-        item['stock']=response.css('#availability > span::text').extract()
-        if len(item['stock']) < 1:
-            item['stock'] = ['Data Missing']
-        else:
-            item['stock'][0] = item['stock'][0].replace('\n',"").strip()
-        # Striping data to remove blank spaces
-        item['name'][0] = item['name'][0].replace('\n',"").strip() 
-        item['location_id'] = [self.location_id]
-        item['store_id'] = [self.store_id]
-        item['sku_id'] = [self.sku]
-    
-
-        return storeItem(item, self.store, self.session_id, response)
+        finally:    
+            return storeItem(item, self.store, self.session_id, response)
 
 
 
@@ -389,61 +412,69 @@ class GrffSpider(scrapy.Spider):
          
 # Requesting a Cookies for location based data scraping
     def start_requests(self):
-          
-        print('Scrapy.Spider')
-        print(scrapy.Spider)
-        name = "GrffSpider"
-        start_urls = [self.base_url+self.sku]
-        allowed_domains = [self.store]  # Domain allowed by this spider
-        print(start_urls)   
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
-        '''
-        Open pkl file stored with stored by the name same as pincode 
-        Append a pincode in the path below.
-        "pin" is defined global 
-        storing the following pkl file as a dictionary in a "cookieJar"
-          
-        '''
-        with open('cookies/'+str(self.store_id)+'_'+str(self.pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-        print(cookieJar)
-        # Passing URL cookieJar and the headers to scrap location based values.
-        for i,url in enumerate(start_urls):
-            yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+        try: 
+            name = "GrffSpider"
+            start_urls = [self.base_url+self.sku]
+            allowed_domains = [self.store]  # Domain allowed by this spider
+            print(start_urls)   
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
+            '''
+            Open pkl file stored with stored by the name same as pincode 
+            Append a pincode in the path below.
+            "pin" is defined global 
+            storing the following pkl file as a dictionary in a "cookieJar"
               
+            '''
+            with open('cookies/'+str(self.store_id)+'_'+str(self.pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+            print(cookieJar)
+            # Passing URL cookieJar and the headers to scrap location based values.
+            for i,url in enumerate(start_urls):
+                yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
+        
+        except FileNotFoundError:
+           print('Requested Cookies does not exist') 
+           
+        except Exception as e:
+            print(e)
+                  
     # Parsing to scrap data  
     def parse(self, response):
-        item = Item() # Creating an object of class Item
-        item['name']=response.css('.LinesEllipsis::text').extract()
-        item['price']=response.css('.pdp-product__price--new::text').extract()
-        item['price']=[item['price'][1]]
-#         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
-        item['rating']= ['Not Applicable']
-         
-        '''
-        store2 gives the stock availability in the form of buttons
-        Stock unavailable is also in the form of button 
-        Hence data fetched is of both available and unavailable.
-        '''
-        item['stock']= response.css('.product-variant__btn::text').extract()
-        # It consists of data from a button that is unavailable. 
-        outOfStock = response.css('.product-variant__btn--disabled::text').extract()
-        #Hence using set operation data of unavailable product is removed from the complete list. 
-        item['stock'] = list(set(item['stock'])-set(outOfStock))
-        #Now applying a join operation to store the data on a 0th index.
-        item['stock'] = [', '.join(item['stock'])]
-        # After all the operation if stock is still empty we store the status as Unavailable
-        if item['stock'][0] == '':
-            item['stock'] = ['Curently Unavailable']
-        item['location_id'] = [self.location_id]
-        item['store_id'] = [self.store_id]
-        item['sku_id'] = [self.sku]
+        try:    
+            item = Item() # Creating an object of class Item
+            item['name']=response.css('.LinesEllipsis::text').extract()
+            item['price']=response.css('.pdp-product__price--new::text').extract()
+            item['price']=[item['price'][1]]
+    #         item['stock']=response.css('#app > div > div.os-windows > div:nth-child(6) > div > div > div.pdp-wrapper > div.wrapper.pdp__top-container.pdp-wrapper--variant > div > div > div.pdp-product__container > div.pdp-product.pdp-product__move-top > div.pdp-product__variants-list > div > div > div.product-variant__list > button::text').extract()
+            item['rating']= ['Not Applicable']
+             
+            '''
+            store2 gives the stock availability in the form of buttons
+            Stock unavailable is also in the form of button 
+            Hence data fetched is of both available and unavailable.
+            '''
+            item['stock']= response.css('.product-variant__btn::text').extract()
+            # It consists of data from a button that is unavailable. 
+            outOfStock = response.css('.product-variant__btn--disabled::text').extract()
+            #Hence using set operation data of unavailable product is removed from the complete list. 
+            item['stock'] = list(set(item['stock'])-set(outOfStock))
+            #Now applying a join operation to store the data on a 0th index.
+            item['stock'] = [', '.join(item['stock'])]
+            # After all the operation if stock is still empty we store the status as Unavailable
+            if item['stock'][0] == '':
+                item['stock'] = ['Curently Unavailable']
+            item['location_id'] = [self.location_id]
+            item['store_id'] = [self.store_id]
+            item['sku_id'] = [self.sku]
+            
+        except Exception as e:
+            print(e)
         
-        return storeItem(item, self.store, self.session_id, response)
+        finally:    
+            return storeItem(item, self.store, self.session_id, response)
 
-
+# Bbs Spider starts here
 class BbsSpider():
 
-    
     def scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id):
         
         start_urls= base_url+sku
@@ -507,16 +538,23 @@ def storeItem(item, store, session_id, response):
     print(session_id)
     print(store)
 
-    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
-    print(sql2)
-    cursor.execute(sql2)
+    try:    
+        sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
+        print(sql2)
+        cursor.execute(sql2)
+        
+        connection.commit()
     
-    connection.commit()
-
-    csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
-    return item
+        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
+    
+    except Exception as e:
+        print(e)
+    
+    finally:
+        return item
          
 def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
+    
     name= [item[0]]
     price=[item[1]]
     price = [price[0].replace('Rs ','')]
@@ -538,11 +576,13 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
     print(location_id)
     print(store)
         
-    sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime[0]+'")'
-    print(sql2)
-    cursor.execute(sql2)
-    connection.commit()
-    csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
-    
+    try:
+        sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime[0]+'")'
+        print(sql2)
+        cursor.execute(sql2)
+        connection.commit()
+        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
+    except Exception as e:
+        print(e)
 print(cursor)
 
