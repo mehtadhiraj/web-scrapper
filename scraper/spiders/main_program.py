@@ -119,13 +119,13 @@ try:
                 if store_id == 2:
                     p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)               
                     continue       
-                elif store_id == 1:
-                    p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
-                    continue
-                elif store_id == 3:
-                    p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
-                    continue
-    
+#                 elif store_id == 1:
+#                     p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
+#                     continue
+#                 elif store_id == 3:
+#                     p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+#                     continue
+#     
     process.start()
     logger.info('Data Scraped Successfully')
     

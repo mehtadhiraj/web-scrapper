@@ -88,14 +88,14 @@ def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku):
          
         # Creating an instance webdriver 
         browser = webdriver.Chrome('chromedriver.exe') 
-        print(start_urls)
+        
         browser.get(start_urls) 
            
         # Let's the user see and also load the element  
         time.sleep(2) 
             
         location = browser.find_elements_by_xpath('//*[@id="nav-global-location-slot"]/span/a') 
-        print(location)  
+          
         # using the click function which is similar to a click in mouse. 
         location[0].click() 
         time.sleep(2)
@@ -194,7 +194,7 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         time.sleep(2)
         browser.close()
         flag=1
-        logger.info('Location changed to '+location_id+' in Amz')
+        logger.info('Location changed to '+str(location_id)+' in Bbs')
 
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
                 
@@ -208,7 +208,7 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
         rating=["Not Available"]
         
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
-        print(sql2)
+    
         cursor.execute(sql2)
         connection.commit()
         logger.exception('Bbs data not available for '+sku+'.')
@@ -231,28 +231,19 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
     '''
     try:
         cJar = cookies.chrome(domain_name=store)
-        print(cJar)
-        for cookie in cJar:
-            print(cookie.name)
-            print(cookie.value)
+        
+        
+            
         cJar1 = {c.name: c.value for c in cJar}#{i.name: i for i in list(j)}
         
-        
-        for i,j in cJar1.items():
-        
-            print (i)
-            print( '-------->>>>>>')
-            print (j)
-    
-    #     print("---------------------------------------------------------------------------------------------------------------------")
-    #     print(name) 
-    #     print(value)
-    #     print("---------------------------------------------------------------------------------------------------------------------")
-        #print(name)
         print(cJar1)
     #    Replace PINCODE below
-        with open('cookies/'+str(store_id)+'_'+pincode+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
+        with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
         logger.info('New Chromw cookies Collected')
+        
+    except TypeError as te:
+        print(te)
+        
     except Exception as e:
         print(e)
         logger.exception(e)
@@ -295,7 +286,7 @@ def mailgeneration(store_id,store,session_id):
                 if fnmatch.fnmatch(name, pattern):
                     filenames.append(os.path.join(root, name))
                
-        print(filenames)
+   
         
         if len(filenames) < 1:
             raise Exception
@@ -334,16 +325,23 @@ def mailgeneration(store_id,store,session_id):
 
     
 #GENERATING CSV FILE    
-def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store):
+def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode):
     try:
+        scrape_datetime = scrape_datetime.split('.')
+        scrape_datetime = scrape_datetime[0]
         csv_path = 'csv_files/'+str(store_id[0])+'_sid'+session_id[0]+'.csv'
-        csvFile = open(csv_path, 'a+', newline='')
-        writer = csv.writer(csvFile)
-        writer.writerow((session_id[0], sku_id[0], store_id[0], location_id[0], name[0], stock[0], price[0], rating[0], scrape_datetime))
-        
-        csvFile.close() 
-        logger.info('CSV file for store '+str(store_id)+' created')
-        return 1
+   
+        file_exists = os.path.isfile(csv_path)
+        if not file_exists:
+            csvFile = open(csv_path, 'w', newline='')
+            writehead = csv.DictWriter(csvFile, fieldnames = ["Session Id", "SKU Id", "Store Name", "Location Id", "Product Name", "Stock Availability","Price in Rupees", "Rating", "Scrape Datetime"])    
+            writehead.writeheader()
+        csvFile1 = open(csv_path, 'a+', newline='')
+        writer = csv.writer(csvFile1)   
+    
+        writer.writerow((session_id[0], sku_id[0], store, pincode, name[0], stock[0], price[0], rating[0], scrape_datetime))
+    
+        csvFile1.close() 
     except FileNotFoundError:
         print('CSV for store '+str(store_id)+' is not created')
         logger.error('CSV for store '+str(store_id)+' is not created')
@@ -410,7 +408,7 @@ class AmzSpider(scrapy.Spider):
             print(e)
             logger.critical(self.sku+' data missing')
         finally:    
-            return storeItem(item, self.store, self.session_id, response)
+            return storeItem(item, self.store, self.session_id, self.pincode, response)
 
 
 
@@ -431,7 +429,7 @@ class GrffSpider(scrapy.Spider):
             name = "GrffSpider"
             start_urls = [self.base_url+self.sku]
             allowed_domains = [self.store]  # Domain allowed by this spider
-            print(start_urls)   
+              
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
             '''
             Open pkl file stored with stored by the name same as pincode 
@@ -487,26 +485,28 @@ class GrffSpider(scrapy.Spider):
             logger.critical(self.sku+' data missing')
    
         finally:    
-            return storeItem(item, self.store, self.session_id, response)
+            return storeItem(item, self.store, self.session_id, self.pincode, response)
 
 # Bbs Spider starts here
 class BbsSpider():
 
     def scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id):
-        
-        start_urls= base_url+sku
-        with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-        #cookies = pickle.load(open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', "rb"))
-        #print(cookieJar)
-        print("Scraping item with variants...")
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
-
-        driver.get(start_urls)
-        for cookiename,cookievalue in cookieJar.items():
-            driver.add_cookie({'name':cookiename,'value':cookievalue,'path':'/','Secure':'True'})
-#           
+        try:
+            start_urls= base_url+sku
+            with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
+            #cookies = pickle.load(open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', "rb"))
+            #print(cookieJar)
+            print("Scraping item with variants...")
+            options = webdriver.ChromeOptions()
+            options.add_argument('--headless')
+            driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
+    
+            driver.get(start_urls)
+            for cookiename,cookievalue in cookieJar.items():
+                driver.add_cookie({'name':cookiename,'value':cookievalue,'path':'/','Secure':'True'})
+                
+        except FileNotFoundError as e:
+            print(e)
         try:
             element = WebDriverWait(driver, 60).until(
                     expected_conditions.presence_of_element_located((By.NAME, "size"))
@@ -521,7 +521,7 @@ class BbsSpider():
                 item1=[item,price]
                  
                 print(item + " " + price)
-                storeItemBbs(item1,sku,location_id,store_id,store, session_id)
+                storeItemBbs(item1,sku,location_id,store_id,store, session_id, pincode)
         except TimeoutException:
             print ("Connection Timeout")
             logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
@@ -529,7 +529,7 @@ class BbsSpider():
             driver.close()
    
  
-def storeItem(item, store, session_id, response):
+def storeItem(item, store, session_id, pincode, response):
     
     name = item['name']
     price = item['price']
@@ -563,7 +563,7 @@ def storeItem(item, store, session_id, response):
         
         connection.commit()
         logger.info('Data of '+store+'stored  Successfully')
-        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
+        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
     
     except Exception as e:
         print(e)
@@ -572,7 +572,7 @@ def storeItem(item, store, session_id, response):
     finally:
         return item
          
-def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
+def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
     
     name= [item[0]]
     price=[item[1]]
@@ -601,7 +601,7 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id):
         cursor.execute(sql2)
         connection.commit()
 
-        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store)
+        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
     except Exception as e:
         print(e)
         logger.critical(e)

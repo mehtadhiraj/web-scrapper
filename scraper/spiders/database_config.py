@@ -11,7 +11,7 @@ try:
     connection = pymysql.connect(
        host='localhost',
        user='root',
-       password='123',                             
+       password='',                             
        db='scraperdb1',
     )
     print ("Database Connection Established") 
