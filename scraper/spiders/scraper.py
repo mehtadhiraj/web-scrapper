@@ -346,6 +346,7 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
             csvFile = open(csv_path, 'w', newline='')
             writehead = csv.DictWriter(csvFile, fieldnames = ["Session Id", "SKU Id", "Store Name", "Location Id", "Product Name", "Stock Availability","Price in Rupees", "Rating", "Scrape Datetime"])    
             writehead.writeheader()
+            csvFile.close()
             
         csvFile1 = open(csv_path, 'a+', newline='')
         writer = csv.writer(csvFile1)   
@@ -515,9 +516,6 @@ class BbsSpider():
             for cookiename,cookievalue in cookieJar.items():
                 driver.add_cookie({'name':cookiename,'value':cookievalue,'path':'/','Secure':'True'})
                 
-        except FileNotFoundError as e:
-            print(e)
-        try:
             element = WebDriverWait(driver, 60).until(
                     expected_conditions.presence_of_element_located((By.NAME, "size"))
                     )
@@ -532,6 +530,11 @@ class BbsSpider():
                  
                 print(item + " " + price)
                 storeItemBbs(item1,sku,location_id,store_id,store, session_id, pincode)
+                
+        except FileNotFoundError as e:
+            print(e)
+            logger.critical(e)
+        
         except TimeoutException:
             print ("Connection Timeout")
             logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
