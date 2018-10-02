@@ -35,7 +35,6 @@ import os, fnmatch
 global response
 from datetime import datetime
 import smtplib 
-import logs
 from email.mime.multipart import MIMEMultipart 
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
@@ -47,9 +46,6 @@ from scraper import BbsSpider
 
 
 try:
-#     Evoking logs from scraper
-    logger = logs.logs()
-    
     # Executing Database config
     exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
     
@@ -69,6 +65,7 @@ try:
     ab= cursor.execute(sql_insert_session)
     connection.commit()
     session_id = cursor.lastrowid
+    print(session_id)
     logger.info('Session Started')
 except TypeError:
     print('Error occured while starting a new seesion')
@@ -114,17 +111,17 @@ try:
                         elif store_id == 2:
                             scraper.ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area)
                         elif store_id == 3:
-                            flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area)
+                            flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
     #             Call to the spiders as per the given store
                 if store_id == 2:
                     p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)               
                     continue       
-#                 elif store_id == 1:
-#                     p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
-#                     continue
-#                 elif store_id == 3:
-#                     p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
-#                     continue
+                elif store_id == 1:
+                    p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
+                    continue
+                elif store_id == 3:
+                    p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+                    continue
 #     
     process.start()
     logger.info('Data Scraped Successfully')
@@ -147,5 +144,5 @@ finally:
     connection.commit()
     
     scraper.mailgeneration(store_id,store,str(session_id))
-    logger.info('Session Sucessfull')
+
 

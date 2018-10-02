@@ -1,0 +1,31 @@
+2018-10-02 22:16:32,938 - INFO - scraper - Database Connection Established
+2018-10-02 22:16:32,956 - INFO - __main__ - Database Connection Established
+2018-10-02 22:16:32,998 - INFO - __main__ - Session Started
+2018-10-02 22:16:32,999 - INFO - __main__ - Scraping for amazon started.
+2018-10-02 22:16:37,189 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-02 22:16:48,650 - INFO - scraper - Cookies Cleared Successfully
+2018-10-02 22:17:31,078 - INFO - scraper - Location changed to 3 in Bbs
+2018-10-02 22:17:33,123 - INFO - scraper - New Chromw cookies Collected
+2018-10-02 22:17:33,133 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+Traceback (most recent call last):
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 688, in close
+    self.execute(Command.CLOSE)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+
+2018-10-02 22:17:33,136 - INFO - __main__ - SUCCESSFUL
+2018-10-02 22:17:33,190 - ERROR - scraper - Mail not sent
+2018-10-02 22:17:33,191 - CRITICAL - scraper - Session Unsucessfull
+2018-10-02 22:20:00,042 - INFO - scraper - Database Connection Established
+2018-10-02 22:20:00,060 - INFO - __main__ - Database Connection Established
+2018-10-02 22:20:00,122 - INFO - __main__ - Session Started
+2018-10-02 22:20:00,125 - INFO - __main__ - Scraping for amazon started.

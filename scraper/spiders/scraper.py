@@ -36,9 +36,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders 
-import logs
 
-logger = logs.logs()
+
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
  
@@ -161,7 +160,7 @@ def ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, are
         print(e)
         logger.critical(e)
     
-def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area):
+def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id):
     try:
         start_urls= base_url+sku
         browser = webdriver.Chrome('chromedriver.exe')
@@ -201,20 +200,31 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku,area)
     except ElementNotVisibleException as elem_not_vis:
         print(elem_not_vis)
         print('cant be scrapped')
-        driver.close()
+        browser.close()
+        session_id  = [str(session_id)]
+        print('=============================++++++++++++++++++++++++++++++++++===================================')
+        print(session_id)
+        print(session_id[0])
         name=["Not Available"]
-        price=["Not Available"]
-        stock=["Not Available"]
+        price=["00.00"]
+        stock=["Currently Unavailable"]
         rating=["Not Available"]
-        
-        sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+price[0]+'", "'+stock[0]+'", "'+rating[0]+'")'
-    
+        scrape_datetime= str(datetime.now())
+        print(sku)
+        print(location_id)
+        print(store_id)
+        print('===========================================================+++++++++++++++++++++++++++++++++++++========================')
+        sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+str(sku)+'","'+str(store_id)+'","'+str(location_id)+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'", "'+scrape_datetime+'")'
+        print(sql2)
         cursor.execute(sql2)
         connection.commit()
         logger.exception('Bbs data not available for '+sku+'.')
     except Exception as e:
         print(e)
         logger.error(e)
+    
+    finally:
+        browser.close()
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
@@ -247,8 +257,8 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
     except Exception as e:
         print(e)
         logger.exception(e)
+        
 #SENDING MAIL
-
 def mailgeneration(store_id,store,session_id):   
     try:
         sql='select recipient_email from report_recipients where is_active = 1' 
@@ -279,7 +289,7 @@ def mailgeneration(store_id,store,session_id):
                  
         # open the file to be sent  
         path = "csv_files/"
-        pattern = "*_sid"+session_id+".csv"
+        pattern = "*_sid"+str(session_id)+".csv"
         filenames = []
         for root, dirs, files in os.walk(path):
             for name in files:
@@ -336,12 +346,12 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
             csvFile = open(csv_path, 'w', newline='')
             writehead = csv.DictWriter(csvFile, fieldnames = ["Session Id", "SKU Id", "Store Name", "Location Id", "Product Name", "Stock Availability","Price in Rupees", "Rating", "Scrape Datetime"])    
             writehead.writeheader()
+            
         csvFile1 = open(csv_path, 'a+', newline='')
         writer = csv.writer(csvFile1)   
-    
         writer.writerow((session_id[0], sku_id[0], store, pincode, name[0], stock[0], price[0], rating[0], scrape_datetime))
-    
         csvFile1.close() 
+        
     except FileNotFoundError:
         print('CSV for store '+str(store_id)+' is not created')
         logger.error('CSV for store '+str(store_id)+' is not created')
@@ -498,7 +508,7 @@ class BbsSpider():
             #print(cookieJar)
             print("Scraping item with variants...")
             options = webdriver.ChromeOptions()
-            options.add_argument('--headless')
+            options.add_argument('--no--sandbox')
             driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
     
             driver.get(start_urls)
@@ -525,6 +535,10 @@ class BbsSpider():
         except TimeoutException:
             print ("Connection Timeout")
             logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
+            
+        except Exception as e:
+            print('=============================================================='+e)
+            logger.critical(e)
         finally:
             driver.close()
    
@@ -584,7 +598,7 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
     sku_id = [sku_id]
     location_id = [str(location_id)]
     store_id = [str(store_id)]
-    scrape_datetime = [str(datetime.now())]
+    scrape_datetime = str(datetime.now())
                         
     print(name)
     print(price)
@@ -596,7 +610,7 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
     print(store)
         
     try:
-        sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime[0]+'")'
+        sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
         print(sql2)
         cursor.execute(sql2)
         connection.commit()
