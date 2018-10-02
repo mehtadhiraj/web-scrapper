@@ -1,0 +1,494 @@
+2018-10-03 00:28:35,967 - INFO - scraper - Database Connection Established
+2018-10-03 00:28:35,978 - INFO - __main__ - Database Connection Established
+2018-10-03 00:28:36,067 - INFO - __main__ - Session Started
+2018-10-03 00:28:36,069 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 00:28:40,677 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 00:29:55,800 - WARNING - scraper - Connection time out while collecting data for 3-10000148
+2018-10-03 00:31:10,827 - WARNING - scraper - Connection time out while collecting data for 3-10000200
+2018-10-03 00:35:25,378 - INFO - scraper - Data of bigbasket - 1203781  stored  Successfully
+2018-10-03 00:35:26,026 - INFO - scraper - Data of bigbasket - 1203781  stored  Successfully
+2018-10-03 00:35:27,173 - INFO - scraper - Data of bigbasket - 1203781  stored  Successfully
+2018-10-03 00:35:27,273 - INFO - __main__ - Scraping for grofers started.
+2018-10-03 00:35:45,327 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 00:35:45,452 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 00:35:45,526 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 00:35:45,602 - INFO - scraper - Data of amazon - B01K4F45LU  stored  Successfully
+2018-10-03 00:35:45,665 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 00:35:45,716 - INFO - scraper - Data of amazon - B01N4893Q0  stored  Successfully
+2018-10-03 00:35:45,819 - INFO - scraper - Data of amazon - B01K4F4B9Q  stored  Successfully
+2018-10-03 00:35:45,928 - INFO - scraper - Data of amazon - B01MSTFSXA  stored  Successfully
+2018-10-03 00:35:46,010 - INFO - scraper - Data of amazon - B01K4F45LU  stored  Successfully
+2018-10-03 00:35:46,109 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 00:35:46,181 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 00:35:46,320 - INFO - scraper - Data of amazon - B01K4F4B9Q  stored  Successfully
+2018-10-03 00:35:46,415 - INFO - scraper - Data of amazon - B01N4893Q0  stored  Successfully
+2018-10-03 00:35:46,544 - INFO - scraper - Data of amazon - B01K4F40JW  stored  Successfully
+2018-10-03 00:35:46,636 - INFO - scraper - Data of amazon - B01K4F6N2E  stored  Successfully
+2018-10-03 00:35:46,758 - INFO - scraper - Data of amazon - B07DLGX4KK  stored  Successfully
+2018-10-03 00:35:46,921 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 00:35:48,164 - INFO - scraper - Data of amazon - B01K4F40JW  stored  Successfully
+2018-10-03 00:35:48,478 - INFO - scraper - Data of amazon - B01MXSK7QM  stored  Successfully
+2018-10-03 00:35:52,161 - INFO - scraper - Data of amazon - B01HBFVM94  stored  Successfully
+2018-10-03 00:35:52,691 - INFO - scraper - Data of grofers - 389731  stored  Successfully
+2018-10-03 00:35:52,754 - INFO - scraper - Data of amazon - B01K4F7IWS  stored  Successfully
+2018-10-03 00:35:53,240 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 00:35:53,912 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 00:35:54,958 - INFO - scraper - Data of amazon - B01K4F7DMS  stored  Successfully
+2018-10-03 00:35:55,146 - INFO - scraper - Data of amazon - B01HBEUAI4  stored  Successfully
+2018-10-03 00:35:55,298 - INFO - scraper - Data of amazon - B078SFQVBR  stored  Successfully
+2018-10-03 00:35:55,374 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 00:35:55,501 - INFO - scraper - Data of amazon - B07DLMRVBY  stored  Successfully
+2018-10-03 00:35:55,599 - INFO - scraper - Data of amazon - B07DLMRVBY  stored  Successfully
+2018-10-03 00:35:55,800 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
+2018-10-03 00:35:55,875 - INFO - scraper - Data of grofers - 391655  stored  Successfully
+2018-10-03 00:35:55,976 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 00:35:56,054 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 00:35:56,140 - INFO - scraper - Data of amazon - B01K4F2TN6  stored  Successfully
+2018-10-03 00:35:56,224 - INFO - scraper - Data of amazon - B01K4F59E2  stored  Successfully
+2018-10-03 00:35:56,296 - INFO - scraper - Data of amazon - B01MQQDJ2K  stored  Successfully
+2018-10-03 00:35:56,376 - INFO - scraper - Data of amazon - B01K4F4L96  stored  Successfully
+2018-10-03 00:35:56,588 - INFO - scraper - Data of amazon - B07DLBXGF1  stored  Successfully
+2018-10-03 00:35:57,132 - INFO - scraper - Data of amazon - B01K4F4L96  stored  Successfully
+2018-10-03 00:35:57,628 - INFO - scraper - Data of amazon - B01K4F59E2  stored  Successfully
+2018-10-03 00:35:57,976 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 00:35:58,080 - INFO - scraper - Data of amazon - B01K4F2DQO  stored  Successfully
+2018-10-03 00:35:58,207 - INFO - scraper - Data of amazon - B01HBEQ006  stored  Successfully
+2018-10-03 00:35:58,365 - INFO - scraper - Data of amazon - B01MTUXLEQ  stored  Successfully
+2018-10-03 00:35:58,477 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 00:35:58,817 - INFO - scraper - Data of amazon - B01HBFXGO8  stored  Successfully
+2018-10-03 00:35:59,188 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 00:36:00,131 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 00:36:00,534 - INFO - scraper - Data of amazon - B07BGCB6M7  stored  Successfully
+2018-10-03 00:36:00,726 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 00:36:00,973 - INFO - scraper - Data of amazon - B07BGC61TC  stored  Successfully
+2018-10-03 00:36:01,280 - INFO - scraper - Data of amazon - B01HBFVM94  stored  Successfully
+2018-10-03 00:36:01,391 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 00:36:01,469 - INFO - scraper - Data of amazon - B01MXSK7QM  stored  Successfully
+2018-10-03 00:36:01,571 - INFO - scraper - Data of amazon - B07BGD2283  stored  Successfully
+2018-10-03 00:36:01,825 - INFO - scraper - Data of amazon - B07B6H751L  stored  Successfully
+2018-10-03 00:36:02,295 - INFO - scraper - Data of amazon - B07BGCNMBB  stored  Successfully
+2018-10-03 00:36:02,489 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 00:36:02,720 - INFO - scraper - Data of amazon - B01K4F78NC  stored  Successfully
+2018-10-03 00:36:02,832 - INFO - scraper - Data of amazon - B07BGC43KD  stored  Successfully
+2018-10-03 00:36:02,924 - INFO - scraper - Data of amazon - B01K4F4QG4  stored  Successfully
+2018-10-03 00:36:03,027 - INFO - scraper - Data of amazon - B07B6H75SQ  stored  Successfully
+2018-10-03 00:36:03,132 - INFO - scraper - Data of amazon - B078SDRVXY  stored  Successfully
+2018-10-03 00:36:03,188 - INFO - scraper - Data of amazon - B01K4F2XVO  stored  Successfully
+2018-10-03 00:36:03,286 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 00:36:03,363 - INFO - scraper - Data of amazon - B01K4F78NC  stored  Successfully
+2018-10-03 00:36:03,441 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 00:36:03,513 - INFO - scraper - Data of amazon - B07B6H75SQ  stored  Successfully
+2018-10-03 00:36:03,574 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 00:36:03,748 - INFO - scraper - Data of amazon - B01MSTFSXA  stored  Successfully
+2018-10-03 00:36:03,826 - INFO - scraper - Data of amazon - B07DLGX4KK  stored  Successfully
+2018-10-03 00:36:03,900 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 00:36:03,957 - INFO - scraper - Data of amazon - B07B6H751L  stored  Successfully
+2018-10-03 00:36:04,010 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 00:36:04,100 - INFO - scraper - Data of amazon - B01K4F3S72  stored  Successfully
+2018-10-03 00:36:04,173 - INFO - scraper - Data of amazon - B01MRRRUJK  stored  Successfully
+2018-10-03 00:36:04,261 - INFO - scraper - Data of amazon - B01N6MVEN4  stored  Successfully
+2018-10-03 00:36:04,324 - INFO - scraper - Data of amazon - B01K4F6HJ8  stored  Successfully
+2018-10-03 00:36:04,406 - INFO - scraper - Data of amazon - B078SFTDTY  stored  Successfully
+2018-10-03 00:36:04,468 - INFO - scraper - Data of amazon - B01K4F66YY  stored  Successfully
+2018-10-03 00:36:04,534 - INFO - scraper - Data of amazon - B01K4F3264  stored  Successfully
+2018-10-03 00:36:04,624 - INFO - scraper - Data of amazon - B078SDRVXY  stored  Successfully
+2018-10-03 00:36:04,710 - INFO - scraper - Data of amazon - B07BGCNMBB  stored  Successfully
+2018-10-03 00:36:04,778 - INFO - scraper - Data of amazon - B07BGCB6M7  stored  Successfully
+2018-10-03 00:36:04,904 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 00:36:04,967 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 00:36:05,030 - INFO - scraper - Data of amazon - B01K4F72RY  stored  Successfully
+2018-10-03 00:36:05,091 - INFO - scraper - Data of amazon - B078SFQVBR  stored  Successfully
+2018-10-03 00:36:05,151 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 00:36:05,202 - INFO - scraper - Data of amazon - B078SFTDTY  stored  Successfully
+2018-10-03 00:36:05,302 - INFO - scraper - Data of amazon - B01HBEQ006  stored  Successfully
+2018-10-03 00:36:05,375 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 00:36:05,455 - INFO - scraper - Data of amazon - B07BGC5C1Z  stored  Successfully
+2018-10-03 00:36:05,529 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 00:36:05,595 - INFO - scraper - Data of amazon - B01K4F5WI0  stored  Successfully
+2018-10-03 00:36:05,735 - INFO - scraper - Data of amazon - B01HBFXKO4  stored  Successfully
+2018-10-03 00:36:05,824 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 00:36:05,882 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 00:36:05,965 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 00:36:06,102 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 00:36:06,164 - INFO - scraper - Data of amazon - B07BGCWY83  stored  Successfully
+2018-10-03 00:36:06,325 - INFO - scraper - Data of amazon - B01K4F6N2E  stored  Successfully
+2018-10-03 00:36:06,379 - INFO - scraper - Data of amazon - B01NBEWANN  stored  Successfully
+2018-10-03 00:36:06,435 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 00:36:06,491 - INFO - scraper - Data of amazon - B07BGCZCB3  stored  Successfully
+2018-10-03 00:36:06,568 - INFO - scraper - Data of amazon - B01K4F7DMS  stored  Successfully
+2018-10-03 00:36:06,634 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 00:36:07,094 - INFO - scraper - Data of amazon - B01K4F5R3K  stored  Successfully
+2018-10-03 00:36:07,175 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 00:36:07,265 - INFO - scraper - Data of amazon - B01K4F2XVO  stored  Successfully
+2018-10-03 00:36:07,375 - INFO - scraper - Data of amazon - B01K4F7QWU  stored  Successfully
+2018-10-03 00:36:07,447 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 00:36:07,535 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 00:36:07,590 - INFO - scraper - Data of amazon - B01K4F2DQO  stored  Successfully
+2018-10-03 00:36:07,711 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 00:36:07,774 - INFO - scraper - Data of amazon - B01K4F62HK  stored  Successfully
+2018-10-03 00:36:08,077 - INFO - scraper - Data of amazon - B01N0GN72Y  stored  Successfully
+2018-10-03 00:36:08,146 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 00:36:08,218 - INFO - scraper - Data of amazon - B01K4F5WI0  stored  Successfully
+2018-10-03 00:36:08,304 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 00:36:08,368 - INFO - scraper - Data of amazon - B07DLBXGF1  stored  Successfully
+2018-10-03 00:36:08,432 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 00:36:08,583 - INFO - scraper - Data of amazon - B01K4F62HK  stored  Successfully
+2018-10-03 00:36:08,654 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 00:36:08,713 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 00:36:08,803 - INFO - scraper - Data of amazon - B01K4F6HJ8  stored  Successfully
+2018-10-03 00:36:08,881 - INFO - scraper - Data of amazon - B01K4F6CBG  stored  Successfully
+2018-10-03 00:36:08,940 - INFO - scraper - Data of amazon - B01K4F3APM  stored  Successfully
+2018-10-03 00:36:09,018 - INFO - scraper - Data of amazon - B01N0GN72Y  stored  Successfully
+2018-10-03 00:36:09,098 - INFO - scraper - Data of amazon - B01K4F7QWU  stored  Successfully
+2018-10-03 00:36:09,166 - INFO - scraper - Data of amazon - B01K4F7IWS  stored  Successfully
+2018-10-03 00:36:09,245 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 00:36:09,301 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 00:36:09,357 - INFO - scraper - Data of amazon - B07BGCZCB3  stored  Successfully
+2018-10-03 00:36:09,412 - INFO - scraper - Data of amazon - B01K4F5R3K  stored  Successfully
+2018-10-03 00:36:09,466 - INFO - scraper - Data of amazon - B01NBEWANN  stored  Successfully
+2018-10-03 00:36:09,523 - INFO - scraper - Data of amazon - B01K4F3IVS  stored  Successfully
+2018-10-03 00:36:09,598 - INFO - scraper - Data of amazon - B07BGD2283  stored  Successfully
+2018-10-03 00:36:09,714 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 00:36:09,798 - INFO - scraper - Data of amazon - B07BGC61TC  stored  Successfully
+2018-10-03 00:36:09,859 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 00:36:09,929 - INFO - scraper - Data of amazon - B01K4F2TN6  stored  Successfully
+2018-10-03 00:36:10,033 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 00:36:10,073 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 00:36:10,145 - INFO - scraper - Data of amazon - B01K4F3264  stored  Successfully
+2018-10-03 00:36:10,213 - INFO - scraper - Data of amazon - B01K4F3APM  stored  Successfully
+2018-10-03 00:36:10,445 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 00:36:10,512 - INFO - scraper - Data of amazon - B01K4F3EYO  stored  Successfully
+2018-10-03 00:36:10,579 - INFO - scraper - Data of amazon - B07BGC5C1Z  stored  Successfully
+2018-10-03 00:36:10,645 - INFO - scraper - Data of amazon - B01K4F3IVS  stored  Successfully
+2018-10-03 00:36:10,712 - INFO - scraper - Data of amazon - B01N6MVEN4  stored  Successfully
+2018-10-03 00:36:10,907 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 00:36:10,979 - INFO - scraper - Data of amazon - B01K4F66YY  stored  Successfully
+2018-10-03 00:36:11,045 - INFO - scraper - Data of amazon - B01MRRRUJK  stored  Successfully
+2018-10-03 00:36:11,126 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 00:36:11,209 - INFO - scraper - Data of amazon - B01K4F72RY  stored  Successfully
+2018-10-03 00:36:11,283 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 00:36:11,339 - INFO - scraper - Data of amazon - B01HBFXGO8  stored  Successfully
+2018-10-03 00:36:11,420 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 00:36:11,490 - INFO - scraper - Data of amazon - B01K4F3EYO  stored  Successfully
+2018-10-03 00:36:11,545 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 00:36:11,600 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 00:36:12,046 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 00:36:12,143 - INFO - scraper - Data of amazon - B01K4F6CBG  stored  Successfully
+2018-10-03 00:36:12,213 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 00:36:12,267 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 00:36:12,323 - INFO - scraper - Data of grofers - 377444  stored  Successfully
+2018-10-03 00:36:12,378 - INFO - scraper - Data of amazon - B07BGC43KD  stored  Successfully
+2018-10-03 00:36:12,444 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 00:36:12,555 - INFO - scraper - Data of amazon - B01K4F3S72  stored  Successfully
+2018-10-03 00:36:12,625 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 00:36:12,707 - INFO - scraper - Data of amazon - B07BGCWY83  stored  Successfully
+2018-10-03 00:36:12,767 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 00:36:12,830 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 00:36:12,898 - INFO - scraper - Data of amazon - B01MTUXLEQ  stored  Successfully
+2018-10-03 00:36:12,959 - INFO - scraper - Data of amazon - B01K4F4QG4  stored  Successfully
+2018-10-03 00:36:13,024 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 00:36:13,078 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 00:36:13,134 - INFO - scraper - Data of amazon - B01MQQDJ2K  stored  Successfully
+2018-10-03 00:36:13,189 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
+2018-10-03 00:36:13,245 - INFO - scraper - Data of amazon - B01HBEUAI4  stored  Successfully
+2018-10-03 00:36:13,505 - INFO - scraper - Data of amazon - B01HBFXKO4  stored  Successfully
+2018-10-03 00:36:14,444 - INFO - __main__ - Data Scraped Successfully
+2018-10-03 00:36:14,444 - INFO - __main__ - SUCCESSFUL
+2018-10-03 00:36:21,561 - INFO - scraper - Mail Sent successfully
+2018-10-03 00:38:03,493 - INFO - scraper - Database Connection Established
+2018-10-03 00:38:03,502 - INFO - __main__ - Database Connection Established
+2018-10-03 00:38:03,585 - INFO - __main__ - Session Started
+2018-10-03 00:38:03,589 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 00:38:07,916 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 00:38:19,666 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 00:39:03,040 - INFO - scraper - Location changed to 3 in Bbs
+2018-10-03 00:39:05,126 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 00:39:05,137 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+Traceback (most recent call last):
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 688, in close
+    self.execute(Command.CLOSE)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+
+2018-10-03 00:39:05,141 - INFO - __main__ - SUCCESSFUL
+2018-10-03 00:39:05,226 - ERROR - scraper - Mail not sent
+2018-10-03 00:39:05,227 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 00:43:57,122 - INFO - scraper - Database Connection Established
+2018-10-03 00:43:57,140 - INFO - __main__ - Database Connection Established
+2018-10-03 00:43:57,264 - INFO - __main__ - Session Started
+2018-10-03 00:43:57,265 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 00:44:01,794 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 00:44:13,446 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 00:44:58,155 - INFO - scraper - Location changed to 3 in Bbs
+2018-10-03 00:45:00,192 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 00:45:00,204 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+Traceback (most recent call last):
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\main_program.py", line 115, in <module>
+    flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 688, in close
+    self.execute(Command.CLOSE)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+
+2018-10-03 00:45:00,208 - INFO - __main__ - SUCCESSFUL
+2018-10-03 00:45:00,317 - ERROR - scraper - Mail not sent
+2018-10-03 00:45:00,318 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 00:50:03,739 - INFO - scraper - Database Connection Established
+2018-10-03 00:50:03,748 - INFO - __main__ - Database Connection Established
+2018-10-03 00:50:03,833 - INFO - __main__ - Session Started
+2018-10-03 00:50:03,836 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 00:50:08,107 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 00:50:17,958 - ERROR - scraper - Message: unknown error: Element <paper-button id="clearBrowsingDataConfirm" class="action-button" role="button" tabindex="-1" animated="" aria-disabled="true" elevation="0" disabled="" style="pointer-events: none;">...</paper-button> is not clickable at point (713, 494). Other element would receive the click: <div slot="button-container">...</div>
+  (Session info: chrome=69.0.3497.100)
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+Traceback (most recent call last):
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\scraper.py", line 74, in ClearCookies
+    clear.click()
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 80, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 633, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: unknown error: Element <paper-button id="clearBrowsingDataConfirm" class="action-button" role="button" tabindex="-1" animated="" aria-disabled="true" elevation="0" disabled="" style="pointer-events: none;">...</paper-button> is not clickable at point (713, 494). Other element would receive the click: <div slot="button-container">...</div>
+  (Session info: chrome=69.0.3497.100)
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+
+2018-10-03 00:51:06,865 - INFO - scraper - Location changed to 3 in Bbs
+2018-10-03 00:51:09,005 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 00:51:09,013 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+Traceback (most recent call last):
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\main_program.py", line 115, in <module>
+    flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Dhiraj Mehta\My Documents\LiClipse Workspace\web-scraping\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 688, in close
+    self.execute(Command.CLOSE)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Program Files\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86)
+
+2018-10-03 00:51:09,014 - INFO - __main__ - SUCCESSFUL
+2018-10-03 00:51:09,170 - ERROR - scraper - Mail not sent
+2018-10-03 00:51:09,171 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 01:25:43,950 - INFO - scraper - Database Connection Established
+2018-10-03 01:25:44,015 - INFO - __main__ - Database Connection Established
+2018-10-03 01:25:44,099 - INFO - __main__ - Session Started
+2018-10-03 01:25:44,101 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 01:25:49,557 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 01:29:50,985 - INFO - scraper - Data of bigbasket - 10000148  stored  Successfully
+2018-10-03 01:29:51,446 - INFO - scraper - Data of bigbasket - 10000148  stored  Successfully
+2018-10-03 01:29:51,990 - INFO - scraper - Data of bigbasket - 10000148  stored  Successfully
+2018-10-03 01:34:15,635 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 01:34:16,049 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 01:34:16,467 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 01:38:40,229 - INFO - scraper - Data of bigbasket - 1203781  stored  Successfully
+2018-10-03 01:38:40,901 - INFO - scraper - Data of bigbasket - 1203781  stored  Successfully
+2018-10-03 01:38:41,290 - INFO - scraper - Data of bigbasket - 1203781  stored  Successfully
+2018-10-03 01:38:41,333 - INFO - __main__ - Scraping for grofers started.
+2018-10-03 01:38:59,576 - INFO - scraper - Data of amazon - B07DLBXGF1  stored  Successfully
+2018-10-03 01:38:59,989 - INFO - scraper - Data of amazon - B01MSTFSXA  stored  Successfully
+2018-10-03 01:39:00,049 - INFO - scraper - Data of amazon - B07DLBXGF1  stored  Successfully
+2018-10-03 01:39:00,109 - INFO - scraper - Data of amazon - B01MTUXLEQ  stored  Successfully
+2018-10-03 01:39:00,171 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 01:39:00,239 - INFO - scraper - Data of amazon - B07DLGX4KK  stored  Successfully
+2018-10-03 01:39:00,320 - INFO - scraper - Data of amazon - B01K4F45LU  stored  Successfully
+2018-10-03 01:39:00,411 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 01:39:00,494 - INFO - scraper - Data of amazon - B01K4F4QG4  stored  Successfully
+2018-10-03 01:39:00,981 - INFO - scraper - Data of amazon - B01K4F78NC  stored  Successfully
+2018-10-03 01:39:01,081 - INFO - scraper - Data of amazon - B01K4F4B9Q  stored  Successfully
+2018-10-03 01:39:01,177 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 01:39:01,249 - INFO - scraper - Data of amazon - B01K4F4QG4  stored  Successfully
+2018-10-03 01:39:01,400 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 01:39:01,535 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 01:39:01,579 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 01:39:01,649 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 01:39:01,721 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 01:39:01,930 - INFO - scraper - Data of amazon - B01K4F4B9Q  stored  Successfully
+2018-10-03 01:39:02,028 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 01:39:02,115 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 01:39:02,210 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 01:39:02,265 - INFO - scraper - Data of amazon - B01MTUXLEQ  stored  Successfully
+2018-10-03 01:39:02,352 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 01:39:02,425 - INFO - scraper - Data of amazon - B01K4F45LU  stored  Successfully
+2018-10-03 01:39:02,565 - INFO - scraper - Data of amazon - B01K4F7IWS  stored  Successfully
+2018-10-03 01:39:03,060 - INFO - scraper - Data of amazon - B01K4F72RY  stored  Successfully
+2018-10-03 01:39:03,199 - INFO - scraper - Data of amazon - B01K4F6N2E  stored  Successfully
+2018-10-03 01:39:03,569 - INFO - scraper - Data of amazon - B01K4F7IWS  stored  Successfully
+2018-10-03 01:39:03,708 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 01:39:03,757 - INFO - scraper - Data of amazon - B01HBFVM94  stored  Successfully
+2018-10-03 01:39:03,821 - INFO - scraper - Data of amazon - B01HBFXGO8  stored  Successfully
+2018-10-03 01:39:03,925 - INFO - scraper - Data of amazon - B01K4F7DMS  stored  Successfully
+2018-10-03 01:39:03,997 - INFO - scraper - Data of amazon - B01K4F7DMS  stored  Successfully
+2018-10-03 01:39:04,098 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 01:39:04,188 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 01:39:04,257 - INFO - scraper - Data of amazon - B01MXSK7QM  stored  Successfully
+2018-10-03 01:39:04,334 - INFO - scraper - Data of amazon - B01MXSK7QM  stored  Successfully
+2018-10-03 01:39:04,476 - INFO - scraper - Data of amazon - B01K4F4L96  stored  Successfully
+2018-10-03 01:39:04,546 - INFO - scraper - Data of amazon - B01K4F78NC  stored  Successfully
+2018-10-03 01:39:04,630 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 01:39:04,712 - INFO - scraper - Data of amazon - B01K4F59E2  stored  Successfully
+2018-10-03 01:39:04,789 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 01:39:04,876 - INFO - scraper - Data of amazon - B01HBFXGO8  stored  Successfully
+2018-10-03 01:39:04,983 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 01:39:05,033 - INFO - scraper - Data of amazon - B07BGC5C1Z  stored  Successfully
+2018-10-03 01:39:05,125 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 01:39:05,369 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 01:39:05,596 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 01:39:05,724 - INFO - scraper - Data of amazon - B01K4F40JW  stored  Successfully
+2018-10-03 01:39:05,907 - INFO - scraper - Data of grofers - 389731  stored  Successfully
+2018-10-03 01:39:05,987 - INFO - scraper - Data of amazon - B01N0GN72Y  stored  Successfully
+2018-10-03 01:39:06,198 - INFO - scraper - Data of amazon - B01K4F6CBG  stored  Successfully
+2018-10-03 01:39:07,630 - INFO - scraper - Data of amazon - B01K4F5R3K  stored  Successfully
+2018-10-03 01:39:08,181 - INFO - scraper - Data of amazon - B01K4F3IVS  stored  Successfully
+2018-10-03 01:39:09,486 - INFO - scraper - Data of amazon - B07BGC43KD  stored  Successfully
+2018-10-03 01:39:09,626 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 01:39:09,704 - INFO - scraper - Data of amazon - B01K4F2DQO  stored  Successfully
+2018-10-03 01:39:10,264 - INFO - scraper - Data of amazon - B078SFTDTY  stored  Successfully
+2018-10-03 01:39:10,356 - INFO - scraper - Data of amazon - B07BGCWY83  stored  Successfully
+2018-10-03 01:39:10,463 - INFO - scraper - Data of amazon - B01K4F5WI0  stored  Successfully
+2018-10-03 01:39:10,587 - INFO - scraper - Data of amazon - B01K4F3EYO  stored  Successfully
+2018-10-03 01:39:10,683 - INFO - scraper - Data of amazon - B01K4F2DQO  stored  Successfully
+2018-10-03 01:39:10,831 - INFO - scraper - Data of grofers - 391655  stored  Successfully
+2018-10-03 01:39:12,136 - INFO - scraper - Data of amazon - B01K4F2TN6  stored  Successfully
+2018-10-03 01:39:12,232 - INFO - scraper - Data of amazon - B07BGCNMBB  stored  Successfully
+2018-10-03 01:39:12,361 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 01:39:12,480 - INFO - scraper - Data of amazon - B07BGD2283  stored  Successfully
+2018-10-03 01:39:12,639 - INFO - scraper - Data of amazon - B01HBFVM94  stored  Successfully
+2018-10-03 01:39:12,724 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 01:39:12,818 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 01:39:13,057 - INFO - scraper - Data of amazon - B078SFQVBR  stored  Successfully
+2018-10-03 01:39:13,444 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 01:39:13,517 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 01:39:13,635 - INFO - scraper - Data of amazon - B01K4F2XVO  stored  Successfully
+2018-10-03 01:39:13,742 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 01:39:13,809 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 01:39:13,864 - INFO - scraper - Data of amazon - B01NBEWANN  stored  Successfully
+2018-10-03 01:39:14,004 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 01:39:14,210 - INFO - scraper - Data of amazon - B01HBEQ006  stored  Successfully
+2018-10-03 01:39:14,289 - INFO - scraper - Data of amazon - B078SDRVXY  stored  Successfully
+2018-10-03 01:39:14,356 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 01:39:14,478 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 01:39:14,609 - INFO - scraper - Data of amazon - B01K4F6N2E  stored  Successfully
+2018-10-03 01:39:14,700 - INFO - scraper - Data of amazon - B01N0GN72Y  stored  Successfully
+2018-10-03 01:39:14,963 - INFO - scraper - Data of amazon - B01HBEUAI4  stored  Successfully
+2018-10-03 01:39:15,051 - INFO - scraper - Data of amazon - B01K4F40JW  stored  Successfully
+2018-10-03 01:39:15,133 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 01:39:15,212 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 01:39:15,300 - INFO - scraper - Data of amazon - B078SFTDTY  stored  Successfully
+2018-10-03 01:39:15,362 - INFO - scraper - Data of amazon - B01N6MVEN4  stored  Successfully
+2018-10-03 01:39:15,452 - INFO - scraper - Data of amazon - B01HBEQ006  stored  Successfully
+2018-10-03 01:39:15,575 - INFO - scraper - Data of amazon - B01HBEUAI4  stored  Successfully
+2018-10-03 01:39:15,691 - INFO - scraper - Data of amazon - B01K4F62HK  stored  Successfully
+2018-10-03 01:39:15,762 - INFO - scraper - Data of amazon - B01K4F3264  stored  Successfully
+2018-10-03 01:39:15,860 - INFO - scraper - Data of amazon - B07B6H75SQ  stored  Successfully
+2018-10-03 01:39:15,964 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 01:39:16,023 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 01:39:16,120 - INFO - scraper - Data of amazon - B01K4F72RY  stored  Successfully
+2018-10-03 01:39:16,222 - INFO - scraper - Data of amazon - B01K4F6HJ8  stored  Successfully
+2018-10-03 01:39:16,823 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 01:39:16,931 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 01:39:17,115 - INFO - scraper - Data of amazon - B01K4F3EYO  stored  Successfully
+2018-10-03 01:39:17,184 - INFO - scraper - Data of amazon - B07BGCZCB3  stored  Successfully
+2018-10-03 01:39:17,245 - INFO - scraper - Data of amazon - B07BGCB6M7  stored  Successfully
+2018-10-03 01:39:17,328 - INFO - scraper - Data of amazon - B07BGCB6M7  stored  Successfully
+2018-10-03 01:39:17,424 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 01:39:17,520 - INFO - scraper - Data of amazon - B01K4F5R3K  stored  Successfully
+2018-10-03 01:39:17,580 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 01:39:17,674 - INFO - scraper - Data of amazon - B07BGC5C1Z  stored  Successfully
+2018-10-03 01:39:17,810 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 01:39:17,873 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 01:39:18,155 - INFO - scraper - Data of amazon - B01MRRRUJK  stored  Successfully
+2018-10-03 01:39:18,296 - INFO - scraper - Data of amazon - B01N4893Q0  stored  Successfully
+2018-10-03 01:39:18,541 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 01:39:18,676 - INFO - scraper - Data of amazon - B07BGC43KD  stored  Successfully
+2018-10-03 01:39:18,911 - INFO - scraper - Data of amazon - B01MRRRUJK  stored  Successfully
+2018-10-03 01:39:19,181 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 01:39:19,293 - INFO - scraper - Data of amazon - B078SDRVXY  stored  Successfully
+2018-10-03 01:39:19,353 - INFO - scraper - Data of amazon - B01K4F6HJ8  stored  Successfully
+2018-10-03 01:39:19,436 - INFO - scraper - Data of amazon - B01K4F3264  stored  Successfully
+2018-10-03 01:39:19,520 - INFO - scraper - Data of amazon - B01K4F59E2  stored  Successfully
+2018-10-03 01:39:19,564 - INFO - scraper - Data of grofers - 377444  stored  Successfully
+2018-10-03 01:39:19,675 - INFO - scraper - Data of amazon - B07BGC61TC  stored  Successfully
+2018-10-03 01:39:19,731 - INFO - scraper - Data of amazon - B01K4F5WI0  stored  Successfully
+2018-10-03 01:39:19,778 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 01:39:19,876 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 01:39:19,951 - INFO - scraper - Data of amazon - B01K4F62HK  stored  Successfully
+2018-10-03 01:39:20,026 - INFO - scraper - Data of amazon - B01MSTFSXA  stored  Successfully
+2018-10-03 01:39:20,103 - INFO - scraper - Data of amazon - B07BGD2283  stored  Successfully
+2018-10-03 01:39:20,182 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 01:39:20,261 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 01:39:20,355 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 01:39:20,428 - INFO - scraper - Data of amazon - B01K4F3S72  stored  Successfully
+2018-10-03 01:39:20,501 - INFO - scraper - Data of amazon - B01K4F66YY  stored  Successfully
+2018-10-03 01:39:20,574 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 01:39:20,631 - INFO - scraper - Data of amazon - B078SFQVBR  stored  Successfully
+2018-10-03 01:39:20,724 - INFO - scraper - Data of amazon - B07DLMRVBY  stored  Successfully
+2018-10-03 01:39:20,788 - INFO - scraper - Data of amazon - B07BGCNMBB  stored  Successfully
+2018-10-03 01:39:20,865 - INFO - scraper - Data of amazon - B01N6MVEN4  stored  Successfully
+2018-10-03 01:39:20,924 - INFO - scraper - Data of amazon - B01N4893Q0  stored  Successfully
+2018-10-03 01:39:20,979 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 01:39:21,035 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 01:39:21,107 - INFO - scraper - Data of amazon - B01HBFXKO4  stored  Successfully
+2018-10-03 01:39:21,179 - INFO - scraper - Data of amazon - B07B6H75SQ  stored  Successfully
+2018-10-03 01:39:21,234 - INFO - scraper - Data of amazon - B07BGCZCB3  stored  Successfully
+2018-10-03 01:39:21,290 - INFO - scraper - Data of amazon - B01K4F6CBG  stored  Successfully
+2018-10-03 01:39:21,351 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 01:39:21,426 - INFO - scraper - Data of amazon - B01MQQDJ2K  stored  Successfully
+2018-10-03 01:39:21,485 - INFO - scraper - Data of amazon - B01NBEWANN  stored  Successfully
+2018-10-03 01:39:21,696 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 01:39:21,785 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 01:39:21,832 - INFO - scraper - Data of amazon - B01K4F2XVO  stored  Successfully
+2018-10-03 01:39:22,116 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 01:39:22,203 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 01:39:22,337 - INFO - scraper - Data of amazon - B01K4F3APM  stored  Successfully
+2018-10-03 01:39:22,407 - INFO - scraper - Data of amazon - B01K4F7QWU  stored  Successfully
+2018-10-03 01:39:22,468 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
+2018-10-03 01:39:22,583 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 01:39:22,653 - INFO - scraper - Data of amazon - B01K4F3S72  stored  Successfully
+2018-10-03 01:39:22,742 - INFO - scraper - Data of amazon - B01K4F4L96  stored  Successfully
+2018-10-03 01:39:22,801 - INFO - scraper - Data of amazon - B01K4F7QWU  stored  Successfully
+2018-10-03 01:39:22,869 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 01:39:23,147 - INFO - scraper - Data of amazon - B01K4F66YY  stored  Successfully
+2018-10-03 01:39:23,225 - INFO - scraper - Data of amazon - B07B6H751L  stored  Successfully
+2018-10-03 01:39:23,294 - INFO - scraper - Data of amazon - B01MQQDJ2K  stored  Successfully
+2018-10-03 01:39:23,369 - INFO - scraper - Data of amazon - B01K4F2TN6  stored  Successfully
+2018-10-03 01:39:23,428 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 01:39:23,507 - INFO - scraper - Data of amazon - B01K4F3IVS  stored  Successfully
+2018-10-03 01:39:23,586 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 01:39:23,641 - INFO - scraper - Data of amazon - B07DLGX4KK  stored  Successfully
+2018-10-03 01:39:23,750 - INFO - scraper - Data of amazon - B07BGC61TC  stored  Successfully
+2018-10-03 01:39:23,831 - INFO - scraper - Data of amazon - B07B6H751L  stored  Successfully
+2018-10-03 01:39:23,896 - INFO - scraper - Data of amazon - B07DLMRVBY  stored  Successfully
+2018-10-03 01:39:23,997 - INFO - scraper - Data of amazon - B01K4F3APM  stored  Successfully
+2018-10-03 01:39:24,088 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 01:39:24,141 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 01:39:24,213 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 01:39:24,267 - INFO - scraper - Data of amazon - B07BGCWY83  stored  Successfully
+2018-10-03 01:39:24,324 - INFO - scraper - Data of amazon - B01HBFXKO4  stored  Successfully
+2018-10-03 01:39:24,725 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 01:39:24,825 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
+2018-10-03 01:39:24,895 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 01:39:32,548 - INFO - scraper - Mail Sent successfully

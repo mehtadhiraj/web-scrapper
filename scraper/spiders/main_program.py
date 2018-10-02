@@ -124,24 +124,25 @@ try:
                     continue
 #     
     process.start()
-    logger.info('Data Scraped Successfully')
+    
+    end_time = str(datetime.now())
+    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Succesfull" where id = "'+str(session_id)+'" '
+    cursor.execute(sql_update_end_time_and_status)
+    connection.commit()
     
 except Exception as e:
+    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
+    cursor.execute(sql_update_end_time_and_status)
+    connection.commit()
+    print('=====================================Exception in main_program')
     print(e)
     logger.exception(e)
 finally:
-    end_time = str(datetime.now())
     if ab == 1:
         scrape_result = 'SUCCESSFUL'
         print(scrape_result)
-        logger.info(scrape_result)
     else:
         scrape_result = 'FAILED'
-        logger.info(scrape_result)
-        
-    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "'+scrape_result+'" where id = "'+str(session_id)+'" '
-    cursor.execute(sql_update_end_time_and_status)
-    connection.commit()
     
     scraper.mailgeneration(store_id,store,str(session_id))
 

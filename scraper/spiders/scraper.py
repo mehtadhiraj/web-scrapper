@@ -298,7 +298,7 @@ def mailgeneration(store_id,store,session_id):
                
    
         
-        if len(filenames) < 1:
+        if len(filenames) < 3:
             raise Exception
         
         for file in filenames:  
@@ -327,9 +327,14 @@ def mailgeneration(store_id,store,session_id):
         s.quit() 
         print("Mail Sent successfully")
         logger.info('Mail Sent successfully')
+        logger.info('Session Successful')
     except Exception as e:
         print(e)
         logger.error('Mail not sent')
+        end_time = str(datetime.now())
+        sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
+        cursor.execute(sql_update_end_time_and_status)
+        connection.commit()
         print('Session Unsucessfull')
         logger.critical('Session Unsucessfull')
 
@@ -509,7 +514,7 @@ class BbsSpider():
             #print(cookieJar)
             print("Scraping item with variants...")
             options = webdriver.ChromeOptions()
-            options.add_argument('--no--sandbox')
+            options.add_argument('--headless')
             driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
     
             driver.get(start_urls)
@@ -539,9 +544,9 @@ class BbsSpider():
             print ("Connection Timeout")
             logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
             
-        except Exception as e:
-            print('=============================================================='+e)
-            logger.critical(e)
+#         except Exception as e:
+#             print('=============================================================='+e)
+#             logger.critical(e)
         finally:
             driver.close()
    
@@ -579,7 +584,7 @@ def storeItem(item, store, session_id, pincode, response):
         cursor.execute(sql2)
         
         connection.commit()
-        logger.info('Data of '+store+'stored  Successfully')
+        logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
         csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
     
     except Exception as e:
@@ -617,7 +622,8 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
         print(sql2)
         cursor.execute(sql2)
         connection.commit()
-
+        logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
+        
         csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
     except Exception as e:
         print(e)
