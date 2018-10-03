@@ -36,6 +36,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders 
+import os
 
 
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
@@ -346,6 +347,9 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
     try:
         scrape_datetime = scrape_datetime.split('.')
         scrape_datetime = scrape_datetime[0]
+        csv_dir= 'csv_files'
+        if not os.path.exists(csv_dir):
+            ps.makedirs(csv_dir)
         csv_path = 'csv_files/'+str(store_id[0])+'_sid'+session_id[0]+'.csv'
    
         file_exists = os.path.isfile(csv_path)
