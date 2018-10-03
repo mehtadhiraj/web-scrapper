@@ -36,7 +36,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders 
-
+import os
 
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
@@ -281,10 +281,10 @@ def mailgeneration(store_id,store,session_id):
         msg['To'] = recipients
           
         # storing the subject  
-        msg['Subject'] = "abc"
+        msg['Subject'] = "Product Availability Report"
           
         # string to store the body of the mail 
-        body = "def"
+        body = "Please find attached the report file(s)"
           
         # attach the body with the msg instance 
         msg.attach(MIMEText(body, 'plain')) 
@@ -329,16 +329,16 @@ def mailgeneration(store_id,store,session_id):
         s.quit() 
         print("Mail Sent successfully")
         logger.info('Mail Sent successfully')
-        logger.info('Session Successful')
+        logger.info('Scraping session completed successfully ')
     except Exception as e:
         print(e)
-        logger.error('Mail not sent')
+        logger.error('Error occurred. Mail was not sent.')
         end_time = str(datetime.now())
         sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
         cursor.execute(sql_update_end_time_and_status)
         connection.commit()
-        print('Session Unsucessfull')
-        logger.critical('Session Unsucessfull')
+        print('Scraping session failed.')
+        logger.critical('Scraping session failed.')
 
     
 #GENERATING CSV FILE    
@@ -346,7 +346,11 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
     try:
         scrape_datetime = scrape_datetime.split('.')
         scrape_datetime = scrape_datetime[0]
-        csv_path = 'csv_files/'+str(store_id[0])+'_sid'+session_id[0]+'.csv'
+        base_folder = os.path.dirname(__file__)+'/csv_files/'
+        if not os.path.exists(base_folder):
+            os.makedirs(base_folder)
+            
+        csv_path = base_folder+str(store_id[0])+'_sid'+session_id[0]+'.csv'
    
         file_exists = os.path.isfile(csv_path)
         if not file_exists:
