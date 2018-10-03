@@ -111,7 +111,7 @@ try:
                         elif store_id == 2:
                             scraper.ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area)
                         elif store_id == 3:
-                            flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+                            scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
     #             Call to the spiders as per the given store
                 if store_id == 2:
                     p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)               
@@ -120,6 +120,7 @@ try:
                     p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
                     continue
                 elif store_id == 3:
+                    time.sleep(5)
                     p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
                     continue
 #     
@@ -131,6 +132,7 @@ try:
     connection.commit()
     
 except Exception as e:
+    end_time = str(datetime.now())
     sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
     cursor.execute(sql_update_end_time_and_status)
     connection.commit()

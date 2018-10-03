@@ -191,10 +191,11 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
 
         complete[0].submit()
         time.sleep(2)
-        browser.close()
         flag=1
         logger.info('Location changed to '+str(location_id)+' in Bbs')
-
+    
+        browser.close()
+        
         GetChromeCookies(pincode, store, base_url, location_id, store_id, sku)
                 
     except ElementNotVisibleException as elem_not_vis:
@@ -219,12 +220,13 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
         cursor.execute(sql2)
         connection.commit()
         logger.exception('Bbs data not available for '+sku+'.')
+        browser.close()
     except Exception as e:
         print(e)
         logger.error(e)
-    
-    finally:
         browser.close()
+    
+
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
     '''
@@ -535,10 +537,12 @@ class BbsSpider():
                  
                 print(item + " " + price)
                 storeItemBbs(item1,sku,location_id,store_id,store, session_id, pincode)
+            driver.close()
                 
         except FileNotFoundError as e:
             print(e)
             logger.critical(e)
+            driver.close()
         
         except TimeoutException:
             print ("Connection Timeout")
@@ -547,7 +551,7 @@ class BbsSpider():
 #         except Exception as e:
 #             print('=============================================================='+e)
 #             logger.critical(e)
-        finally:
+    
             driver.close()
    
  

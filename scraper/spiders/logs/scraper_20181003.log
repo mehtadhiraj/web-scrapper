@@ -492,3 +492,512 @@ selenium.common.exceptions.WebDriverException: Message: invalid session id
 2018-10-03 01:39:24,825 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
 2018-10-03 01:39:24,895 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
 2018-10-03 01:39:32,548 - INFO - scraper - Mail Sent successfully
+2018-10-03 10:21:23,302 - INFO - scraper - Database Connection Established
+2018-10-03 10:21:23,318 - INFO - __main__ - Database Connection Established
+2018-10-03 10:21:23,397 - INFO - __main__ - Session Started
+2018-10-03 10:21:23,397 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:21:37,783 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:22:12,663 - INFO - scraper - Location changed to 3 in Amz
+2018-10-03 10:22:12,694 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:22:24,471 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:22:38,010 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:23:51,554 - INFO - scraper - Location changed to 7 in Bbs
+2018-10-03 10:23:53,621 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:23:53,636 - ERROR - scraper - Mail not sent
+2018-10-03 10:23:53,833 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 10:28:16,718 - INFO - scraper - Database Connection Established
+2018-10-03 10:28:16,734 - INFO - __main__ - Database Connection Established
+2018-10-03 10:28:16,875 - INFO - __main__ - Session Started
+2018-10-03 10:28:16,875 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:28:30,511 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:29:06,638 - INFO - scraper - Location changed to 3 in Amz
+2018-10-03 10:29:06,706 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:29:16,586 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:29:30,788 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:30:43,385 - INFO - scraper - Location changed to 7 in Bbs
+2018-10-03 10:30:45,617 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:30:45,822 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    flag=scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 10:30:45,843 - ERROR - scraper - Mail not sent
+2018-10-03 10:30:45,895 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 10:36:42,897 - INFO - scraper - Database Connection Established
+2018-10-03 10:36:42,913 - INFO - __main__ - Database Connection Established
+2018-10-03 10:36:43,116 - INFO - __main__ - Session Started
+2018-10-03 10:36:43,121 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:36:47,267 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:37:04,659 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 10:37:07,150 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 10:37:08,359 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 10:37:26,833 - INFO - scraper - Data of bigbasket - 10000178  stored  Successfully
+2018-10-03 10:37:29,582 - INFO - scraper - Data of bigbasket - 10000178  stored  Successfully
+2018-10-03 10:37:30,419 - INFO - scraper - Data of bigbasket - 10000178  stored  Successfully
+2018-10-03 10:37:53,665 - INFO - scraper - Data of bigbasket - 10000068  stored  Successfully
+2018-10-03 10:37:54,795 - INFO - scraper - Data of bigbasket - 10000068  stored  Successfully
+2018-10-03 10:37:55,734 - INFO - scraper - Data of bigbasket - 10000068  stored  Successfully
+2018-10-03 10:37:55,814 - INFO - __main__ - Scraping for grofers started.
+2018-10-03 10:38:09,589 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:38:34,579 - INFO - scraper - Location changed to 6 in Grff
+2018-10-03 10:38:40,750 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:38:54,348 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 10:38:54,637 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 10:38:55,025 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 10:38:55,440 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 10:38:56,186 - INFO - scraper - Data of amazon - B01K4F6N2E  stored  Successfully
+2018-10-03 10:38:56,385 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 10:38:56,520 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 10:38:56,707 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 10:38:56,884 - INFO - scraper - Data of amazon - B01N6MVEN4  stored  Successfully
+2018-10-03 10:38:57,117 - INFO - scraper - Data of amazon - B01K4F45LU  stored  Successfully
+2018-10-03 10:38:57,349 - INFO - scraper - Data of amazon - B01K4F3S72  stored  Successfully
+2018-10-03 10:38:57,550 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
+2018-10-03 10:38:57,748 - INFO - scraper - Data of amazon - B01HBFVM94  stored  Successfully
+2018-10-03 10:38:57,925 - INFO - scraper - Data of amazon - B01K4F5WI0  stored  Successfully
+2018-10-03 10:38:58,115 - INFO - scraper - Data of amazon - B07DLBXGF1  stored  Successfully
+2018-10-03 10:38:58,313 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 10:38:58,546 - INFO - scraper - Data of amazon - B01K4F3264  stored  Successfully
+2018-10-03 10:38:58,777 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 10:38:59,578 - INFO - scraper - Data of amazon - B01N4893Q0  stored  Successfully
+2018-10-03 10:38:59,754 - INFO - scraper - Data of amazon - B01K4F62HK  stored  Successfully
+2018-10-03 10:38:59,951 - INFO - scraper - Data of amazon - B01K4F4QG4  stored  Successfully
+2018-10-03 10:39:00,241 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 10:39:00,396 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 10:39:00,582 - INFO - scraper - Data of amazon - B01MTUXLEQ  stored  Successfully
+2018-10-03 10:39:00,893 - INFO - scraper - Data of amazon - B01K4F72RY  stored  Successfully
+2018-10-03 10:39:01,048 - INFO - scraper - Data of amazon - B01K4F6HJ8  stored  Successfully
+2018-10-03 10:39:01,288 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 10:39:01,481 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 10:39:01,681 - INFO - scraper - Data of amazon - B07DLGX4KK  stored  Successfully
+2018-10-03 10:39:01,899 - INFO - scraper - Data of amazon - B01MRRRUJK  stored  Successfully
+2018-10-03 10:39:02,132 - INFO - scraper - Data of amazon - B07BGC43KD  stored  Successfully
+2018-10-03 10:39:02,401 - INFO - scraper - Data of amazon - B01K4F5R3K  stored  Successfully
+2018-10-03 10:39:02,653 - INFO - scraper - Data of amazon - B01MSTFSXA  stored  Successfully
+2018-10-03 10:39:02,831 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 10:39:03,265 - INFO - scraper - Data of amazon - B01K4F78NC  stored  Successfully
+2018-10-03 10:39:03,567 - INFO - scraper - Data of amazon - B01K4F4B9Q  stored  Successfully
+2018-10-03 10:39:03,784 - INFO - scraper - Data of amazon - B01K4F66YY  stored  Successfully
+2018-10-03 10:39:03,968 - INFO - scraper - Data of amazon - B01MQQDJ2K  stored  Successfully
+2018-10-03 10:39:04,679 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 10:39:06,816 - INFO - scraper - Data of grofers - 375919  stored  Successfully
+2018-10-03 10:39:07,101 - INFO - scraper - Data of grofers - 114408  stored  Successfully
+2018-10-03 10:39:08,022 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 10:39:08,232 - INFO - scraper - Data of amazon - B07B6H751L  stored  Successfully
+2018-10-03 10:39:08,739 - INFO - scraper - Data of amazon - B01K4F7IWS  stored  Successfully
+2018-10-03 10:39:08,918 - INFO - scraper - Data of amazon - B01K4F7QWU  stored  Successfully
+2018-10-03 10:39:09,064 - INFO - scraper - Data of grofers - 389683  stored  Successfully
+2018-10-03 10:39:09,331 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 10:39:09,648 - INFO - scraper - Data of amazon - B01HBEQ006  stored  Successfully
+2018-10-03 10:39:10,216 - INFO - scraper - Data of amazon - B01K4F3IVS  stored  Successfully
+2018-10-03 10:39:10,499 - INFO - scraper - Data of amazon - B01K4F6CBG  stored  Successfully
+2018-10-03 10:39:10,712 - INFO - scraper - Data of amazon - B07B6H75SQ  stored  Successfully
+2018-10-03 10:39:10,922 - INFO - scraper - Data of amazon - B07DLMRVBY  stored  Successfully
+2018-10-03 10:39:11,231 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 10:39:11,429 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 10:39:11,664 - INFO - scraper - Data of amazon - B078SFQVBR  stored  Successfully
+2018-10-03 10:39:11,964 - INFO - scraper - Data of amazon - B07BGC5C1Z  stored  Successfully
+2018-10-03 10:39:12,251 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 10:39:12,526 - INFO - scraper - Data of amazon - B01K4F59E2  stored  Successfully
+2018-10-03 10:39:12,873 - INFO - scraper - Data of amazon - B07BGCZCB3  stored  Successfully
+2018-10-03 10:39:13,247 - INFO - scraper - Data of amazon - B01K4F2TN6  stored  Successfully
+2018-10-03 10:39:13,512 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 10:39:14,080 - INFO - scraper - Data of amazon - B01MXSK7QM  stored  Successfully
+2018-10-03 10:39:14,288 - INFO - scraper - Data of amazon - B01K4F2XVO  stored  Successfully
+2018-10-03 10:39:15,395 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 10:39:15,751 - INFO - scraper - Data of amazon - B01K4F7DMS  stored  Successfully
+2018-10-03 10:39:16,156 - INFO - scraper - Data of amazon - B07BGCNMBB  stored  Successfully
+2018-10-03 10:39:16,655 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 10:39:16,843 - INFO - scraper - Data of amazon - B07BGCB6M7  stored  Successfully
+2018-10-03 10:39:17,068 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 10:39:17,240 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 10:39:17,523 - INFO - scraper - Data of amazon - B078SDRVXY  stored  Successfully
+2018-10-03 10:39:17,719 - INFO - scraper - Data of amazon - B01HBEUAI4  stored  Successfully
+2018-10-03 10:39:17,884 - INFO - scraper - Data of amazon - B07BGD2283  stored  Successfully
+2018-10-03 10:39:18,129 - INFO - scraper - Data of amazon - B01NBEWANN  stored  Successfully
+2018-10-03 10:39:18,307 - INFO - scraper - Data of amazon - B01HBFXKO4  stored  Successfully
+2018-10-03 10:39:18,442 - INFO - scraper - Data of amazon - B01N0GN72Y  stored  Successfully
+2018-10-03 10:39:18,674 - INFO - scraper - Data of amazon - B01K4F2DQO  stored  Successfully
+2018-10-03 10:39:19,301 - INFO - scraper - Data of amazon - B07BGC61TC  stored  Successfully
+2018-10-03 10:39:20,286 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 10:39:20,607 - INFO - scraper - Data of amazon - B01K4F40JW  stored  Successfully
+2018-10-03 10:39:20,815 - INFO - scraper - Data of amazon - B01K4F3EYO  stored  Successfully
+2018-10-03 10:39:21,123 - INFO - scraper - Data of amazon - B07BGCWY83  stored  Successfully
+2018-10-03 10:39:21,375 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 10:39:21,575 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 10:39:21,991 - INFO - scraper - Data of amazon - B01K4F3APM  stored  Successfully
+2018-10-03 10:39:22,170 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 10:39:22,380 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 10:39:23,889 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 10:39:24,151 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 10:39:24,385 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 10:39:24,622 - INFO - scraper - Data of amazon - B078SFTDTY  stored  Successfully
+2018-10-03 10:39:24,922 - INFO - scraper - Data of amazon - B01HBFXGO8  stored  Successfully
+2018-10-03 10:39:25,262 - INFO - scraper - Data of amazon - B01K4F4L96  stored  Successfully
+2018-10-03 10:39:32,292 - INFO - scraper - Mail Sent successfully
+2018-10-03 10:39:32,295 - INFO - scraper - Session Successful
+2018-10-03 10:40:56,219 - INFO - scraper - Database Connection Established
+2018-10-03 10:40:56,232 - INFO - __main__ - Database Connection Established
+2018-10-03 10:40:56,352 - INFO - __main__ - Session Started
+2018-10-03 10:40:56,460 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:41:01,791 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:41:15,904 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:42:31,231 - INFO - scraper - Location changed to 7 in Bbs
+2018-10-03 10:42:31,300 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:42:31,553 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 10:42:31,561 - ERROR - scraper - Mail not sent
+2018-10-03 10:42:31,618 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 10:45:28,843 - INFO - scraper - Database Connection Established
+2018-10-03 10:45:28,856 - INFO - __main__ - Database Connection Established
+2018-10-03 10:45:29,044 - INFO - __main__ - Session Started
+2018-10-03 10:45:29,047 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:45:53,206 - INFO - scraper - Database Connection Established
+2018-10-03 10:45:53,226 - INFO - __main__ - Database Connection Established
+2018-10-03 10:45:53,347 - INFO - __main__ - Session Started
+2018-10-03 10:45:53,349 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:45:57,374 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:46:11,204 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:46:20,892 - ERROR - scraper - list index out of range
+2018-10-03 10:46:26,296 - CRITICAL - scraper - [Errno 2] No such file or directory: 'cookies/3_400025.pkl'
+2018-10-03 10:46:26,385 - ERROR - __main__ - local variable 'driver' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 124, in <module>
+    p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 551, in scrape_item_with_variants
+    driver.close()
+UnboundLocalError: local variable 'driver' referenced before assignment
+2018-10-03 10:46:26,393 - ERROR - scraper - Mail not sent
+2018-10-03 10:46:26,495 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 10:49:59,200 - INFO - scraper - Database Connection Established
+2018-10-03 10:49:59,223 - INFO - __main__ - Database Connection Established
+2018-10-03 10:49:59,374 - INFO - __main__ - Session Started
+2018-10-03 10:49:59,374 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:50:03,451 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:50:21,114 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:51:37,624 - INFO - scraper - Location changed to 7 in Bbs
+2018-10-03 10:51:37,649 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 10:51:37,902 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 10:51:37,907 - ERROR - scraper - Mail not sent
+2018-10-03 10:51:37,987 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 10:54:11,693 - INFO - scraper - Database Connection Established
+2018-10-03 10:54:11,706 - INFO - __main__ - Database Connection Established
+2018-10-03 10:54:11,901 - INFO - __main__ - Session Started
+2018-10-03 10:54:11,904 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 10:54:15,901 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 10:54:30,174 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 10:55:33,241 - INFO - scraper - Location changed to 7 in Bbs
+2018-10-03 10:55:33,507 - ERROR - scraper - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 10:55:33,633 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 197, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 227, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 10:55:33,640 - ERROR - scraper - Mail not sent
+2018-10-03 10:55:33,708 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 11:03:49,289 - INFO - scraper - Database Connection Established
+2018-10-03 11:03:49,311 - INFO - __main__ - Database Connection Established
+2018-10-03 11:03:49,493 - INFO - __main__ - Session Started
+2018-10-03 11:03:49,495 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 11:03:53,369 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 11:04:07,545 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 11:05:28,679 - INFO - scraper - Location changed to 7 in Bbs
+2018-10-03 11:05:28,735 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 11:05:52,289 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:05:54,460 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:05:55,732 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:06:20,760 - INFO - scraper - Data of bigbasket - 10000178  stored  Successfully
+2018-10-03 11:06:24,205 - INFO - scraper - Data of bigbasket - 10000178  stored  Successfully
+2018-10-03 11:06:25,410 - INFO - scraper - Data of bigbasket - 10000178  stored  Successfully
+2018-10-03 11:06:55,476 - INFO - scraper - Data of bigbasket - 10000068  stored  Successfully
+2018-10-03 11:06:56,922 - INFO - scraper - Data of bigbasket - 10000068  stored  Successfully
+2018-10-03 11:06:57,921 - INFO - scraper - Data of bigbasket - 10000068  stored  Successfully
+2018-10-03 11:06:58,013 - INFO - __main__ - Scraping for grofers started.
+2018-10-03 11:07:17,806 - INFO - scraper - Data of amazon - B01K4F45LU  stored  Successfully
+2018-10-03 11:07:18,160 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 11:07:18,344 - INFO - scraper - Data of amazon - B01K4F5KWS  stored  Successfully
+2018-10-03 11:07:18,911 - INFO - scraper - Data of amazon - B07BGC5C1Z  stored  Successfully
+2018-10-03 11:07:19,159 - INFO - scraper - Data of amazon - B01K4F3S72  stored  Successfully
+2018-10-03 11:07:19,419 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 11:07:19,607 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 11:07:19,828 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 11:07:20,342 - INFO - scraper - Data of amazon - B01N6MVEN4  stored  Successfully
+2018-10-03 11:07:20,538 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 11:07:20,705 - INFO - scraper - Data of amazon - B01N4893Q0  stored  Successfully
+2018-10-03 11:07:21,046 - INFO - scraper - Data of amazon - B01MSTFSXA  stored  Successfully
+2018-10-03 11:07:21,206 - INFO - scraper - Data of amazon - B07BGCZCB3  stored  Successfully
+2018-10-03 11:07:21,575 - INFO - scraper - Data of amazon - B01K4F6HJ8  stored  Successfully
+2018-10-03 11:07:21,866 - INFO - scraper - Data of amazon - B01K4F4QG4  stored  Successfully
+2018-10-03 11:07:22,080 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 11:07:22,479 - INFO - scraper - Data of amazon - B07BGCB6M7  stored  Successfully
+2018-10-03 11:07:23,092 - INFO - scraper - Data of amazon - B01K4F2DQO  stored  Successfully
+2018-10-03 11:07:26,161 - INFO - scraper - Data of amazon - B01K4F7DMS  stored  Successfully
+2018-10-03 11:07:27,855 - INFO - scraper - Data of amazon - B07B6H751L  stored  Successfully
+2018-10-03 11:07:28,153 - INFO - scraper - Data of amazon - B01K4F6N2E  stored  Successfully
+2018-10-03 11:07:28,595 - INFO - scraper - Data of amazon - B01K4F7QWU  stored  Successfully
+2018-10-03 11:07:29,437 - INFO - scraper - Data of amazon - B01K4F59E2  stored  Successfully
+2018-10-03 11:07:29,705 - INFO - scraper - Data of amazon - B01MRRRUJK  stored  Successfully
+2018-10-03 11:07:29,893 - INFO - scraper - Data of amazon - B01HBEUAI4  stored  Successfully
+2018-10-03 11:07:30,290 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 11:07:30,511 - INFO - scraper - Data of amazon - B01K4F62HK  stored  Successfully
+2018-10-03 11:07:30,692 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 11:07:31,342 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 11:07:31,496 - INFO - scraper - Data of amazon - B01N7CJHBT  stored  Successfully
+2018-10-03 11:07:31,628 - INFO - scraper - Data of amazon - B01K4F40JW  stored  Successfully
+2018-10-03 11:07:31,923 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 11:07:32,216 - INFO - scraper - Data of amazon - B07BGC61TC  stored  Successfully
+2018-10-03 11:07:32,445 - INFO - scraper - Data of amazon - B01K4F3NPE  stored  Successfully
+2018-10-03 11:07:32,822 - INFO - scraper - Data of amazon - B01MXSK7QM  stored  Successfully
+2018-10-03 11:07:33,011 - INFO - scraper - Data of amazon - B07B6H75SQ  stored  Successfully
+2018-10-03 11:07:33,282 - INFO - scraper - Data of amazon - B01HBFXGO8  stored  Successfully
+2018-10-03 11:07:33,943 - INFO - scraper - Data of amazon - B01K4F5R3K  stored  Successfully
+2018-10-03 11:07:34,160 - INFO - scraper - Data of amazon - B01K4F4L96  stored  Successfully
+2018-10-03 11:07:34,463 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 11:07:34,632 - INFO - scraper - Data of amazon - B07BGD2283  stored  Successfully
+2018-10-03 11:07:34,906 - INFO - scraper - Data of amazon - B07BGCWY83  stored  Successfully
+2018-10-03 11:07:35,115 - INFO - scraper - Data of amazon - B01K4F2TN6  stored  Successfully
+2018-10-03 11:07:35,331 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 11:07:35,529 - INFO - scraper - Data of amazon - B01K4F2XVO  stored  Successfully
+2018-10-03 11:07:35,700 - INFO - scraper - Data of amazon - B078SFTDTY  stored  Successfully
+2018-10-03 11:07:36,102 - INFO - scraper - Data of amazon - B01K4F66YY  stored  Successfully
+2018-10-03 11:07:36,515 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 11:07:36,648 - INFO - scraper - Data of amazon - B07DLGX4KK  stored  Successfully
+2018-10-03 11:07:37,321 - INFO - scraper - Data of amazon - B01K4F4B9Q  stored  Successfully
+2018-10-03 11:07:37,575 - INFO - scraper - Data of amazon - B01K4F7IWS  stored  Successfully
+2018-10-03 11:07:37,697 - INFO - scraper - Data of amazon - B01N59O6RL  stored  Successfully
+2018-10-03 11:07:37,880 - INFO - scraper - Data of amazon - B01K4F3264  stored  Successfully
+2018-10-03 11:07:37,981 - INFO - scraper - Data of amazon - B07BGC43KD  stored  Successfully
+2018-10-03 11:07:38,193 - INFO - scraper - Data of amazon - B01K4F3IVS  stored  Successfully
+2018-10-03 11:07:38,650 - INFO - scraper - Data of amazon - B01K4F72RY  stored  Successfully
+2018-10-03 11:07:38,823 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 11:07:38,976 - INFO - scraper - Data of amazon - B07BGCNMBB  stored  Successfully
+2018-10-03 11:07:39,263 - INFO - scraper - Data of amazon - B01K4F78NC  stored  Successfully
+2018-10-03 11:07:39,657 - INFO - scraper - Data of amazon - B01K4F3W00  stored  Successfully
+2018-10-03 11:07:40,421 - INFO - scraper - Data of amazon - B01MQQDJ2K  stored  Successfully
+2018-10-03 11:07:40,563 - INFO - scraper - Data of amazon - B07DLBXGF1  stored  Successfully
+2018-10-03 11:07:41,048 - INFO - scraper - Data of amazon - B01N0GN72Y  stored  Successfully
+2018-10-03 11:07:41,575 - INFO - scraper - Data of amazon - B01K4F5FIC  stored  Successfully
+2018-10-03 11:07:41,774 - INFO - scraper - Data of amazon - B01HBF5WBI  stored  Successfully
+2018-10-03 11:07:41,936 - INFO - scraper - Data of amazon - B01K4F6CBG  stored  Successfully
+2018-10-03 11:07:42,959 - INFO - scraper - Data of amazon - B078SDRVXY  stored  Successfully
+2018-10-03 11:07:43,199 - INFO - scraper - Data of grofers - 389683  stored  Successfully
+2018-10-03 11:07:43,462 - INFO - scraper - Data of amazon - B07DLMRVBY  stored  Successfully
+2018-10-03 11:07:43,882 - INFO - scraper - Data of amazon - B01HBEQ006  stored  Successfully
+2018-10-03 11:07:44,761 - INFO - scraper - Data of grofers - 375919  stored  Successfully
+2018-10-03 11:07:45,147 - INFO - scraper - Data of amazon - B01K4F5WI0  stored  Successfully
+2018-10-03 11:07:45,388 - INFO - scraper - Data of amazon - B078SFQVBR  stored  Successfully
+2018-10-03 11:07:45,477 - INFO - scraper - Data of grofers - 114408  stored  Successfully
+2018-10-03 11:07:45,761 - INFO - scraper - Data of amazon - B01MTUXLEQ  stored  Successfully
+2018-10-03 11:07:46,517 - INFO - scraper - Data of amazon - B01K4F4G4Q  stored  Successfully
+2018-10-03 11:07:47,081 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 11:07:47,281 - INFO - scraper - Data of amazon - B01K4F4VXC  stored  Successfully
+2018-10-03 11:07:47,490 - INFO - scraper - Data of amazon - B01MQQDL4A  stored  Successfully
+2018-10-03 11:07:47,680 - INFO - scraper - Data of amazon - B01HBFXKO4  stored  Successfully
+2018-10-03 11:07:48,146 - INFO - scraper - Data of amazon - B01K4F6SHO  stored  Successfully
+2018-10-03 11:07:48,542 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 11:07:48,692 - INFO - scraper - Data of amazon - B01NBEWANN  stored  Successfully
+2018-10-03 11:07:48,843 - INFO - scraper - Data of amazon - B01HBFTGPQ  stored  Successfully
+2018-10-03 11:07:49,360 - INFO - scraper - Data of amazon - B01K4F55BE  stored  Successfully
+2018-10-03 11:07:49,508 - INFO - scraper - Data of amazon - B01K4F3APM  stored  Successfully
+2018-10-03 11:07:49,673 - INFO - scraper - Data of amazon - B01K4F3EYO  stored  Successfully
+2018-10-03 11:07:49,862 - INFO - scraper - Data of amazon - B01HBFSSUK  stored  Successfully
+2018-10-03 11:07:50,027 - INFO - scraper - Data of amazon - B01HBFVM94  stored  Successfully
+2018-10-03 11:07:50,151 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 11:07:50,314 - INFO - scraper - Data of amazon - B01K4F50P0  stored  Successfully
+2018-10-03 11:07:50,481 - INFO - scraper - Data of amazon - B01HBFUCTA  stored  Successfully
+2018-10-03 11:07:50,880 - INFO - scraper - Data of amazon - B01N0L50QX  stored  Successfully
+2018-10-03 11:07:58,636 - INFO - scraper - Mail Sent successfully
+2018-10-03 11:07:58,636 - INFO - scraper - Session Successful
+2018-10-03 11:18:10,756 - INFO - scraper - Database Connection Established
+2018-10-03 11:18:10,788 - INFO - __main__ - Database Connection Established
+2018-10-03 11:18:10,867 - INFO - __main__ - Session Started
+2018-10-03 11:18:10,867 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 11:18:25,798 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 11:19:08,310 - INFO - scraper - Location changed to 8 in Amz
+2018-10-03 11:19:08,363 - INFO - scraper - New Chromw cookies Collected
+2018-10-03 11:19:23,805 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 11:19:53,573 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:19:55,053 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:19:56,055 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:20:12,114 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 11:21:02,751 - ERROR - scraper - Bbs data not available for 10000200.
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 187, in ChangeLocationBbs
+    randomclick[0].click()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 80, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 628, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not interactable
+  (Session info: chrome=69.0.3497.100)
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 11:21:03,070 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 187, in ChangeLocationBbs
+    randomclick[0].click()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 80, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 628, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not interactable
+  (Session info: chrome=69.0.3497.100)
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 223, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 11:21:03,096 - ERROR - scraper - Mail not sent
+2018-10-03 11:21:03,193 - CRITICAL - scraper - Session Unsucessfull
+2018-10-03 11:24:52,614 - INFO - scraper - Database Connection Established
+2018-10-03 11:24:52,647 - INFO - __main__ - Database Connection Established
+2018-10-03 11:24:52,716 - INFO - __main__ - Session Started
+2018-10-03 11:24:52,716 - INFO - __main__ - Scraping for amazon started.
+2018-10-03 11:25:01,591 - INFO - __main__ - Scraping for bigbasket started.
+2018-10-03 11:25:31,559 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:25:32,934 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:25:33,818 - INFO - scraper - Data of bigbasket - 10000200  stored  Successfully
+2018-10-03 11:25:48,140 - INFO - scraper - Cookies Cleared Successfully
+2018-10-03 11:26:33,355 - ERROR - scraper - Bbs data not available for 10000200.
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 187, in ChangeLocationBbs
+    randomclick[0].click()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 80, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 628, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not interactable
+  (Session info: chrome=69.0.3497.100)
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 11:26:33,717 - ERROR - __main__ - Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 187, in ChangeLocationBbs
+    randomclick[0].click()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 80, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webelement.py", line 628, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not interactable
+  (Session info: chrome=69.0.3497.100)
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\main_program.py", line 114, in <module>
+    scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
+  File "C:\Users\Vivek Iyer\Desktop\FINAL_PROJECT\semifinal\web-scrapper\scraper\spiders\scraper.py", line 223, in ChangeLocationBbs
+    browser.close()
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 687, in close
+    self.execute(Command.CLOSE)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 320, in execute
+    self.error_handler.check_response(response)
+  File "C:\Anaconda3\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: invalid session id
+  (Driver info: chromedriver=2.42.591088 (7b2b2dca23cca0862f674758c9a3933e685c27d5),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+2018-10-03 11:26:33,728 - ERROR - scraper - Mail not sent
+2018-10-03 11:26:33,774 - CRITICAL - scraper - Session Unsucessfull
