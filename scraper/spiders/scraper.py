@@ -113,7 +113,7 @@ def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku):
         time.sleep(2)
          
         apply=browser.find_elements_by_xpath('//*[@id="GLUXZipUpdate"]/span/input')
-        print(apply)
+        
         apply[0].click()
         time.sleep(2)
          
@@ -183,7 +183,7 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
             time.sleep(2)
             
         randomclick = browser.find_elements_by_css_selector('.ui-corner-all')
-        print(randomclick)
+        
         randomclick[0].click()
         time.sleep(2)
         
@@ -200,12 +200,12 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
                 
     except ElementNotVisibleException as elem_not_vis:
         print(elem_not_vis)
-        print('cant be scrapped')
+        
         browser.close()
         session_id  = [str(session_id)]
-        print('=============================++++++++++++++++++++++++++++++++++===================================')
-        print(session_id)
-        print(session_id[0])
+        
+        
+        
         name=["Not Available"]
         price=["00.00"]
         stock=["Currently Unavailable"]
@@ -214,18 +214,14 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
         print(sku)
         print(location_id)
         print(store_id)
-        print('===========================================================+++++++++++++++++++++++++++++++++++++========================')
+        
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+str(sku)+'","'+str(store_id)+'","'+str(location_id)+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'", "'+scrape_datetime+'")'
-        print(sql2)
+
         cursor.execute(sql2)
         connection.commit()
         logger.exception('Bbs data not available for '+sku+'.')
         browser.close()
-#     except Exception as e:
-#         print(e)
-#         logger.error(e)
-#         browser.close()
-#     
+
 
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
@@ -248,7 +244,7 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
             
         cJar1 = {c.name: c.value for c in cJar}#{i.name: i for i in list(j)}
         
-        print(cJar1)
+        
     #    Replace PINCODE below
         with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
         logger.info('New Chromw cookies Collected')
@@ -327,7 +323,7 @@ def mailgeneration(store_id,store,session_id):
           
         # terminating the session 
         s.quit() 
-        print("Mail Sent successfully")
+        
         logger.info('Mail Sent successfully')
         logger.info('Scraping session completed successfully ')
     except Exception as e:
@@ -365,7 +361,7 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
         csvFile1.close() 
         
     except FileNotFoundError:
-        print('CSV for store '+str(store_id)+' is not created')
+        
         logger.error('CSV for store '+str(store_id)+' is not created')
     except Exception as e:
         print(e)
@@ -388,15 +384,15 @@ class AmzSpider(scrapy.Spider):
             name = "AmzSpider"
             allowed_domains = [self.store] # Domains allowed in Store1's spider
             start_urls = [self.base_url+self.sku]
-            print(start_urls)
+        
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
             with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-            print(cookieJar)
+            
             for i,url in enumerate(start_urls):
                 yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
                 
         except FileNotFoundError:
-           print('Requested Cookies for '+self.store+' does not exist') 
+            
            logger.critical('Requested Cookies does not exist')
         except Exception as e:
             print(e)
@@ -409,7 +405,7 @@ class AmzSpider(scrapy.Spider):
             if len(item['name']) <1:
                 item['name'] = ['Data Unavailable']
             
-            print('=====================================================================')
+            
             print(item['name'])
             item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
             if len(item['rating']) <1:
@@ -461,13 +457,13 @@ class GrffSpider(scrapy.Spider):
               
             '''
             with open('cookies/'+str(self.store_id)+'_'+str(self.pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-            print(cookieJar)
+            
             # Passing URL cookieJar and the headers to scrap location based values.
             for i,url in enumerate(start_urls):
                 yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
         
         except FileNotFoundError:
-           print('Requested Cookies for '+self.store+' does not exist') 
+            
            logger.critical('Requested Cookies does not exist')
         except Exception as e:
             print(e)
@@ -516,9 +512,8 @@ class BbsSpider():
         try:
             start_urls= base_url+sku
             with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-            #cookies = pickle.load(open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', "rb"))
-            #print(cookieJar)
-            print("Scraping item with variants...")
+           
+      
             options = webdriver.ChromeOptions()
             options.add_argument('--headless')
             driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
@@ -552,9 +547,7 @@ class BbsSpider():
             print ("Connection Timeout")
             logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
             
-#         except Exception as e:
-#             print('=============================================================='+e)
-#             logger.critical(e)
+
     
             driver.close()
    
@@ -588,7 +581,7 @@ def storeItem(item, store, session_id, pincode, response):
 
     try:    
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
-        print(sql2)
+       
         cursor.execute(sql2)
         
         connection.commit()
@@ -627,7 +620,7 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
         
     try:
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
-        print(sql2)
+      
         cursor.execute(sql2)
         connection.commit()
         logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
@@ -636,5 +629,5 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
     except Exception as e:
         print(e)
         logger.critical(e)
-print(cursor)
+
 
