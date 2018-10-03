@@ -221,11 +221,11 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
         connection.commit()
         logger.exception('Bbs data not available for '+sku+'.')
         browser.close()
-    except Exception as e:
-        print(e)
-        logger.error(e)
-        browser.close()
-    
+#     except Exception as e:
+#         print(e)
+#         logger.error(e)
+#         browser.close()
+#     
 
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
