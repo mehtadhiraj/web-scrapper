@@ -43,7 +43,7 @@ from twisted.internet import reactor
 from scraper import BbsSpider
 import logging
 
-sys.stdout = open('scrapy_output', 'w')
+sys.stdout = open('logs/scrapy_output.log', 'w')
 
 
 
