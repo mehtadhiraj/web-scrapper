@@ -45,6 +45,10 @@ from twisted.internet import reactor
 from scraper import BbsSpider
 
 
+sys.stdout = open('scrapy_output', 'w')
+
+
+
 try:
     # Executing Database config
     exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))

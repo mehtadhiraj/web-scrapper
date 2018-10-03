@@ -38,6 +38,7 @@ from email.mime.base import MIMEBase
 from email import encoders 
 import os
 
+
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
  
