@@ -37,9 +37,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase 
 from email import encoders 
 import os
-exec(compile(source=open('logger_init.py').read(), filename='logger_init.py', mode='exec'))
- 
 
+sys.stdout = open('scrapy_output', 'w')
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
  
@@ -202,12 +201,12 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
                 
     except ElementNotVisibleException as elem_not_vis:
         print(elem_not_vis)
-        
+        print('cant be scrapped')
         browser.close()
         session_id  = [str(session_id)]
-        
-        
-        
+        print('=============================++++++++++++++++++++++++++++++++++===================================')
+        print(session_id)
+        print(session_id[0])
         name=["Not Available"]
         price=["00.00"]
         stock=["Currently Unavailable"]
@@ -216,14 +215,18 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
         print(sku)
         print(location_id)
         print(store_id)
-        
+        print('===========================================================+++++++++++++++++++++++++++++++++++++========================')
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+str(sku)+'","'+str(store_id)+'","'+str(location_id)+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'", "'+scrape_datetime+'")'
-
+        print(sql2)
         cursor.execute(sql2)
         connection.commit()
         logger.exception('Bbs data not available for '+sku+'.')
         browser.close()
-
+#     except Exception as e:
+#         print(e)
+#         logger.error(e)
+#         browser.close()
+#     
 
  
 def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> None:
@@ -279,10 +282,10 @@ def mailgeneration(store_id,store,session_id):
         msg['To'] = recipients
           
         # storing the subject  
-        msg['Subject'] = "Product Availability Report"
+        msg['Subject'] = "abc"
           
         # string to store the body of the mail 
-        body = "Please find attached the report file(s)"
+        body = "def"
           
         # attach the body with the msg instance 
         msg.attach(MIMEText(body, 'plain')) 
@@ -294,23 +297,22 @@ def mailgeneration(store_id,store,session_id):
         for root, dirs, files in os.walk(path):
             for name in files:
                 if fnmatch.fnmatch(name, pattern):
-                    #filenames.append(os.path.join(root, name))
-                    filenames.append(name)
+                    filenames.append(os.path.join(root, name))
                
    
         
-        if len(filenames) == 0:
+        if len(filenames) < 3:
             raise Exception
         
         for file in filenames:  
         # instance of MIMEBase and named as p 
               part = MIMEBase('application', 'octet-stream')
-              part.set_payload(open(path+file, 'rb').read())
+              part.set_payload(open(file, 'rb').read())
               encoders.encode_base64(part)
               part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
               msg.attach(part)
         # creates SMTP session 
-        s = smtplib.SMTP_SSL(host='smtp.gmail.com',port=587,timeout=300) 
+        s = smtplib.SMTP('smtp.gmail.com', 587) 
           
         # start TLS for security 
         s.starttls() 
@@ -323,32 +325,33 @@ def mailgeneration(store_id,store,session_id):
           
         # sending the mail 
         s.sendmail(fromaddr, toaddr, text) 
-        
-        s.close()  
+          
         # terminating the session 
         s.quit() 
-        
-        logger.info('Mail Sent successfully.')
-        
+        print("Mail Sent successfully")
+        logger.info('Mail Sent successfully')
+        logger.info('Session Successful')
     except Exception as e:
-        logger.error(e)
-        logger.error('Mail sending failed.')
-        #end_time = str(datetime.now())
-        #sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "MAIL FAILURE" where id = "'+str(session_id)+'" '
-        #cursor.execute(sql_update_end_time_and_status)
-        #connection.commit()
-      
+        print(e)
+        logger.error('Mail not sent')
+        end_time = str(datetime.now())
+        sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
+        cursor.execute(sql_update_end_time_and_status)
+        connection.commit()
+        print('Session Unsucessfull')
+        logger.critical('Session Unsucessfull')
 
     
 #GENERATING CSV FILE    
-def csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, stock, price, rating, scrape_datetime, store, pincode):
+def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode):
     try:
         scrape_datetime = scrape_datetime.split('.')
         scrape_datetime = scrape_datetime[0]
-        base_folder = os.path.dirname(__file__)+'/csv_files/'
-        if not os.path.exists(base_folder):
-            os.makedirs(base_folder)    
-        csv_path = base_folder+str(store_id[0])+'_sid'+session_id[0]+'.csv'
+        csv_dir= 'csv_files'
+        if not os.path.exists(csv_dir):
+            ps.makedirs(csv_dir)
+        csv_path = 'csv_files/'+str(store_id[0])+'_sid'+session_id[0]+'.csv'
+   
         file_exists = os.path.isfile(csv_path)
         if not file_exists:
             csvFile = open(csv_path, 'w', newline='')
@@ -362,14 +365,14 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, sto
         csvFile1.close() 
         
     except FileNotFoundError:
-        
+        print('CSV for store '+str(store_id)+' is not created')
         logger.error('CSV for store '+str(store_id)+' is not created')
     except Exception as e:
         print(e)
         logger.error(e)
 #Spider to scrap store1 data
 class AmzSpider(scrapy.Spider):
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store,city, area, session_id):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store, area, session_id):
         self.base_url = base_url
         self.pincode = pincode
         self.area = area
@@ -378,7 +381,6 @@ class AmzSpider(scrapy.Spider):
         self.store_id = store_id
         self.store = store
         self.session_id = session_id
-        self.city= city
 
  # Cookie based data scraping    
     def start_requests(self):               
@@ -386,15 +388,15 @@ class AmzSpider(scrapy.Spider):
             name = "AmzSpider"
             allowed_domains = [self.store] # Domains allowed in Store1's spider
             start_urls = [self.base_url+self.sku]
-        
+            print(start_urls)
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36'}
             with open('cookies/'+str(self.store_id)+'_'+self.pincode+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp)
-            
+            print(cookieJar)
             for i,url in enumerate(start_urls):
                 yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
                 
         except FileNotFoundError:
-            
+           print('Requested Cookies for '+self.store+' does not exist') 
            logger.critical('Requested Cookies does not exist')
         except Exception as e:
             print(e)
@@ -407,7 +409,7 @@ class AmzSpider(scrapy.Spider):
             if len(item['name']) <1:
                 item['name'] = ['Data Unavailable']
             
-            
+            print('=====================================================================')
             print(item['name'])
             item['rating']=response.css('#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4 > span::text').extract()
             if len(item['rating']) <1:
@@ -428,12 +430,12 @@ class AmzSpider(scrapy.Spider):
             print(e)
             logger.critical(self.sku+' data missing')
         finally:    
-            return storeItem(item, self.store, self.session_id,self.city, self.pincode, response)
+            return storeItem(item, self.store, self.session_id, self.pincode, response)
 
 
 
 class GrffSpider(scrapy.Spider):
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store, city, area, session_id):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store, area, session_id):
         self.base_url = base_url
         self.pincode = pincode
         self.area = area
@@ -442,7 +444,6 @@ class GrffSpider(scrapy.Spider):
         self.store_id = store_id
         self.store = store
         self.session_id = session_id
-        self.city = city
          
 # Requesting a Cookies for location based data scraping
     def start_requests(self):
@@ -460,13 +461,13 @@ class GrffSpider(scrapy.Spider):
               
             '''
             with open('cookies/'+str(self.store_id)+'_'+str(self.pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-            
+            print(cookieJar)
             # Passing URL cookieJar and the headers to scrap location based values.
             for i,url in enumerate(start_urls):
                 yield Request(url,cookies=cookieJar, callback=self.parse, headers=headers)
         
         except FileNotFoundError:
-            
+           print('Requested Cookies for '+self.store+' does not exist') 
            logger.critical('Requested Cookies does not exist')
         except Exception as e:
             print(e)
@@ -506,7 +507,7 @@ class GrffSpider(scrapy.Spider):
             logger.critical(self.sku+' data missing')
    
         finally:    
-            return storeItem(item, self.store, self.session_id,self.city, self.pincode, response)
+            return storeItem(item, self.store, self.session_id, self.pincode, response)
 
 # Bbs Spider starts here
 class BbsSpider():
@@ -515,8 +516,9 @@ class BbsSpider():
         try:
             start_urls= base_url+sku
             with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
-           
-      
+            #cookies = pickle.load(open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', "rb"))
+            #print(cookieJar)
+            print("Scraping item with variants...")
             options = webdriver.ChromeOptions()
             options.add_argument('--headless')
             driver = webdriver.Chrome('chromedriver.exe', chrome_options=options)
@@ -550,12 +552,14 @@ class BbsSpider():
             print ("Connection Timeout")
             logger.warning('Connection time out while collecting data for '+str(store_id)+'-'+str(sku))
             
-
+#         except Exception as e:
+#             print('=============================================================='+e)
+#             logger.critical(e)
     
             driver.close()
    
  
-def storeItem(item, store,city, session_id,city, pincode, response):
+def storeItem(item, store, session_id, pincode, response):
     
     name = item['name']
     price = item['price']
@@ -584,12 +588,12 @@ def storeItem(item, store,city, session_id,city, pincode, response):
 
     try:    
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
-       
+        print(sql2)
         cursor.execute(sql2)
         
         connection.commit()
         logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
-        csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, stock, price, rating, scrape_datetime, store, pincode)
+        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
     
     except Exception as e:
         print(e)
@@ -598,7 +602,7 @@ def storeItem(item, store,city, session_id,city, pincode, response):
     finally:
         return item
          
-def storeItemBbs(item,sku_id,location_id,city,store_id,store, session_id, pincode):
+def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
     
     name= [item[0]]
     price=[item[1]]
@@ -623,14 +627,14 @@ def storeItemBbs(item,sku_id,location_id,city,store_id,store, session_id, pincod
         
     try:
         sql2 = 'INSERT INTO scrape_reports(scrape_session_id,sku_code, store_id, location_id, item_name, stock_available, item_price, store_rating, scrape_datetime ) values("'+session_id[0]+'","'+sku_id[0]+'","'+store_id[0]+'","'+location_id[0]+'","'+name[0]+'","'+stock[0]+'", "'+price[0]+'", "'+rating[0]+'","'+scrape_datetime+'")'
-      
+        print(sql2)
         cursor.execute(sql2)
         connection.commit()
         logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
         
-        csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, stock, price, rating, scrape_datetime, store, pincode)
+        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
     except Exception as e:
         print(e)
         logger.critical(e)
-
+print(cursor)
 

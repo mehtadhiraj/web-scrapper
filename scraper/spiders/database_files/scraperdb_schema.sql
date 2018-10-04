@@ -84,7 +84,7 @@ CREATE TABLE `scrape_reports` (
   `sku_code` varchar(45) NOT NULL,
   `store_id` int(11) NOT NULL,
   `location_id` int(11) NOT NULL,
-  `item_name` varchar(50) NOT NULL,
+  `item_name` varchar(150) NOT NULL,
   `stock_available` varchar(50) NOT NULL,
   `item_price` decimal(8,2) DEFAULT NULL,
   `store_rating` varchar(45) DEFAULT NULL,
@@ -106,6 +106,7 @@ CREATE TABLE `scrape_sessions` (
   `session_start_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `session_end_datetime` datetime DEFAULT NULL,
   `scrape_result` varchar(150) DEFAULT NULL
+  `email_status` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
