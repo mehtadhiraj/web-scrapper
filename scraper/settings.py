@@ -18,6 +18,7 @@ NEWSPIDER_MODULE = 'grff.spiders'
 FEED_FORMAT = "csv"
 FEED_URI = "products.csv"
 
+TELNETCONSOLE_ENABLED=False
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'grff (+http://www.yourdomain.com)'
 

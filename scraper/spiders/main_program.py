@@ -14,9 +14,7 @@ from boto.cloudtrail.exceptions import InvalidTimeRangeException
 import scraper
 import subprocess
 import scrapy
-import pymysql
 import csv
-import pymysql.cursors
 from twisted.conch.insults.window import cursor
 from scrapy.crawler import CrawlerProcess
 from scrapy.crawler import CrawlerRunner
@@ -43,19 +41,26 @@ from twisted.internet import reactor
 from multiprocessing import Process, Queue
 from twisted.internet import reactor
 from scraper import BbsSpider
+import logging
 
-
-sys.stdout = open('scrapy_output', 'w')
+sys.stdout = open('logs/scrapy_output.log', 'w')
 
 
 
 try:
+   
+    logMsg = "Started scraping session at: "+str(datetime.now())
+    print(logMsg)
+    
+    exec(compile(source=open('logger_init.py').read(), filename='logger_init.py', mode='exec'))
+    logger.info(logMsg) 
     # Executing Database config
     exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
     
     process = CrawlerProcess({
-        'USER_AGENT': (
-                'Chrome/69.0.3497.81')
+        'USER_AGENT': ('Chrome/69.0.3497.81'),
+        'TELNETCONSOLE_ENABLED': False,
+        'CONCURRENT_REQUESTS':10
     })
       
 #     Get date and time of current session
@@ -127,22 +132,27 @@ try:
                     time.sleep(5)
                     p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
                     continue
-#     
+#   
+
+    
+      
     process.start()
     
     end_time = str(datetime.now())
-    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Succesfull" where id = "'+str(session_id)+'" '
+    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "SUCCESSFUL" where id = "'+str(session_id)+'" '
     cursor.execute(sql_update_end_time_and_status)
     connection.commit()
+    logger.info("Scraping session completed successfully.")
     
 except Exception as e:
     end_time = str(datetime.now())
-    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
+    sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "FAILED" where id = "'+str(session_id)+'" '
     cursor.execute(sql_update_end_time_and_status)
     connection.commit()
-    print('=====================================Exception in main_program')
     print(e)
     logger.exception(e)
+    logger.Error("Scraping session could not be completed successfully.")
+    
 finally:
     if ab == 1:
         scrape_result = 'SUCCESSFUL'

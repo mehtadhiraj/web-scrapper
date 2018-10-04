@@ -37,7 +37,10 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase 
 from email import encoders 
 import os
+import logging
 
+exec(compile(source=open('logger_init.py').read(), filename='logger_init.py', mode='exec'))
+ 
 
 #DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
 exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
@@ -293,22 +296,23 @@ def mailgeneration(store_id,store,session_id):
         for root, dirs, files in os.walk(path):
             for name in files:
                 if fnmatch.fnmatch(name, pattern):
-                    filenames.append(os.path.join(root, name))
+                    #filenames.append(os.path.join(root, name))
+                    filenames.append(name)
                
    
         
-        if len(filenames) < 3:
+        if len(filenames) == 0:
             raise Exception
         
         for file in filenames:  
         # instance of MIMEBase and named as p 
               part = MIMEBase('application', 'octet-stream')
-              part.set_payload(open(file, 'rb').read())
+              part.set_payload(open(path+file, 'rb').read())
               encoders.encode_base64(part)
               part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
               msg.attach(part)
         # creates SMTP session 
-        s = smtplib.SMTP('smtp.gmail.com', 587) 
+        s = smtplib.SMTP_SSL(host='smtp.gmail.com',port=587,timeout=300) 
           
         # start TLS for security 
         s.starttls() 
@@ -321,21 +325,21 @@ def mailgeneration(store_id,store,session_id):
           
         # sending the mail 
         s.sendmail(fromaddr, toaddr, text) 
-          
+        
+        s.close()  
         # terminating the session 
         s.quit() 
         
-        logger.info('Mail Sent successfully')
-        logger.info('Scraping session completed successfully ')
+        logger.info('Mail Sent successfully.')
+        
     except Exception as e:
-        print(e)
-        logger.error('Error occurred. Mail was not sent.')
-        end_time = str(datetime.now())
-        sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "Unsuccessful" where id = "'+str(session_id)+'" '
-        cursor.execute(sql_update_end_time_and_status)
-        connection.commit()
-        print('Scraping session failed.')
-        logger.critical('Scraping session failed.')
+        logger.error(e)
+        logger.error('Mail sending failed.')
+        #end_time = str(datetime.now())
+        #sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "MAIL FAILURE" where id = "'+str(session_id)+'" '
+        #cursor.execute(sql_update_end_time_and_status)
+        #connection.commit()
+      
 
     
 #GENERATING CSV FILE    

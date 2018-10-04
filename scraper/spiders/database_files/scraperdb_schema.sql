@@ -106,6 +106,7 @@ CREATE TABLE `scrape_sessions` (
   `session_start_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `session_end_datetime` datetime DEFAULT NULL,
   `scrape_result` varchar(150) DEFAULT NULL
+  `email_status` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
