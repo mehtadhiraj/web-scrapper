@@ -339,7 +339,7 @@ def mailgeneration(store_id,store,session_id):
 
     
 #GENERATING CSV FILE    
-def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode):
+def csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, stock, price, rating, scrape_datetime, store, pincode):
     try:
         scrape_datetime = scrape_datetime.split('.')
         scrape_datetime = scrape_datetime[0]
@@ -369,7 +369,7 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, pr
         logger.error(e)
 #Spider to scrap store1 data
 class AmzSpider(scrapy.Spider):
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store, area, session_id):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store,city, area, session_id):
         self.base_url = base_url
         self.pincode = pincode
         self.area = area
@@ -378,6 +378,7 @@ class AmzSpider(scrapy.Spider):
         self.store_id = store_id
         self.store = store
         self.session_id = session_id
+        self.city= city
 
  # Cookie based data scraping    
     def start_requests(self):               
@@ -427,12 +428,12 @@ class AmzSpider(scrapy.Spider):
             print(e)
             logger.critical(self.sku+' data missing')
         finally:    
-            return storeItem(item, self.store, self.session_id, self.pincode, response)
+            return storeItem(item, self.store, self.session_id,self.city, self.pincode, response)
 
 
 
 class GrffSpider(scrapy.Spider):
-    def __init__(self, base_url, pincode, sku, location_id, store_id, store, area, session_id):
+    def __init__(self, base_url, pincode, sku, location_id, store_id, store, city, area, session_id):
         self.base_url = base_url
         self.pincode = pincode
         self.area = area
@@ -441,6 +442,7 @@ class GrffSpider(scrapy.Spider):
         self.store_id = store_id
         self.store = store
         self.session_id = session_id
+        self.city = city
          
 # Requesting a Cookies for location based data scraping
     def start_requests(self):
@@ -504,7 +506,7 @@ class GrffSpider(scrapy.Spider):
             logger.critical(self.sku+' data missing')
    
         finally:    
-            return storeItem(item, self.store, self.session_id, self.pincode, response)
+            return storeItem(item, self.store, self.session_id,self.city, self.pincode, response)
 
 # Bbs Spider starts here
 class BbsSpider():
@@ -553,7 +555,7 @@ class BbsSpider():
             driver.close()
    
  
-def storeItem(item, store, session_id, pincode, response):
+def storeItem(item, store,city, session_id,city, pincode, response):
     
     name = item['name']
     price = item['price']
@@ -587,7 +589,7 @@ def storeItem(item, store, session_id, pincode, response):
         
         connection.commit()
         logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
-        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
+        csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, stock, price, rating, scrape_datetime, store, pincode)
     
     except Exception as e:
         print(e)
@@ -596,7 +598,7 @@ def storeItem(item, store, session_id, pincode, response):
     finally:
         return item
          
-def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
+def storeItemBbs(item,sku_id,location_id,city,store_id,store, session_id, pincode):
     
     name= [item[0]]
     price=[item[1]]
@@ -626,7 +628,7 @@ def storeItemBbs(item,sku_id,location_id,store_id,store, session_id, pincode):
         connection.commit()
         logger.info('Data of '+store+' - '+sku_id[0]+'  stored  Successfully')
         
-        csvfilegeneration(session_id, sku_id, store_id, location_id, name, stock, price, rating, scrape_datetime, store, pincode)
+        csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, stock, price, rating, scrape_datetime, store, pincode)
     except Exception as e:
         print(e)
         logger.critical(e)
