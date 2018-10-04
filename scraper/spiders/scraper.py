@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys  
 from boto.cloudtrail.exceptions import InvalidTimeRangeException
 from selenium.common.exceptions import ElementNotVisibleException
+from selenium.webdriver.chrome.options import Options
 import subprocess
 import scrapy
 import pymysql
@@ -29,6 +30,7 @@ import sys
 import browser_cookie3 as cookies
 from scrapy.utils.log import configure_logging
 import os, fnmatch
+from filecmp import clear_cache
 global response
 from datetime import datetime
 import smtplib 
@@ -60,17 +62,20 @@ class Item(scrapy.Item):
  
  
 def ClearCookies(): 
-    try:    
+    try: 
+#         options = Options()
         driver = webdriver.Chrome('chromedriver.exe')
+       
+
         driver.get('chrome://settings/clearBrowserData')
         time.sleep(2)
         elem = Select(driver.find_element_by_css_selector('* /deep/ #dropdownMenu'))
         elem.select_by_index(2)   
         time.sleep(2)
-         
+           
         result = driver.find_element_by_css_selector('* /deep/ #checkbox')
         result.click()
-        
+          
         time.sleep(2)
         clear = driver.find_element_by_css_selector('* /deep/ #clearBrowsingDataConfirm')
         clear.click()
@@ -88,7 +93,9 @@ def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku):
         start_urls = base_url+sku
          
         # Creating an instance webdriver 
-        browser = webdriver.Chrome('chromedriver.exe') 
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')   
+        browser = webdriver.Chrome('chromedriver.exe',chrome_options=options)
         
         browser.get(start_urls) 
            
@@ -138,7 +145,9 @@ def ChangeLocationAmz(pincode, store, base_url, location_id, store_id, sku):
 
 def ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, area):
     try:
-        browser = webdriver.Chrome('chromedriver.exe')
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')   
+        browser = webdriver.Chrome('chromedriver.exe',chrome_options=options)
         url = base_url+sku
         browser.get(url)
         time.sleep(2)
@@ -165,7 +174,9 @@ def ChangeLocationGrff(pincode, store, base_url, location_id, store_id, sku, are
 def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id):
     try:
         start_urls= base_url+sku
-        browser = webdriver.Chrome('chromedriver.exe')
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')   
+        browser = webdriver.Chrome('chromedriver.exe',chrome_options=options)
         browser.get(start_urls)
         time.sleep(2)
     
@@ -248,6 +259,9 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
         
         
     #    Replace PINCODE below
+        base_folder1 = os.path.dirname(__file__)+'/cookies/'
+        if not os.path.exists(base_folder1):
+            os.makedirs(base_folder1)
         with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
         logger.info('New Chromw cookies Collected')
         
@@ -271,22 +285,22 @@ def mailgeneration(store_id,store,session_id):
         recipients = ', '.join(toaddr)   
         # instance of MIMEMultipart 
         msg = MIMEMultipart() 
-          
+            
         # storing the senders email address   
         msg['From'] = fromaddr 
-          
+            
         # storing the receivers email address  
         msg['To'] = recipients
-          
+            
         # storing the subject  
         msg['Subject'] = "Product Availability Report"
-          
+            
         # string to store the body of the mail 
         body = "Please find attached the report file(s)"
-          
+            
         # attach the body with the msg instance 
         msg.attach(MIMEText(body, 'plain')) 
-                 
+                   
         # open the file to be sent  
         path = "csv_files/"
         pattern = "*_sid"+str(session_id)+".csv"
@@ -296,12 +310,13 @@ def mailgeneration(store_id,store,session_id):
                 if fnmatch.fnmatch(name, pattern):
                     #filenames.append(os.path.join(root, name))
                     filenames.append(name)
-               
-   
-        
+                 
+     
+        print(filenames)
+          
         if len(filenames) == 0:
             raise Exception
-        
+          
         for file in filenames:  
         # instance of MIMEBase and named as p 
               part = MIMEBase('application', 'octet-stream')
@@ -310,34 +325,37 @@ def mailgeneration(store_id,store,session_id):
               part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
               msg.attach(part)
         # creates SMTP session 
-        s = smtplib.SMTP_SSL(host='smtp.gmail.com',port=587,timeout=300) 
-          
+        s = smtplib.SMTP(host='smtp.gmail.com',port=587,timeout=300) 
+            
         # start TLS for security 
         s.starttls() 
-          
+            
         # Authentication 
         s.login(fromaddr, "messi2009") 
-          
+            
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
-          
+            
         # sending the mail 
         s.sendmail(fromaddr, toaddr, text) 
-        
-        s.close()  
+           
         # terminating the session 
         s.quit() 
-        
+          
         logger.info('Mail Sent successfully.')
-        
+        end_time = str(datetime.now())
+        sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", email_status = 1 where id = "'+str(session_id)+'" '
+        cursor.execute(sql_update_end_time_and_status)
+        connection.commit()
+       
     except Exception as e:
         logger.error(e)
         logger.error('Mail sending failed.')
-        #end_time = str(datetime.now())
-        #sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", scrape_result = "MAIL FAILURE" where id = "'+str(session_id)+'" '
-        #cursor.execute(sql_update_end_time_and_status)
-        #connection.commit()
-      
+        end_time = str(datetime.now())
+        sql_update_end_time_and_status = 'UPDATE scrape_sessions SET session_end_datetime = "'+end_time+'", email_status = 0 where id = "'+str(session_id)+'" '
+        cursor.execute(sql_update_end_time_and_status)
+        connection.commit()
+       
 
     
 #GENERATING CSV FILE    
@@ -345,6 +363,7 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, sto
     try:
         scrape_datetime = scrape_datetime.split('.')
         scrape_datetime = scrape_datetime[0]
+        city = city.replace('_', ', ')
         base_folder = os.path.dirname(__file__)+'/csv_files/'
         if not os.path.exists(base_folder):
             os.makedirs(base_folder)    
@@ -352,13 +371,13 @@ def csvfilegeneration(session_id, sku_id, store_id, location_id, city, name, sto
         file_exists = os.path.isfile(csv_path)
         if not file_exists:
             csvFile = open(csv_path, 'w', newline='')
-            writehead = csv.DictWriter(csvFile, fieldnames = ["Session Id", "SKU Id", "Store Name", "Location Id", "Product Name", "Stock Availability","Price in Rupees", "Rating", "Scrape Datetime"])    
+            writehead = csv.DictWriter(csvFile, fieldnames = ["Session Id", "SKU Id", "Store Name", "Pincode","City, Area", "Product Name", "Stock Availability","Price in Rupees", "Rating", "Scrape Datetime"])    
             writehead.writeheader()
             csvFile.close()
             
         csvFile1 = open(csv_path, 'a+', newline='')
         writer = csv.writer(csvFile1)   
-        writer.writerow((session_id[0], sku_id[0], store, pincode, name[0], stock[0], price[0], rating[0], scrape_datetime))
+        writer.writerow((session_id[0], sku_id[0], store, pincode,city, name[0], stock[0], price[0], rating[0], scrape_datetime))
         csvFile1.close() 
         
     except FileNotFoundError:
@@ -511,7 +530,7 @@ class GrffSpider(scrapy.Spider):
 # Bbs Spider starts here
 class BbsSpider():
 
-    def scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id):
+    def scrape_item_with_variants(base_url, pincode, sku, location_id,city, store_id, store, area, session_id):
         try:
             start_urls= base_url+sku
             with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'rb') as fp: cookieJar = pickle.load(fp) 
@@ -538,7 +557,7 @@ class BbsSpider():
                 item1=[item,price]
                  
                 print(item + " " + price)
-                storeItemBbs(item1,sku,location_id,store_id,store, session_id, pincode)
+                storeItemBbs(item1,sku,location_id,city,store_id,store, session_id, pincode)
             driver.close()
                 
         except FileNotFoundError as e:
@@ -555,7 +574,7 @@ class BbsSpider():
             driver.close()
    
  
-def storeItem(item, store,city, session_id,city, pincode, response):
+def storeItem(item, store, session_id,city, pincode, response):
     
     name = item['name']
     price = item['price']

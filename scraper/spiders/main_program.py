@@ -45,6 +45,11 @@ import logging
 
 sys.stdout = open('logs/scrapy_output.log', 'w')
 
+exec(compile(source=open('logger_init.py').read(), filename='logger_init.py', mode='exec'))
+ 
+
+#DATABASE CONNECTIVITY AS SPECIFIED IN database_config.py
+exec(compile(source=open('database_config.py').read(), filename='database_config.py', mode='exec'))
 
 
 try:
@@ -69,7 +74,7 @@ try:
      
     scrape_result= 'SCRAPING IN PROGRESS'
     # Query to add session in database
-    sql_insert_session = 'INSERT INTO scrape_sessions(session_start_datetime,session_end_datetime, scrape_result ) values("'+start_date_time+'","'+end_date_time+'", "'+scrape_result+'")'
+    sql_insert_session = 'INSERT INTO scrape_sessions(session_start_datetime,session_end_datetime, scrape_result, email_status ) values("'+start_date_time+'","'+end_date_time+'", "'+scrape_result+'", 0)'
     print(sql_insert_session)
     ab= cursor.execute(sql_insert_session)
     connection.commit()
@@ -101,6 +106,7 @@ try:
             for location_id,area,pincode in cursor3:
                 print(location_id)
                 print(pincode)
+                city= area
                 area = area.split('_')
                 area = area[0]
                 print(area)
@@ -123,18 +129,15 @@ try:
                             scraper.ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area, session_id)
     #             Call to the spiders as per the given store
                 if store_id == 2:
-                    p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)               
+                    p= process.crawl(scraper.GrffSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, city=city, area = area, session_id = session_id)               
                     continue       
                 elif store_id == 1:
-                    p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, area = area, session_id = session_id)
+                    p = process.crawl(scraper.AmzSpider, base_url = base_url, pincode = pincode, sku = sku, location_id = location_id, store_id = store_id, store = store, city=city, area = area, session_id = session_id)
                     continue
                 elif store_id == 3:
                     time.sleep(5)
-                    p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id, store_id, store, area, session_id)
+                    p = scraper.BbsSpider.scrape_item_with_variants(base_url, pincode, sku, location_id,city, store_id, store, area, session_id)
                     continue
-#   
-
-    
       
     process.start()
     
