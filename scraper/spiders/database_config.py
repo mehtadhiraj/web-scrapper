@@ -28,8 +28,8 @@ try:
     connection = pymysql.connect(
        host='localhost',
        user='root',
-       password='',                             
-       db='scraperdb1',
+       password='root',                             
+       db='scraperdb2',
        port=3306
     )
     connection.autocommit = True
