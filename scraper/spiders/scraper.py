@@ -186,17 +186,18 @@ def ChangeLocationBbs(pincode, store, base_url, location_id, store_id, sku, area
     
         city = browser.find_elements_by_xpath('//*[@id="city-select"]')
         city[0].clear()
-        city[0].send_keys(area)
-        time.sleep(2)
+        element = WebDriverWait(browser, 60).until(
+            expected_conditions.presence_of_element_located((By.PARTIAL_LINK_TEXT, area))
+        )
+        element.click()
     
         pin=pincode
         pincode1 = browser.find_elements_by_xpath('//*[@id="area-select"]')
         for pinc in pin:
             pincode1[0].send_keys(pinc)
-            time.sleep(2)
+        time.sleep(2)
             
         randomclick = browser.find_elements_by_css_selector('.ui-corner-all')
-        
         randomclick[0].click()
         time.sleep(2)
         
@@ -263,7 +264,7 @@ def GetChromeCookies(pincode, store, base_url, location_id, store_id, sku) -> No
         if not os.path.exists(base_folder1):
             os.makedirs(base_folder1)
         with open('cookies/'+str(store_id)+'_'+str(pincode)+'.pkl', 'wb') as fp: pickle.dump(cJar1, fp)
-        logger.info('New Chromw cookies Collected')
+        logger.info('New Chrome cookies collected')
         
     except TypeError as te:
         print(te)
@@ -414,7 +415,7 @@ class AmzSpider(scrapy.Spider):
                 
         except FileNotFoundError:
             
-           logger.critical('Requested Cookies does not exist')
+           logger.critical('Requested cookies do not exist')
         except Exception as e:
             print(e)
             logger.error(e)
